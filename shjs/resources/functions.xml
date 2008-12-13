@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE functions [
+    <!ELEMENT functions (function*)>
+
+    <!ELEMENT function (#PCDATA)>
+    <!ATTLIST function name CDATA #REQUIRED>
+]>
+
+<functions>
+    <function name="source"><![CDATA[
+        text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        text = '<pre class="sh_#{lang}">#{source}</pre>'.interpolate({
+            lang: args.lang,
+            source: text
+        });
+    
+        var check = function(){
+            if (typeof(highlight) != 'function') {
+                setTimeout(function(){check()}, 5);
+                return;
+            }
+            highlight();
+        }
+        setTimeout(function(){check()}, 5);
+    ]]></function>
+</functions>

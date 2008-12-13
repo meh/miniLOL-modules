@@ -1,0 +1,7 @@
+To install the module extract the stuff in the modules/ dir into the modules/ dir of miniLOL.
+
+Then merge the elements inside the resources/ files into the miniLOL's ones.
+
+You can change the highlighting style by changing the value in config.xml.
+
+You can also write your own syntax CSS, put it in modules/shjs/css/ and set it's name in the config.xml
