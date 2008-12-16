@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE blog [
+    <!ELEMENT blog (template, post*)>
+
+    <!ELEMENT template (#PCDATA)>
+
+    <!ELEMENT post (#PCDATA)>
+    <!ATTLIST post
+        id ID #REQUIRED
+    >
+]>
+
+<blog>
+    <template>
+    
+    </template>
+
+    <post id="1"><![CDATA[
+        NIGGUZ
+    ]]></post>
+</blog>
