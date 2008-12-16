@@ -1,12 +1,20 @@
 miniLOL.module.create('blog', {
     onLoad: function() {
+        this.cache = miniLOL._cache.blog = {
+            dom: null,
+            cache: {},
+            template: null
+        };
+
         new Ajax.Request('resources/blog.xml', {
             method: 'get',
             asynchronous: false,
 
             onSuccess: function (http) {
                 http.responseXML.$ = _$;
-                miniLOL._cache.blog = http.responseXML;
+                miniLOL._cache.blog.dom = http.responseXML;
+                miniLOL._cache.blog.template
+                    = http.responseXML.getElementsByTagName("template")[0].firstChild.nodeValue;
             }
         });
 
@@ -19,9 +27,13 @@ miniLOL.module.create('blog', {
         }
         
         if (args.id) {
-            var post = miniLOL._cache.blog.$(args.id);
+            var post = this.cache.dom.$(args.id);
             if (post) {
-                miniLOL.config.contentNode.innerHTML = post.firstChild.nodeValue;
+
+                miniLOL.config.contentNode.innerHTML = this.cache.template.interpolate({
+                    content: post.firstChild.nodeValue,
+                    title: post.getAttribute('title')
+                });
             }
             else {
                 miniLOL.config.contentNode.innerHTML = "Post not found.";

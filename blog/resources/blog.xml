@@ -7,16 +7,20 @@
 
     <!ELEMENT post (#PCDATA)>
     <!ATTLIST post
-        id ID #REQUIRED
+        title CDATA #REQUIRED
+        id    ID    #REQUIRED
     >
 ]>
 
 <blog>
-    <template>
-    
-    </template>
+    <template><![CDATA[
+        <div class="blog_post">
+            <div class="title">#{title}</div>
+            <div class="content">#{content}</div>
+        </div>
+    ]]></template>
 
-    <post id="1"><![CDATA[
+    <post id="1" title="101 ways to nigguz"><![CDATA[
         NIGGUZ
     ]]></post>
 </blog>
