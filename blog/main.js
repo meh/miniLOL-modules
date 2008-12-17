@@ -6,7 +6,7 @@ miniLOL.module.create('blog', {
             template: null
         };
 
-        new Ajax.Request('resources/blog.xml', {
+        new Ajax.Request(this.root+'/resources/blog.xml', {
             method: 'get',
             asynchronous: false,
 

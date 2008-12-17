@@ -14,14 +14,6 @@
             lang: args.lang,
             source: text
         });
-    
-        var check = function(){
-            if (typeof(highlight) != 'function') {
-                setTimeout(function(){check()}, 5);
-                return;
-            }
-            highlight();
-        }
-        setTimeout(function(){check()}, 5);
+        miniLOL.module.execute("shjs", args);
     ]]></function>
 </functions>
