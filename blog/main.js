@@ -1,29 +1,37 @@
 miniLOL.module.create('blog', {
     onLoad: function() {
-        this.cache = miniLOL._cache.blog = {
-            dom: null,
-            cache: {},
-            template: null
-        };
+        miniLOL.resource.blog = {
+            name: 'blog',
+            res: {
+                dom: null,
+                cache: {},
+                template: undefined,
+            },
 
-        new Ajax.Request(this.root+'/resources/blog.xml', {
-            method: 'get',
-            asynchronous: false,
+            load: function (path) {
+                new Ajax.Request(path, {
+                    method: 'get',
+                    asynchronous: false,
 
-            onSuccess: function (http) {
-                http.responseXML.$ = _$;
-                miniLOL._cache.blog.dom = http.responseXML;
-                miniLOL._cache.blog.template
-                    = http.responseXML.getElementsByTagName("template")[0].firstChild.nodeValue;
+                    onSuccess: function (http) {
+                        http.responseXML.$ = _$;
+                        miniLOL.resource.blog.res.dom = http.responseXML;
+                        miniLOL.resource.blog.res.template
+                            = http.responseXML.getElementsByTagName("template")[0].firstChild.nodeValue;
+                    }
+                });
             }
-        });
+        }; this.cache = miniLOL.resource.blog.res;
 
-        setTimeout("miniLOL.module.reload('blog')", miniLOL.config.refreshEvery*1000);
+        miniLOL.resource.load(miniLOL.resource.blog, this.root+"/resources/blog.xml");
+
+        new PeriodicalExecuter(function(){miniLOL.resource.reload(miniLOL.resource.blog)}, miniLOL.config.refreshEvery);
     },
 
     execute: function (args) {
-        if (!miniLOL._cache.blog) {
+        if (!this.cache.dom) {
             miniLOL.config.contentNode.innerHTML = "An error occurred while loading blog.xml";
+            return false;
         }
         
         if (args.id) {
