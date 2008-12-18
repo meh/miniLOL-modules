@@ -20,7 +20,27 @@
         </div>
     ]]></template>
 
-    <post id="1" title="101 ways to nigguz"><![CDATA[
+    <post id="1" title="Post 1"><![CDATA[
         NIGGUZ
+    ]]></post>
+
+    <post id="2" title="Post 2"><![CDATA[
+        NIGGUZ NIGGUZ
+    ]]></post>
+    
+    <post id="3" title="Post 3"><![CDATA[
+        NIGGUZ NIGGUZ NIGGUZ
+    ]]></post>
+
+    <post id="4" title="Post 4"><![CDATA[
+        NIGGUZ NIGGUZ NIGGUZ NIGGUZ
+    ]]></post>
+
+    <post id="5" title="Post 5"><![CDATA[
+        NIGGUZ NIGGUZ NIGGUZ NIGGUZ NIGGUZ
+    ]]></post>
+
+    <post id="6" title="Post 6"><![CDATA[
+        NIGGUZ NIGGUZ NIGGUZ NIGGUZ NIGGUZ NIGGUZ
     ]]></post>
 </blog>

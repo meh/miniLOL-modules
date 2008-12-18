@@ -2,13 +2,17 @@ miniLOL.module.create('blog', {
     onLoad: function() {
         miniLOL.resource.blog = {
             name: 'blog',
-            res: {
-                dom: null,
-                cache: {},
-                template: undefined,
-            },
+            res: null,
 
             load: function (path) {
+                if (miniLOL.resource.blog.res == null) {
+                    miniLOL.resource.blog.res = {
+                        dom: null,
+                        cache: {},
+                        template: undefined,
+                    };
+                }
+
                 new Ajax.Request(path, {
                     method: 'get',
                     asynchronous: false,
@@ -21,9 +25,13 @@ miniLOL.module.create('blog', {
                     }
                 });
             }
-        }; this.cache = miniLOL.resource.blog.res;
+        };
 
         miniLOL.resource.load(miniLOL.resource.blog, this.root+"/resources/blog.xml");
+        miniLOL.resource.load(miniLOL.resource.config, this.root+"/resources/config.xml");
+        this.cache = miniLOL.resource.blog.res;
+
+        include("css", this.root+"/resources/style.css");
 
         new PeriodicalExecuter(function(){miniLOL.resource.reload(miniLOL.resource.blog)}, miniLOL.config.refreshEvery);
     },
@@ -33,19 +41,34 @@ miniLOL.module.create('blog', {
             miniLOL.config.contentNode.innerHTML = "An error occurred while loading blog.xml";
             return false;
         }
+
+        args.page = args.page || 1;
         
         if (args.id) {
             var post = this.cache.dom.$(args.id);
             if (post) {
-
-                miniLOL.config.contentNode.innerHTML = this.cache.template.interpolate({
-                    content: post.firstChild.nodeValue,
-                    title: post.getAttribute('title')
-                });
+                miniLOL.config.contentNode.innerHTML = this.templetize(post);
             }
             else {
                 miniLOL.config.contentNode.innerHTML = "Post not found.";
             }
         }
+        else if (args.page) {
+            var output = "";
+            var posts  = this.cache.dom.getElementsByTagName('post');
+
+            for (var i = 0; i < miniLOL.config.blog.postsPerPage && i < posts.length; i++) {
+                output += this.templetize(posts[i]);
+            }
+
+            miniLOL.config.contentNode.innerHTML = output;
+        }
+    },
+
+    templetize: function (post) {
+        return this.cache.template.interpolate({
+            content: post.firstChild.nodeValue,
+            title: post.getAttribute('title')
+        });
     }
 });

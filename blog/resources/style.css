@@ -1,0 +1,12 @@
+.blog_post {
+    border-bottom: 1px solid #222222;
+    margin-bottom: 10px;
+}
+
+.blog_post .title {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}

@@ -4,6 +4,6 @@
     <!ELEMENT configuration ANY>
 ]>
 
-<configuration domain="shjs">
-    <style>sh_nedit.css</style>
+<configuration domain="blog">
+    <postsPerPage>5</postsPerPage>
 </configuration>
