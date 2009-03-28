@@ -3,44 +3,62 @@
 <!DOCTYPE blog [
     <!ELEMENT blog (template, post*)>
 
-    <!ELEMENT template (#PCDATA)>
+    <!ELEMENT template (page, post)>
+    <!ELEMENT page  (#PCDATA)>
+    <!ELEMENT post  (#PCDATA)>
 
     <!ELEMENT post (#PCDATA)>
     <!ATTLIST post
         title CDATA #REQUIRED
+        date  CDATA #REQUIRED
         id    ID    #REQUIRED
     >
 ]>
 
 <blog>
-    <template><![CDATA[
-        <div class="blog_post">
-            <div class="title">#{title}</div>
-            <div class="content">#{content}</div>
-        </div>
-    ]]></template>
+    <template>
+        <posts><![CDATA[
+            <div class="blog">
+                <div class="page">
+                    #{posts}
+                    #{pager}
+                </div>
+            </div>
+        ]]></posts>
 
-    <post id="1" title="Post 1"><![CDATA[
-        NIGGUZ
-    ]]></post>
+        <post><![CDATA[
+            <div class="blog">
+                <div class="post">
+                    <div class="title">#{title}</div>
+                    <div class="content">#{content}</div>
+                </div>
+            </div>
+        ]]></post>
+    </template>
 
-    <post id="2" title="Post 2"><![CDATA[
-        NIGGUZ NIGGUZ
-    ]]></post>
+    <data>
+        <post date="Thu Dec 18 2008 03:21:11 GMT+0100 (CET)" id="1" title="Post 1"><![CDATA[
+            NIGGUZ
+        ]]></post>
+
+        <post date="Thu Dec 18 2008 03:21:34 GMT+0100 (CET)" id="2" title="Post 2"><![CDATA[
+            NIGGUZ NIGGUZ
+        ]]></post>
+        
+        <post date="Thu Dec 18 2008 03:22:11 GMT+0100 (CET)" id="3" title="Post 3"><![CDATA[
+            NIGGUZ NIGGUZ NIGGUZ
+        ]]></post>
     
-    <post id="3" title="Post 3"><![CDATA[
-        NIGGUZ NIGGUZ NIGGUZ
-    ]]></post>
-
-    <post id="4" title="Post 4"><![CDATA[
-        NIGGUZ NIGGUZ NIGGUZ NIGGUZ
-    ]]></post>
-
-    <post id="5" title="Post 5"><![CDATA[
-        NIGGUZ NIGGUZ NIGGUZ NIGGUZ NIGGUZ
-    ]]></post>
-
-    <post id="6" title="Post 6"><![CDATA[
-        NIGGUZ NIGGUZ NIGGUZ NIGGUZ NIGGUZ NIGGUZ
-    ]]></post>
+        <post date="Thu Dec 18 2008 03:23:11 GMT+0100 (CET)" id="4" title="Post 4"><![CDATA[
+            NIGGUZ NIGGUZ NIGGUZ NIGGUZ
+        ]]></post>
+    
+        <post date="Thu Dec 18 2008 03:31:11 GMT+0100 (CET)" id="5" title="Post 5"><![CDATA[
+            NIGGUZ NIGGUZ NIGGUZ NIGGUZ NIGGUZ
+        ]]></post>
+    
+        <post date="Thu Dec 18 2008 04:21:11 GMT+0100 (CET)" id="6" title="Post 6"><![CDATA[
+            NIGGUZ NIGGUZ NIGGUZ NIGGUZ NIGGUZ NIGGUZ
+        ]]></post>
+    </data>
 </blog>
