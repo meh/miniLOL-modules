@@ -17,19 +17,23 @@
 
 <blog>
     <template>
-        <posts><![CDATA[
+        <blog><![CDATA[
             <div class="blog">
-                <div class="page">
-                    #{posts}
-                    #{pager}
-                </div>
+                #{content}
+            </div>
+        ]]></blog>
+
+        <posts><![CDATA[
+            <div class="page">
+                #{posts}
+                #{pager}
             </div>
             ]]>
         
             <pager><![CDATA[
                 <div class="pager">
                     #{previous}
-                    #{pages}
+                    #{numbers}
                     #{next}
                 </div>
                 ]]>
@@ -40,12 +44,10 @@
         </posts>
 
         <post><![CDATA[
-            <div class="blog">
-                <div class="post">
-                    <div class="title">#{title}</div>
-                    <div class="content">#{content}</div>
-                    #{pager}
-                </div>
+            <div class="post">
+                <div class="title">#{title}</div>
+                <div class="content">#{content}</div>
+                #{pager}
             </div>
             ]]>
         

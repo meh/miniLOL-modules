@@ -22,8 +22,9 @@ miniLOL.module.create('blog', {
                         miniLOL.resource.blog.res.dom = http.responseXML;
 
                         var template = http.responseXML.getElementsByTagName("template")[0];
-                        miniLOL.resource.blog.res.template.posts = template.getElementsByTagName('posts')[0].firstChild.nodeValue;
-                        miniLOL.resource.blog.res.template.post  = template.getElementsByTagName('post')[0].firstChild.nodeValue;
+                        miniLOL.resource.blog.res.template.blog  = template.getElementsByTagName('blog')[0].firstChild.nodeValue;
+                        miniLOL.resource.blog.res.template.posts = template.getElementsByTagName('posts')[0];
+                        miniLOL.resource.blog.res.template.post  = template.getElementsByTagName('post')[0];
                     }
                 });
             }
@@ -77,19 +78,49 @@ miniLOL.module.create('blog', {
                 posts += this.templetize([data[0][i], null], 'post');
             }
 
-            return this.cache.template.posts.interpolate({
-                posts: posts,
-                pager: this.templetize(['page', data[1], this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post').length/miniLOL.config.blog.postsPerPage], 'pager_overall'),
+            return this.cache.template.blog.interpolate({ content:
+                this.cache.template.posts.firstChild.nodeValue.interpolate({
+                    posts: posts,
+                    pager: this.templetize(['page', data[1], this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post').length/miniLOL.config.blog.postsPerPage], 'pager_overall'),
+                }),
             });
         }
         else if (type == "post") {
-            return this.cache.template.post.interpolate({
-                content: data[0].firstChild.nodeValue,
-                title: data[0].getAttribute('title'),
-                pager: (data[1] == null) ? "" : this.templetize(['id', data[1], this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post').length], 'pager_overall'),
-            });
+            if (data[1]) {
+                return this.cache.template.blog.interpolate({ content:
+                    this.cache.template.post.firstChild.nodeValue.interpolate({
+                        content: data[0].firstChild.nodeValue,
+                        title: data[0].getAttribute('title'),
+                        pager: this.templetize(['id', data[1], this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post').length], 'pager_overall'),
+                    }),
+                });
+            }
+            else {
+                return this.cache.template.post.firstChild.nodeValue.interpolate({
+                    content: data[0].firstChild.nodeValue,
+                    title: data[0].getAttribute('title'),
+                    pager: "",
+                });
+            }
         }
         else if (type == 'pager_overral') {
+            if (data[0] == 'id') {
+                var pager = this.cache.template.post.getElementsByTagName("pager").firstChild.nodeValue;
+                
+                return pager.interpolate({
+                    previous: this.templetize(data, 'pager_previous'),
+                    numbers:  this.templetize(data, 'pager_numbers'),
+                    next:     this.templetize(data, 'pager_next'),
+                });
+            }
+        }
+        else if (type == 'pager_previous') {
+            return "";
+        }
+        else if (type == 'pager_numbers') {
+            return "";
+        }
+        else if (type == 'pager_next') {
             return "";
         }
     }
