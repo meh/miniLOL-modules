@@ -24,28 +24,42 @@
                     #{pager}
                 </div>
             </div>
-        ]]></posts>
+            ]]>
+        
+            <pager><![CDATA[
+                <div class="pager">
+                    #{previous}
+                    #{pages}
+                    #{next}
+                </div>
+                ]]>
+                <previous><![CDATA[<div class="previous">&lt;</div>]]></previous>
+                <number><![CDATA[<div class="number">#{number}</div>]]></number>
+                <next><![CDATA[<div class="previous">&lt;</div>]]></next>
+            </pager>
+        </posts>
 
         <post><![CDATA[
             <div class="blog">
                 <div class="post">
                     <div class="title">#{title}</div>
                     <div class="content">#{content}</div>
+                    #{pager}
                 </div>
             </div>
-        ]]></post>
-
-        <pager><![CDATA[
-            <div class="pager">
-                #{previous}
-                #{pages}
-                #{next}
-            </div>
             ]]>
-            <previous><![CDATA[<div class="previous">&lt;</div>]]></previous>
-            <number><![CDATA[<div class="number">#{number}</div>]]></number>
-            <next><![CDATA[<div class="previous">&lt;</div>]]></next>
-        </pager>
+        
+            <pager><![CDATA[
+                <div class="pager">
+                    #{previous}
+                    #{next}
+                </div>
+                ]]>
+                <previous><![CDATA[<div class="previous">previous</div>]]></previous>
+                <number><![CDATA[<div class="number">#{number}</div>]]></number>
+                <next><![CDATA[<div class="previous">next</div>]]></next>
+            </pager>
+        </post>
     </template>
 
     <data>

@@ -61,7 +61,7 @@ miniLOL.module.create('blog', {
             for (   var i = allPosts.length-1-(miniLOL.config.blog.postsPerPage*(args.page-1)), count = 0;
                     count < miniLOL.config.blog.postsPerPage && i >= 0;
                     i--, count++) {
-                posts.push(allPosts[i], 'posts');
+                posts.push(allPosts[i]);
             }
 
             miniLOL.config.contentNode.innerHTML = this.templetize([posts, args.page], 'posts');
@@ -82,15 +82,15 @@ miniLOL.module.create('blog', {
                 pager: this.templetize(['page', data[1], this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post').length/miniLOL.config.blog.postsPerPage], 'pager_overall'),
             });
         }
-        else if (type == "post"{
+        else if (type == "post") {
             return this.cache.template.post.interpolate({
-                content: data.firstChild.nodeValue,
-                title: data.getAttribute('title'),
-                pager: (data[1] == null) ? "" : this.templetize(['id', this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post').length]),
-                
+                content: data[0].firstChild.nodeValue,
+                title: data[0].getAttribute('title'),
+                pager: (data[1] == null) ? "" : this.templetize(['id', data[1], this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post').length], 'pager_overall'),
             });
         }
         else if (type == 'pager_overral') {
+            return "";
         }
     }
 });
