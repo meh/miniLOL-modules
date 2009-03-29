@@ -34,6 +34,18 @@
                 </div>
             </div>
         ]]></post>
+
+        <pager><![CDATA[
+            <div class="pager">
+                #{previous}
+                #{pages}
+                #{next}
+            </div>
+            ]]>
+            <previous><![CDATA[<div class="previous">&lt;</div>]]></previous>
+            <number><![CDATA[<div class="number">#{number}</div>]]></number>
+            <next><![CDATA[<div class="previous">&lt;</div>]]></next>
+        </pager>
     </template>
 
     <data>

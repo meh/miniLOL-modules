@@ -48,47 +48,49 @@ miniLOL.module.create('blog', {
         if (args.id) {
             var post = this.cache.dom.$(args.id);
             if (post) {
-                miniLOL.config.contentNode.innerHTML = this.templetize(post);
+                miniLOL.config.contentNode.innerHTML = this.templetize([post, args.id], 'post');
             }
             else {
                 miniLOL.config.contentNode.innerHTML = "Post not found.";
             }
         }
         else {
-            var output = "";
-            var allPosts  = this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post');
-
-            var posts = new Array;
+            var allPosts = this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post');
+            var posts    = new Array;
 
             for (   var i = allPosts.length-1-(miniLOL.config.blog.postsPerPage*(args.page-1)), count = 0;
                     count < miniLOL.config.blog.postsPerPage && i >= 0;
                     i--, count++) {
-                posts.push(allPosts[i]);
+                posts.push(allPosts[i], 'posts');
             }
 
-            miniLOL.config.contentNode.innerHTML = this.templetize(posts);
+            miniLOL.config.contentNode.innerHTML = this.templetize([posts, args.page], 'posts');
         }
 
         return true;
     },
 
-    templetize: function (data) {
-        if (data instanceof Array) {
+    templetize: function (data, type) {
+        if (type == "posts") {
             var posts = new String;
-            for (var i = 0; i < data.length; i++) {
-                posts += this.templetize(data[i]);
+            for (var i = 0; i < data[0].length; i++) {
+                posts += this.templetize([data[0][i], null], 'post');
             }
 
             return this.cache.template.posts.interpolate({
                 posts: posts,
-                pager: "",
+                pager: this.templetize(['page', data[1], this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post').length/miniLOL.config.blog.postsPerPage], 'pager_overall'),
             });
         }
-        else {
+        else if (type == "post"{
             return this.cache.template.post.interpolate({
                 content: data.firstChild.nodeValue,
                 title: data.getAttribute('title'),
+                pager: (data[1] == null) ? "" : this.templetize(['id', this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post').length]),
+                
             });
+        }
+        else if (type == 'pager_overral') {
         }
     }
 });
