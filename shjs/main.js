@@ -11,12 +11,12 @@ miniLOL.module.create('shjs', {
         miniLOL.module.execute('shjs');
     },
 
-    execute: function () {
+    execute: function (args) {
         if (typeof(sh_highlightDocument) == 'function') {
             sh_highlightDocument(this.root+'/system/lang/', '.min.js');
         }
         else {
-            setTimeout(function(){miniLOL.module.execute('shjs', arguments[0])}, 10);
+            setTimeout('miniLOL.module.execute("shjs")', 10);
         }
     },
 });
