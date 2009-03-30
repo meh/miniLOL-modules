@@ -7,12 +7,16 @@ miniLOL.module.create('shjs', {
         include("css", this.root+"/resources/css/"+miniLOL.config.shjs.style);
     },
 
+    onGo: function () {
+        miniLOL.module.execute('shjs');
+    },
+
     execute: function () {
         if (typeof(sh_highlightDocument) == 'function') {
             sh_highlightDocument(this.root+'/system/lang/', '.min.js');
         }
         else {
-            miniLOL.module.execute('shjs', arguments[0]);
+            setTimeout(function(){miniLOL.module.execute('shjs', arguments[0])}, 10);
         }
-    }
+    },
 });

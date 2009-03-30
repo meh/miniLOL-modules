@@ -126,5 +126,11 @@
         <post date="Mon Mar 30 2009 20:40:46 GMT+0200 (CET)" id="6" title="FBI" author="Chris Hansen"><![CDATA[
             Have a seat.
         ]]></post>
+
+        <post date="Mon Mar 30 2009 20:41:46 GMT+0200 (CET)" id="7" title="g00nz" author="h4qu3r"><![CDATA[
+            <pre class="sh_perl">$lol = "NIGGER";
+print $lol, "\n";</pre>
+            Test for source highlight in blog posts :)
+        ]]></post>
     </data>
 </blog>
