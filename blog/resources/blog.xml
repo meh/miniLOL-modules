@@ -37,56 +37,94 @@
                     #{next}
                 </div>
                 ]]>
-                <previous><![CDATA[<div class="previous">&lt;</div>]]></previous>
-                <number><![CDATA[<div class="number">#{number}</div>]]></number>
-                <next><![CDATA[<div class="previous">&lt;</div>]]></next>
+                <previous><![CDATA[<div class="previous"><a href="#{link}">&lt;=</a></div>]]></previous>
+                <numbers length="5"><![CDATA[
+                        <div class="numbers">#{content}</div>
+                    ]]>
+                    <first><![CDATA[
+                        <div class="first"><a href="#{link}">#{number}</a></div>
+                    ]]></first>
+                    <inner><![CDATA[
+                        <div class="inner"><a href="#{link}">#{number}</a></div>
+                    ]]></inner>
+                    <current><![CDATA[
+                        <div class="current">#{number}</div>
+                    ]]></current>
+                    <last><![CDATA[
+                        <div class="last"><a href="#{link}">#{number}</a></div>
+                    ]]></last>
+                </numbers>
+                <next><![CDATA[<div class="next"><a href="#{link}">=&gt;</a></div>]]></next>
             </pager>
         </posts>
 
         <post><![CDATA[
             <div class="post">
-                <div class="title">#{title}</div>
+                <div class="header">
+                    <span class="title"><a href="#{link}">#{title}</a></span>
+                </div>
                 <div class="content">#{content}</div>
+                <div class="by">Posted by <span class="author">#{author}</span> on <span class="date">#{date}</span></div>
                 #{pager}
             </div>
             ]]>
-        
+
             <pager><![CDATA[
                 <div class="pager">
                     #{previous}
+                    #{numbers}
                     #{next}
                 </div>
                 ]]>
-                <previous><![CDATA[<div class="previous">previous</div>]]></previous>
-                <number><![CDATA[<div class="number">#{number}</div>]]></number>
-                <next><![CDATA[<div class="previous">next</div>]]></next>
-            </pager>
+                <previous><![CDATA[
+                    <div class="previous"><a href="#{link}">previous</a></div>
+                ]]></previous>
+                <numbers length="5"><![CDATA[
+                        <div class="numbers">#{content}</div>
+                    ]]>
+                    <first><![CDATA[
+                        <div class="first"><a href="#{link}">#{number}</a></div>
+                    ]]></first>
+                    <inner><![CDATA[
+                        <div class="inner"><a href="#{link}">#{number}</a></div>
+                    ]]></inner>
+                    <current><![CDATA[
+                        <div class="current">#{number}</div>
+                    ]]></current>
+                    <last><![CDATA[
+                        <div class="last"><a href="#{link}">#{number}</a></div>
+                    ]]></last>
+                </numbers>
+                <next><![CDATA[
+                    <div class="next"><a href="#{link}">next</a></div>
+                ]]></next>
+            </pager>       
         </post>
     </template>
 
     <data>
-        <post date="Thu Dec 18 2008 03:21:11 GMT+0100 (CET)" id="1" title="Post 1"><![CDATA[
-            NIGGUZ
+        <post date="Mon Mar 30 2009 20:35:46 GMT+0200 (CET)" id="1" title="LOL I STOLE YOUR BLOG" author="Dix"><![CDATA[
+            I say, the nigga.
         ]]></post>
 
-        <post date="Thu Dec 18 2008 03:21:34 GMT+0100 (CET)" id="2" title="Post 2"><![CDATA[
-            NIGGUZ NIGGUZ
+        <post date="Mon Mar 30 2009 20:36:46 GMT+0200 (CET)" id="2" title="Imma lost .(" author="Dix"><![CDATA[
+            WHERE DA HOOD AT?
         ]]></post>
-        
-        <post date="Thu Dec 18 2008 03:22:11 GMT+0100 (CET)" id="3" title="Post 3"><![CDATA[
-            NIGGUZ NIGGUZ NIGGUZ
+
+        <post date="Mon Mar 30 2009 20:37:46 GMT+0200 (CET)" id="3" title="Look at you haquer" author="Cockmongler"><![CDATA[
+            :E
         ]]></post>
-    
-        <post date="Thu Dec 18 2008 03:23:11 GMT+0100 (CET)" id="4" title="Post 4"><![CDATA[
-            NIGGUZ NIGGUZ NIGGUZ NIGGUZ
+
+        <post date="Mon Mar 30 2009 20:38:46 GMT+0200 (CET)" id="4" title="LIAR" author="Grinman"><![CDATA[
+            YOU TRAITOR
         ]]></post>
-    
-        <post date="Thu Dec 18 2008 03:31:11 GMT+0100 (CET)" id="5" title="Post 5"><![CDATA[
-            NIGGUZ NIGGUZ NIGGUZ NIGGUZ NIGGUZ
+
+        <post date="Mon Mar 30 2009 20:39:46 GMT+0200 (CET)" id="5" title="Remember remember, wat, I forgot :(" author="EFG"><![CDATA[
+            Oh look, the twins :O
         ]]></post>
-    
-        <post date="Thu Dec 18 2008 04:21:11 GMT+0100 (CET)" id="6" title="Post 6"><![CDATA[
-            NIGGUZ NIGGUZ NIGGUZ NIGGUZ NIGGUZ NIGGUZ
+
+        <post date="Mon Mar 30 2009 20:40:46 GMT+0200 (CET)" id="6" title="FBI" author="Chris Hansen"><![CDATA[
+            Have a seat.
         ]]></post>
     </data>
 </blog>
