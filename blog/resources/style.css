@@ -24,6 +24,10 @@
     font-weight: bold;
 }
 
+.blog .post .header .title a {
+    text-decoration: none;
+}
+
 .blog .post .header .date {
     font-size: 10px;
 }

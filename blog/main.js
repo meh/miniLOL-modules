@@ -1,28 +1,49 @@
+/*********************************************************************
+ *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE             *
+ *                   Version 2, December 2004                        *
+ *                                                                   *
+ *  Copyleft meh.                                                    *
+ *                                                                   *
+ *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE             *
+ *  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION  *
+ *                                                                   *
+ *  0. You just DO WHAT THE FUCK YOU WANT TO.                        *
+ *********************************************************************/
+
 miniLOL.module.create('blog', {
+    version: '0.2',
+
     onLoad: function() {
         miniLOL.resource.blog = {
             name: 'blog',
             res: null,
 
-            load: function (path) {
+            load: function (data, template) {
                 if (miniLOL.resource.blog.res == null) {
                     miniLOL.resource.blog.res = {
-                        dom: null,
+                        data: null,
                         cache: {},
                         template: {},
                     }
                 }
 
-                new Ajax.Request(path, {
+                new Ajax.Request(data, {
                     method: 'get',
                     asynchronous: false,
 
                     onSuccess: function (http) {
                         http.responseXML.$ = _$;
-                        miniLOL.resource.blog.res.dom = http.responseXML;
+                        miniLOL.resource.blog.res.data = http.responseXML;
+                    }
+                });
 
-                        var template = http.responseXML.getElementsByTagName("template")[0];
-                        miniLOL.resource.blog.res.template.blog  = template.getElementsByTagName('blog')[0].firstChild.nodeValue;
+                new Ajax.Request(template, {
+                    method: 'get',
+                    asynchronous: false,
+
+                    onSuccess: function (http) {
+                        var template = http.responseXML.documentElement;
+                        miniLOL.resource.blog.res.template.blog = template.getElementsByTagName('blog')[0].firstChild.nodeValue;
 
                         var posts   = template.getElementsByTagName('posts')[0];
                         var pager   = posts.getElementsByTagName('pager')[0];
@@ -58,7 +79,7 @@ miniLOL.module.create('blog', {
             }
         };
 
-        miniLOL.resource.load(miniLOL.resource.blog, this.root+"/resources/blog.xml");
+        miniLOL.resource.load(miniLOL.resource.blog, this.root+"/resources/data.xml", this.root+"/resources/template.xml");
         miniLOL.resource.load(miniLOL.resource.config, this.root+"/resources/config.xml");
         this.cache = miniLOL.resource.blog.res;
 
@@ -68,14 +89,14 @@ miniLOL.module.create('blog', {
     },
 
     execute: function (args) {
-        if (!this.cache.dom) {
-            throw "An error occurred while loading blog.xml";
+        if (!this.cache.data) {
+            throw "An error occurred while loading data.xml";
         }
 
         args.page = args.page || 1;
         
         if (args.id) {
-            var post = this.cache.dom.$(args.id);
+            var post = this.cache.data.$(args.id);
             if (post) {
                 miniLOL.config.contentNode.innerHTML = this.templetize([post, parseInt(args.id)], 'post');
             }
@@ -85,7 +106,7 @@ miniLOL.module.create('blog', {
             }
         }
         else {
-            var allPosts = this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post');
+            var allPosts = this.cache.data.getElementsByTagName('post');
 
             if (args.page > Math.ceil(allPosts.length/miniLOL.config.blog.postsPerPage) || args.page < 1) {
                 miniLOL.config.contentNode.innerHTML = "Page not found.";
@@ -116,13 +137,13 @@ miniLOL.module.create('blog', {
             return this.cache.template.blog.interpolate({ content:
                 this.cache.template.posts.overall.interpolate({
                     posts: posts,
-                    pager: this.templetize(['page', data[1], Math.ceil(this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post').length/miniLOL.config.blog.postsPerPage)], 'pager_overall'),
+                    pager: this.templetize(['page', data[1], Math.ceil(this.cache.data.getElementsByTagName('post').length/miniLOL.config.blog.postsPerPage)], 'pager_overall'),
                 }),
             });
         }
         else if (type == "post") {
             var pager = (data[1] != null)
-                ? this.templetize(['id', data[1], this.cache.dom.getElementsByTagName("data")[0].getElementsByTagName('post').length], 'pager_overall')
+                ? this.templetize(['id', data[1], this.cache.data.getElementsByTagName('post').length], 'pager_overall')
                 : "";
 
             var content = this.cache.template.post.overall.interpolate({

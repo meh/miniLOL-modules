@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE blog [
+    <!ELEMENT template (posts, post)>
+]>
+
+<template>
+    <blog><![CDATA[
+        <div class="blog">
+            #{content}
+        </div>
+    ]]></blog>
+
+    <posts><![CDATA[
+        <div class="page">
+            #{posts}
+            #{pager}
+        </div>
+        ]]>
+    
+        <pager><![CDATA[
+            <div class="pager">
+                #{previous}
+                #{numbers}
+                #{next}
+            </div>
+            ]]>
+            <previous><![CDATA[<div class="previous"><a href="#{link}">&lt;=</a></div>]]></previous>
+            <numbers length="5"><![CDATA[
+                    <div class="numbers">#{content}</div>
+                ]]>
+                <first><![CDATA[
+                    <div class="first"><a href="#{link}">#{number}</a></div>
+                ]]></first>
+                <inner><![CDATA[
+                    <div class="inner"><a href="#{link}">#{number}</a></div>
+                ]]></inner>
+                <current><![CDATA[
+                    <div class="current">#{number}</div>
+                ]]></current>
+                <last><![CDATA[
+                    <div class="last"><a href="#{link}">#{number}</a></div>
+                ]]></last>
+            </numbers>
+            <next><![CDATA[<div class="next"><a href="#{link}">=&gt;</a></div>]]></next>
+        </pager>
+    </posts>
+
+    <post><![CDATA[
+        <div class="post">
+            <div class="header">
+                <span class="title"><a href="#{link}">#{title}</a></span>
+            </div>
+            <div class="content">#{content}</div>
+            <div class="by">Posted by <span class="author">#{author}</span> on <span class="date">#{date}</span></div>
+            #{pager}
+        </div>
+        ]]>
+
+        <pager><![CDATA[
+            <div class="pager">
+                #{previous}
+                #{numbers}
+                #{next}
+            </div>
+            ]]>
+            <previous><![CDATA[
+                <div class="previous"><a href="#{link}">previous</a></div>
+            ]]></previous>
+            <numbers length="5"><![CDATA[
+                    <div class="numbers">#{content}</div>
+                ]]>
+                <first><![CDATA[
+                    <div class="first"><a href="#{link}">#{number}</a></div>
+                ]]></first>
+                <inner><![CDATA[
+                    <div class="inner"><a href="#{link}">#{number}</a></div>
+                ]]></inner>
+                <current><![CDATA[
+                    <div class="current">#{number}</div>
+                ]]></current>
+                <last><![CDATA[
+                    <div class="last"><a href="#{link}">#{number}</a></div>
+                ]]></last>
+            </numbers>
+            <next><![CDATA[
+                <div class="next"><a href="#{link}">next</a></div>
+            ]]></next>
+        </pager>       
+    </post>
+</template>
