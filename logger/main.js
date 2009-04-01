@@ -14,10 +14,11 @@ miniLOL.module.create('logger', {
     version: '0.1',
 
     onGo: function () {
-        var url = location.href.match(/#(.*)$/);
-        url     = encodeURIComponent(url ? url[1] : miniLOL.config.homePage);
+        var url  = location.href.match(/#(.*)$/);
+        url      = encodeURIComponent(url ? (url[1].empty() ? miniLOL.config.homePage : url[1]) : miniLOL.config.homePage);
+        var date = encodeURIComponent(new Date().toString());
 
-        new Ajax.Request(this.root+"/logger.php?url="+url, {
+        new Ajax.Request(this.root+"/logger.php?url="+url+"&date="+date, {
             method: 'get',
         });
     },
