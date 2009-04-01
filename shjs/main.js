@@ -5,6 +5,17 @@ miniLOL.module.create('shjs', {
 
         include("js" , this.root+"/system/sh_main.min.js");
         include("css", this.root+"/resources/css/"+miniLOL.config.shjs.style);
+
+        var check = function () {
+            if (typeof(sh_highlightDocument) == 'function') {
+                delete miniLOL.modules.loading["shjs"];
+            }
+            else {
+                setTimeout(function(){check()}, 10);
+            }
+        }; setTimeout(function(){check()}, 10);
+
+        return false;
     },
 
     onGo: function () {
@@ -12,11 +23,6 @@ miniLOL.module.create('shjs', {
     },
 
     execute: function (args) {
-        if (typeof(sh_highlightDocument) == 'function') {
-            sh_highlightDocument(this.root+'/system/lang/', '.min.js');
-        }
-        else {
-            setTimeout('miniLOL.module.execute("shjs")', 10);
-        }
+        sh_highlightDocument(this.root+'/system/lang/', '.min.js');
     },
 });
