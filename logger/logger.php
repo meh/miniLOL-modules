@@ -13,6 +13,11 @@
 
 define('__VERSION__', '0.1');
 
+function fixCData ($string)
+{
+    return preg_replace('#\]\]>#', '] ]>', $string);
+}
+
 $config    = simplexml_load_file('resources/config.xml');
 $protected = $config->protected == 'true';
 $file      = 'resources/'.$config->fileName;
@@ -49,24 +54,33 @@ if (!isset($_REQUEST['url'])) {
     exit;
 }
 
+while (file_exists('resources/.logging')) {
+    usleep(rand()%1000000);
+}
+
 $fp = fopen($file, 'r+');
+
+touch('resources/.logging');
+
 fseek($fp, -12, SEEK_END);
 
 $xml = new XMLWriter();
 $xml->openMemory();
 $xml->startElement('log');
-$xml->startElement('url'); $xml->writeCData($_REQUEST['url']); $xml->endElement();
+$xml->startElement('url'); $xml->writeCData(fixCData($_REQUEST['url'])); $xml->endElement();
 $xml->startElement('date');
     $xml->startElement('server'); $xml->writeCData(date('D M j Y H:i:s \G\M\TO (T)')); $xml->endElement();
-    $xml->startElement('user');   $xml->writeCData($_REQUEST['date']);                 $xml->endElement();
+    $xml->startElement('user');   $xml->writeCData(fixCData($_REQUEST['date']));       $xml->endElement();
 $xml->endElement();
 $xml->startElement('ip'); $xml->writeCData($_SERVER['REMOTE_ADDR']); $xml->endElement();
-$xml->startElement('user_agent'); $xml->writeCData($_SERVER['HTTP_USER_AGENT']); $xml->endElement();
-$xml->startElement('referer'); $xml->writeCData($_SERVER['HTTP_REFERER']); $xml->endElement();
+$xml->startElement('user_agent'); $xml->writeCData(fixCData($_SERVER['HTTP_USER_AGENT'])); $xml->endElement();
+$xml->startElement('referer'); $xml->writeCData(fixCData($_SERVER['HTTP_REFERER'])); $xml->endElement();
 $xml->endElement();
 
 fwrite($fp, $xml->outputMemory(true));
 fwrite($fp, "</logs>\n*/?>");
 fclose($fp);
+
+unlink('resources/.logging');
 
 ?>
