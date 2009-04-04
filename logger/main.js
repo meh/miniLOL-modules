@@ -18,8 +18,12 @@ miniLOL.module.create('logger', {
         url      = encodeURIComponent(url ? (url[1].empty() ? miniLOL.config.homePage : url[1]) : miniLOL.config.homePage);
         var date = encodeURIComponent(new Date().toString());
 
-        new Ajax.Request(this.root+"/logger.php?url="+url+"&date="+date, {
+        new Ajax.Request(this.root+"/main.php?url="+url+"&date="+date, {
             method: 'get',
         });
+    },
+
+    execute: function (args) {
+
     },
 });

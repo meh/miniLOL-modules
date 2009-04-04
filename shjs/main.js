@@ -12,6 +12,18 @@ miniLOL.module.create('shjs', {
     },
 
     execute: function (args) {
+        var pres = document.getElementsByTagName("pre");
+        
+        for (var i = 0; i < pres.length; i++) {
+            if (pres[i].className.match(/sh_/)) {
+                if (pres[i].innerHTML.match(/[<>&]/)) {
+                    pres[i].innerHTML = pres[i].innerHTML
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;");
+                }
+            }
+        }
+
         sh_highlightDocument(this.root+'/system/lang/', '.min.js');
     },
 });
