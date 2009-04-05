@@ -13,6 +13,8 @@
 miniLOL.module.create('blog', {
     version: '0.2',
 
+    dependencies: ['security'],
+
     onLoad: function() {
         miniLOL.resource.blog = {
             name: 'blog',

@@ -13,6 +13,8 @@
 
 define('__VERSION__', '0.1');
 
+session_start();
+
 function fixCData ($string)
 {
     return preg_replace('#\]\]>#', '] ]>', $string);
@@ -36,9 +38,8 @@ if (!file_exists($file)) {
     fclose($fp);
 }
 
-if (!isset($_REQUEST['url'])) {
-    // TODO: Develop shared secure configuration module.
-    if ($_REQUEST['passwd'] == 'youareafagget') {
+if (!isset($_REQUEST['url']) || !isset($_REQUEST['date'])) {
+    if ($_SESSION['miniLOL']['admin']) {
         if (isset($_REQUEST['retrieve'])) {
             header('Content-Type: text/xml');
 
@@ -49,6 +50,9 @@ if (!isset($_REQUEST['url'])) {
 
             echo $content;
         }
+    }
+    else {
+        echo "You're doing it deeply wrong.";
     }
 
     exit;
