@@ -1,3 +1,4 @@
+<?php
 /*********************************************************************
  *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE             *
  *                   Version 2, December 2004                        *
@@ -10,22 +11,14 @@
  *  0. You just DO WHAT THE FUCK YOU WANT TO.                        *
  *********************************************************************/
 
-miniLOL.module.create('logger', {
-    version: '0.1',
+define('__VERSION__', '0.2');
 
-    dependencies: ['security'],
+session_set_cookie_params(60*60*24*365, '/');
+session_start();
 
-    onGo: function (url) {
-        url      = url.match(/#(.*)$/);
-        url      = encodeURIComponent(url ? (url[1].empty() ? miniLOL.config.homePage : url[1]) : miniLOL.config.homePage);
-        var date = encodeURIComponent(new Date().toString());
+if (!$_SESSION['miniLOL']['admin']) {
+    echo "You're doing it wrong.";
+    exit;
+}
 
-        new Ajax.Request(this.root+"/main.php?url="+url+"&date="+date, {
-            method: 'get',
-        });
-    },
-
-    execute: function (args) {
-
-    },
-});
+?>

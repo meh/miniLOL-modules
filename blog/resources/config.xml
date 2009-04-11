@@ -6,4 +6,5 @@
 
 <configuration domain="blog">
     <postsPerPage>5</postsPerPage>
+    <editorType>simple</editorType>
 </configuration>

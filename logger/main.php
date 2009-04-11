@@ -13,6 +13,7 @@
 
 define('__VERSION__', '0.1');
 
+session_set_cookie_params(60*60*24*365, '/');
 session_start();
 
 function fixCData ($string)

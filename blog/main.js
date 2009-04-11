@@ -99,35 +99,53 @@ miniLOL.module.create('blog', {
             throw new Error("An error occurred while loading data.xml");
         }
 
-        args.page = args.page || 1;
-        
-        if (args.id) {
-            var post = this.data.$(args.id);
-            if (post) {
-                $(miniLOL.config.contentNode).innerHTML = this.templetize([post, parseInt(args.id)], 'post');
+        if (args.post) {
+            if (args.do) {
+
             }
             else {
-                $(miniLOL.config.contentNode).innerHTML = "Post not found.";
-                return false;
+
+            }
+        }
+        else if (args.edit) {
+            if (args.do) {
+
+            }
+            else {
+
             }
         }
         else {
-            var allPosts = this.data.getElementsByTagName('post');
-
-            if (args.page > Math.ceil(allPosts.length/miniLOL.config.blog.postsPerPage) || args.page < 1) {
-                $(miniLOL.config.contentNode).innerHTML = "Page not found.";
-                return false;
+            args.page = args.page || 1;
+            
+            if (args.id) {
+                var post = this.data.$(args.id);
+                if (post) {
+                    $(miniLOL.config.contentNode).innerHTML = this.templetize([post, parseInt(args.id)], 'post');
+                }
+                else {
+                    $(miniLOL.config.contentNode).innerHTML = "Post not found.";
+                    return false;
+                }
             }
-
-            var posts = new Array;
-
-            for (   var i = allPosts.length-1-(miniLOL.config.blog.postsPerPage*(args.page-1)), count = 0;
-                    count < miniLOL.config.blog.postsPerPage && i >= 0;
-                    i--, count++) {
-                posts.push(allPosts[i]);
+            else {
+                var allPosts = this.data.getElementsByTagName('post');
+    
+                if (args.page > Math.ceil(allPosts.length/miniLOL.config.blog.postsPerPage) || args.page < 1) {
+                    $(miniLOL.config.contentNode).innerHTML = "Page not found.";
+                    return false;
+                }
+    
+                var posts = new Array;
+    
+                for (   var i = allPosts.length-1-(miniLOL.config.blog.postsPerPage*(args.page-1)), count = 0;
+                        count < miniLOL.config.blog.postsPerPage && i >= 0;
+                        i--, count++) {
+                    posts.push(allPosts[i]);
+                }
+    
+                $(miniLOL.config.contentNode).innerHTML = this.templetize([posts, parseInt(args.page)], 'posts');
             }
-
-            $(miniLOL.config.contentNode).innerHTML = this.templetize([posts, parseInt(args.page)], 'posts');
         }
 
         return true;
