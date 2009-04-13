@@ -88,4 +88,18 @@
             ]]></next>
         </pager>       
     </post>
+
+    <manage>
+        <post><![CDATA[
+            <form onsubmit="miniLOL.module.execute('blog', { post: true, do: true, title: $('title').value, content: $('editor').value });">
+                <input type="text" id="title"/>
+                #{editor}
+                <input type="send" value="Post"/>
+            </form>
+        ]]></post>
+
+        <edit><![CDATA[
+
+        ]]></edit>
+    </manage>
 </template>
