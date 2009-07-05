@@ -4,6 +4,7 @@
     <!ELEMENT editors (editor*)>
 
     <!ELEMENT editor (#PCDATA)>
+    <!ATTLIST editor
         type CDATA #REQUIRED
     >
 ]>

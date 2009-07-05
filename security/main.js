@@ -18,14 +18,14 @@ miniLOL.module.create('security', {
     },
 
     execute: function (args) {
-        if (args.login) {
-            if (args.do) {
-                if (!args.password) {
+        if (args["login"]) {
+            if (args["do"]) {
+                if (!args["password"]) {
                     $(miniLOL.config.contentNode).innerHTML = 'The password is missing.';
                     return false;
                 }
 
-                new Ajax.Request(this.root+"/main.php?password=#{0}".interpolate([encodeURIComponent(args.password)]), {
+                new Ajax.Request(this.root+"/main.php?login&password=#{0}".interpolate([encodeURIComponent(args["password"])]), {
                     method: 'get',
 
                     onSuccess: function (http) {
@@ -50,6 +50,35 @@ miniLOL.module.create('security', {
                     },
                 });
             }
+        }
+        else if (args["connected"]) {
+            var result = "false";
+            
+            new Ajax.Request(this.root+"/main.php?connected", {
+                method: 'get',
+                asynchronous: false,
+
+                onSuccess: function (http) {
+                    result = http.responseText;
+                },
+            });
+
+            return result == "true";
+        }
+        else if (args["get"]) {
+            var result = "";
+            
+            new Ajax.Request(this.root+"/main.php?get=" + args["get"], {
+                method: 'get',
+                asynchronous: false,
+
+                onSuccess: function (http) {
+                    result = http.responseText;
+                },
+            });
+
+            return result;
+           
         }
     },
 });

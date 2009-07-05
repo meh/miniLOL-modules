@@ -119,20 +119,20 @@ miniLOL.module.create('blog', {
             throw new Error("An error occurred while loading data.xml");
         }
 
-        if (args.post) {
-            if (args.do) {
-                args.title  = "HAR HAR HAR" || args.title;
-                args.date   = new Date().toString() || args.date;
-                args.author = miniLOL.config.blog.author || args.author;
+        if (args["post"]) {
+            if (args["do"]) {
+                args["title"]  = args["title"] || "";
+                args["date"]   = args["date"] || new Date().toString();
+                args["author"] = args["author"] || miniLOL.config.blog.author;
 
                 new Ajax.Request(this.root+"/main.php?post", {
                     method: 'post',
 
                     params: {
-                        'title':   args.title,
-                        'date':    args.date,
-                        'author':  args.author,
-                        'content': args.content,
+                        'title':   args["title"],
+                        'date':    args["date"],
+                        'author':  args["author"],
+                        'content': args["content"],
                     },
 
                     onSuccess: function (http) {
@@ -153,9 +153,9 @@ miniLOL.module.create('blog', {
                 $(miniLOL.config.contentNode).innerHTML = this.templetize(null, 'new_post');
             }
         }
-        else if (args.edit) {
-            if (args.id) {
-                if (args.do) {
+        else if (args["edit"]) {
+            if (args["id"]) {
+                if (args["do"]) {
 
                 }
                 else {
@@ -178,29 +178,29 @@ miniLOL.module.create('blog', {
                 
             }
         }
-        else if (args.delete) {
-            if (!args.id) {
+        else if (args["delete"]) {
+            if (!args["id"]) {
                 $(miniLOL.config.contentNode).innerHTML = "You're doing it wrong.";
                 return false;
             }
 
-            if (args.do) {
+            if (args["do"]) {
 
             }
             else {
 
             }
         }
-        else if (args.retrieve) {
+        else if (args["retrieve"]) {
 
         }
         else {
-            args.page = args.page || 1;
+            args["page"] = args["page"] || 1;
             
-            if (args.id) {
-                var post = this.data.$(args.id);
+            if (args["id"]) {
+                var post = this.data.$(args["id"]);
                 if (post) {
-                    $(miniLOL.config.contentNode).innerHTML = this.templetize([post, parseInt(args.id)], 'post');
+                    $(miniLOL.config.contentNode).innerHTML = this.templetize([post, parseInt(args["id"])], 'post');
                 }
                 else {
                     $(miniLOL.config.contentNode).innerHTML = "Post not found.";
@@ -210,20 +210,20 @@ miniLOL.module.create('blog', {
             else {
                 var allPosts = this.data.getElementsByTagName('post');
     
-                if (args.page > Math.ceil(allPosts.length/miniLOL.config.blog.postsPerPage) || args.page < 1) {
+                if (args["page"] > Math.ceil(allPosts.length/miniLOL.config.blog.postsPerPage) || args["page"] < 1) {
                     $(miniLOL.config.contentNode).innerHTML = "Page not found.";
                     return false;
                 }
     
                 var posts = new Array;
     
-                for (   var i = allPosts.length-1-(miniLOL.config.blog.postsPerPage*(args.page-1)), count = 0;
+                for (   var i = allPosts.length-1-(miniLOL.config.blog.postsPerPage*(args["page"]-1)), count = 0;
                         count < miniLOL.config.blog.postsPerPage && i >= 0;
                         i--, count++) {
                     posts.push(allPosts[i]);
                 }
     
-                $(miniLOL.config.contentNode).innerHTML = this.templetize([posts, parseInt(args.page)], 'posts');
+                $(miniLOL.config.contentNode).innerHTML = this.templetize([posts, parseInt(args["page"])], 'posts');
             }
         }
 
