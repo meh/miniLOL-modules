@@ -2,6 +2,9 @@
 
 <!DOCTYPE blog [
     <!ELEMENT data (post*)>
+    <!ATTLIST data
+        total CDATA #REQUIRED
+    >
 
     <!ELEMENT post (#PCDATA)>
     <!ATTLIST post
@@ -12,7 +15,7 @@
     >
 ]>
 
-<data>
+<data total="7">
     <post date="Mon Mar 30 2009 20:35:46 GMT+0200 (CET)" id="1" title="LOL I STOLE YOUR BLOG" author="Dix"><![CDATA[
         I say, the nigga.
     ]]></post>

@@ -28,21 +28,19 @@ if (!$_SESSION['miniLOL']['admin']) {
 $data = DOMDocument::load('resources/data.xml');
 
 if (isset($_REQUEST['post'])) {
-    $ids   = array();
-    $posts = $data->getElementsByTagName("post");
-
-    for ($i = 0; $i < $posts->length; $i++) {
-        array_push($ids, ((int) $posts->item($i)->getAttribute('id')));
-    }
+    $id = $data->documentElement->getAttribute('total') + 1;
     
-    $post = new DOMElement('post');
-    $post->setAttribute('id', max($ids)+1);
-    $post->setAttribute('title', $_REQUEST['title']);
-    $post->setAttribute('author', $_REQUEST['author']);
-    $post->setAttribute('date', $_REQUEST['date']);
+    $post = $data->createElement('post');
+    $post->setAttribute('id', $id);
+    $post->setAttribute('title', htmlentities(urldecode($_REQUEST['title'])));
+    $post->setAttribute('author', htmlentities(urldecode($_REQUEST['author'])));
+    $post->setAttribute('date', htmlentities(urldecode($_REQUEST['date'])));
 
-    $content = $data->createCDataSection(str_replace(']]>', ']&#93;>', $_REQUEST['content']));
+    $data->documentElement->setAttribute('total', $id);
+
+    $content = $data->createCDataSection(str_replace(']]>', ']&#93;>', urldecode($_REQUEST['content'])));
     $post->appendChild($content);
+    $data->documentElement->appendChild($post);
 
     echo "The post has been added.";
     $data->save('resources/data.xml');

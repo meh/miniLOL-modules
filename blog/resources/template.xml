@@ -91,11 +91,21 @@
 
     <manage>
         <post><![CDATA[
-            <form onsubmit="miniLOL.module.execute('blog', { post: true, do: true, title: $('title').value, content: $('editor').value });">
-                <input type="text" id="title"/>
+            <form onsubmit="miniLOL.module.execute('blog', { post: true, do: true, title: escape($('title').value), author: escape($('author').value), date: escape(new Date().toString()), content: escape($('editor').value) });">
+                <table>
+                    <tr><td>Title:</td><td><input type="text" id="title"/></td></tr>
+                    <tr><td>Author:</td><td><input type="text" id="author"/></td>
+                </table><br/>
+                Content:<br/>
                 #{editor}
-                <input type="send" value="Post"/>
+                <br/><br/><input type="submit" value="Post"/>
             </form>
+
+            <script>
+            if (miniLOL.config.blog.author) {
+                $("author").value = miniLOL.config.blog.author;
+            }
+            </script>
         ]]></post>
 
         <edit><![CDATA[

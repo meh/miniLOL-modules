@@ -90,3 +90,10 @@
 .blog .pager .numbers a {
     text-decoration: none;
 }
+
+.blog #editor {
+    width: 99%;
+    height: 100px;
+    font-family: Courier new;
+    font-size: 10px;
+}
