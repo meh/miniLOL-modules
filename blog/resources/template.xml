@@ -91,7 +91,7 @@
 
     <manage>
         <post><![CDATA[
-            <form onsubmit="miniLOL.module.execute('blog', { post: true, do: true, title: escape($('title').value), author: escape($('author').value), date: escape(new Date().toString()), content: escape($('editor').value) });">
+            <form onsubmit="miniLOL.module.execute('blog', { post: true, do: true, title: encodeURIComponent($('title').value), author: encodeURIComponent($('author').value), date: encodeURIComponent(new Date().toString()), content: encodeURIComponent($('editor').value) });">
                 <table>
                     <tr><td>Title:</td><td><input type="text" id="title"/></td></tr>
                     <tr><td>Author:</td><td><input type="text" id="author"/></td>

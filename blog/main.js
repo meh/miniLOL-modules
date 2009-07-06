@@ -20,7 +20,7 @@ miniLOL.module.create('blog', {
             name: 'blog',
             res: null,
 
-            load: function (data, template, editors) {
+            load: function (data, template, editors, blog) {
                 if (this.res == null) {
                     this.res = {
                         data: null,
@@ -100,21 +100,23 @@ miniLOL.module.create('blog', {
                         }
                     },
                 });
+
+                blog.template = res.template;
+                blog.editors  = res.editors;
+                blog.data     = res.data;
+                blog.cache    = res.cache;
             }
         };
 
-        miniLOL.resource.load(miniLOL.resource.blog, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml");
+        miniLOL.resource.load(miniLOL.resource.blog, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml", this);
         miniLOL.resource.load(miniLOL.resource.config, this.root+"/resources/config.xml");
-        this.template = miniLOL.resource.blog.res.template;
-        this.editors  = miniLOL.resource.blog.res.editors;
-        this.data     = miniLOL.resource.blog.res.data;
-        this.cache    = miniLOL.resource.blog.res.cache;
 
         include("css", this.root+"/resources/style.css");
 
         miniLOL.module.addEvent('window.onresize', function () {
-            if ($('editor')) {
-                $('editor').setStyle({ height: (($('body').getHeight() - 150)) + 'px' });
+            var editor = $('editor');
+            if (editor) {
+                editor.setStyle({ height: (($('body').getHeight() - 150)) + 'px' });
             }
         });
 

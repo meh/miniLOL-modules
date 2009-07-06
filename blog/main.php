@@ -26,6 +26,8 @@ if (!$_SESSION['miniLOL']['admin']) {
 }
 
 $data = DOMDocument::load('resources/data.xml');
+$data->preserveWhiteSpace = false;
+$data->formatOutput       = true;
 
 if (isset($_REQUEST['post'])) {
     $id = $data->documentElement->getAttribute('total') + 1;
@@ -42,8 +44,9 @@ if (isset($_REQUEST['post'])) {
     $post->appendChild($content);
     $data->documentElement->appendChild($post);
 
-    echo "The post has been added.";
     $data->save('resources/data.xml');
+
+    echo "The post has been added.";
     exit;
 }
 
