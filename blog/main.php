@@ -34,13 +34,13 @@ if (isset($_REQUEST['post'])) {
     
     $post = $data->createElement('post');
     $post->setAttribute('id', $id);
-    $post->setAttribute('title', htmlentities(urldecode($_REQUEST['title']), ENT_QUOTES, 'UTF-8'));
-    $post->setAttribute('author', htmlentities(urldecode($_REQUEST['author']), ENT_QUOTES, 'UTF-8'));
-    $post->setAttribute('date', htmlentities(urldecode($_REQUEST['date']), ENT_QUOTES, 'UTF-8'));
+    $post->setAttribute('title', htmlentities(urldecode(get_magic_quotes_gpc() ? stripslashes($_REQUEST['title']) : $_REQUEST['title']), ENT_QUOTES, 'UTF-8'));
+    $post->setAttribute('author', htmlentities(urldecode(get_magic_quotes_gpc() ? stripslashes($_REQUEST['author']) : $_REQUEST['author']), ENT_QUOTES, 'UTF-8'));
+    $post->setAttribute('date', htmlentities(urldecode(get_magic_quotes_gpc() ? stripslashes($_REQUEST['date']) : $_REQUEST['date']), ENT_QUOTES, 'UTF-8'));
 
     $data->documentElement->setAttribute('total', $id);
 
-    $content = $data->createCDataSection(str_replace(']]>', ']&#93;>', urldecode($_REQUEST['content'])));
+    $content = $data->createCDataSection(str_replace(']]>', ']&#93;>', urldecode(get_magic_quotes_gpc() ? stripslashes($_REQUEST['content']) : $_REQUEST['content'])));
     $post->appendChild($content);
     $data->documentElement->appendChild($post);
 

@@ -18,6 +18,10 @@ miniLOL.module.create('security', {
     },
 
     execute: function (args) {
+        if (!args) {
+            return;
+        }
+
         if (args["login"]) {
             if (args["do"]) {
                 if (!args["password"]) {
