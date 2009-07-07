@@ -13,6 +13,32 @@
 
 define('__VERSION__', '0.1');
 
+function simpleXMLToArray ($xml)
+{
+    if (count($xml->children()) == 0) {
+        return (string) $xml;
+    }
+
+    $result = array();
+
+    foreach ($xml as $name => $value) {
+        $result[$name] = simpleXMLToArray($value);
+    }
+
+    return $result;
+}
+
+function buildConfig ($file)
+{
+    // Secure config file
+    $xml = file($file);
+    array_shift($xml);
+    array_pop($xml);
+    $xml = join("\n", $xml);
+
+    return simplexml_load_string($xml);
+}
+
 session_set_cookie_params(60*60*24*365, '/');
 session_start();
 
@@ -26,18 +52,16 @@ if (isset($_REQUEST['connected'])) {
 
     exit;
 }
-
-// Secure config file
-$xml = file('resources/config.php');
-array_shift($xml);
-array_pop($xml);
-$xml = join("\n", $xml);
-
-$Config = simplexml_load_string($xml);
+else if (isset($_REQUEST['build'])) {
+    $_SESSION['miniLOL']['config'] = simpleXMLToArray(buildConfig('resources/config.php'));
+    exit;
+}
 
 if (isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
-    if ($_REQUEST['password'] == $Config->admin->password) {
-        $_SESSION['miniLOL']['admin'] = true;
+    $_SESSION['miniLOL']['config'] = simpleXMLToArray(buildConfig('resources/config.php'));
+
+    if ($_REQUEST['password'] == $_SESSION['miniLOL']['config']['admin']['password']) {
+        $_SESSION['miniLOL']['admin']  = true;
 
         echo 'Logged in succesfully.';
     }
@@ -47,28 +71,30 @@ if (isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
 
     exit;
 }
+else if (isset($_REQUEST['logout'])) {
+    unset($_SESSION['miniLOL']);
+
+    echo 'Logged out.';
+    exit;
+}
 
 if (@!$_SESSION['miniLOL']['admin'] || !isset($_REQUEST['get']) || !strlen($_REQUEST['get'])) {
     exit;
 }
 
-if ($_REQUEST['get'][0] == '/') {
-    $node = @$Config->xpath($_REQUEST['get']);
-    echo $node[0];
-    exit;
-}
-
-$lastNode = $Config;
+$lastNode = $_SESSION['miniLOL']['config'];
 $nodeTree = explode('.', $_REQUEST['get']);
 
 foreach ($nodeTree as $node) {
-    $lastNode = $lastNode->{$node};
-
-    if (!$lastNode) {
-        break;
+    if (!isset($lastNode[$node])) {
+        exit;
     }
+
+    $lastNode = $lastNode[$node];
 }
 
-echo $lastNode;
+if (is_string($lastNode)) {
+    echo $lastNode;
+}
 
 ?>

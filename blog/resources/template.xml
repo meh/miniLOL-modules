@@ -105,11 +105,26 @@
             if (miniLOL.config.blog.author) {
                 $("author").value = miniLOL.config.blog.author;
             }
+
+            $('editor').setStyle({ height: (($('body').getHeight() - 150)) + 'px' });
             </script>
         ]]></post>
 
         <edit><![CDATA[
+            <form onsubmit="miniLOL.module.execute('blog', { edit: true, do: true, id: $('post_id').value, title: encodeURIComponent($('title').value), author: encodeURIComponent($('author').value), date: encodeURIComponent(new Date().toString()), content: encodeURIComponent($('editor').value) });">
+                <table>
+                    <tr><td>Title:</td><td><input type="text" id="title"/></td></tr>
+                    <tr><td>Author:</td><td><input type="text" id="author"/></td>
+                </table><br/>
+                Content:<br/>
+                #{editor}
+                <input type="hidden" id="post_id"/>
+                <br/><br/><input type="submit" value="Post"/>
+            </form>
 
+            <script>
+            $('editor').setStyle({ height: (($('body').getHeight() - 150)) + 'px' });
+            </script>
         ]]></edit>
     </manage>
 </template>

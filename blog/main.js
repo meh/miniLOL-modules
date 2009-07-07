@@ -384,11 +384,13 @@ miniLOL.module.create('blog', {
                 content: this.template.manage.post.interpolate({
                     editor: this.editors[miniLOL.config.blog.editorType || 'simple'],
                 })
-            }) + "<script>$('editor').setStyle({ height: (($('body').getHeight() - 150)) + 'px' });</script>";
+            });
         }
         else if (type == 'edit_post') {
-            return this.template.manage.edit.interpolate({
-                editor: this.editors[miniLOL.config.blog.editorType || 'simple'],
+            return this.template.blog.interpolate({
+                content: this.template.manage.edit.interpolate({
+                    editor: this.editors[miniLOL.config.blog.editorType || 'simple'],
+                })
             });
         }
     }

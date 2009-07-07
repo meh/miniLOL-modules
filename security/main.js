@@ -15,6 +15,13 @@ miniLOL.module.create('security', {
     
     onLoad: function () {
         include("css", this.root+"/resources/style.css");
+        new Ajax.Request(this.root+"/main.php?build", {
+            method: 'get',
+
+            onFailure: function () {
+                $(miniLOL.config.contentNode).innerHTML = "Failed to build the configuration tree.";
+            }
+        });
     },
 
     execute: function (args) {
@@ -54,6 +61,19 @@ miniLOL.module.create('security', {
                     },
                 });
             }
+        }
+        else if (args["logout"]) {
+            new Ajax.Request(this.root+"/main.php?logout", {
+                method: 'get',
+
+                onSuccess: function (http) {
+                    $(miniLOL.config.contentNode).innerHTML = http.responseText;
+                },
+
+                onFailure: function () {
+                    $(miniLOL.config.contentNode).innerHTML = 'Something went deeply wrong :(';
+                },
+            });
         }
         else if (args["connected"]) {
             var result = "false";
