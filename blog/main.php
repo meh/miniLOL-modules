@@ -46,7 +46,7 @@ if (isset($_REQUEST['post'])) {
 
     $data->save('resources/data.xml');
 
-    echo "The post has been added.";
+    echo 'The post has been added.';
     exit;
 }
 
@@ -55,11 +55,26 @@ if (!isset($_REQUEST['id'])) {
     exit;
 }
 
-if (isset($_REQUEST['edit'])) {
+$post = $data->getElementById($_REQUEST['id']);
 
+if (isset($_REQUEST['edit'])) {
+    $post->setAttribute('title', htmlentities(urldecode(get_magic_quotes_gpc() ? stripslashes($_REQUEST['title']) : $_REQUEST['title']), ENT_QUOTES, 'UTF-8'));
+    $post->setAttribute('author', htmlentities(urldecode(get_magic_quotes_gpc() ? stripslashes($_REQUEST['author']) : $_REQUEST['author']), ENT_QUOTES, 'UTF-8'));
+    $post->setAttribute('date', htmlentities(urldecode(get_magic_quotes_gpc() ? stripslashes($_REQUEST['date']) : $_REQUEST['date']), ENT_QUOTES, 'UTF-8'));
+
+    $post->removeChild($post->firstChild)
+    $content = $data->createCDataSection(str_replace(']]>', ']&#93;>', urldecode(get_magic_quotes_gpc() ? stripslashes($_REQUEST['content']) : $_REQUEST['content'])));
+    $post->appendChild($content);
+
+    $data->save('resources/data.xml');
+
+    echo 'The post has been modified.';
 }
 else if (isset($_REQUEST['delete'])) {
+    $data->removeChild($post);
+    $data->save('resources/data.xml');
 
+    echo 'The post has been deleted.';
 }
 
 ?>

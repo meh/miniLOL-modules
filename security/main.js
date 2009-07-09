@@ -15,6 +15,7 @@ miniLOL.module.create('security', {
     
     onLoad: function () {
         include("css", this.root+"/resources/style.css");
+
         new Ajax.Request(this.root+"/main.php?build", {
             method: 'get',
 

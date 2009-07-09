@@ -130,8 +130,8 @@ miniLOL.module.create('blog', {
 
         if (args["post"]) {
             if (args["do"]) {
-                args["title"]  = args["title"] || "";
-                args["date"]   = args["date"] || new Date().toString();
+                args["title"]  = args["title"]  || "";
+                args["date"]   = args["date"]   || new Date().toString();
                 args["author"] = args["author"] || miniLOL.config.blog.author;
 
                 new Ajax.Request(this.root+"/main.php?post", {
