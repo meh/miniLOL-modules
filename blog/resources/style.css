@@ -1,3 +1,7 @@
+.blog a {
+    font-size: 11px;
+}
+
 .blog pre {
     width: 90%;
     margin-top: 20px;
@@ -19,12 +23,9 @@
     margin-bottom: 10px;
 }
 
-.blog .post .header .title {
+.blog .post .header .title a {
     font-size: 12px;
     font-weight: bold;
-}
-
-.blog .post .header .title a {
     text-decoration: none;
 }
 

@@ -28,6 +28,11 @@ miniLOL.module.create('blog', {
                         template: {},
                         editors: {},
                     };
+
+                    delete blog.data;
+                    delete blog.cache;
+                    delete blog.template;
+                    delete blog.editors;
                 } var res = this.res;
 
                 new Ajax.Request(data, {
@@ -107,10 +112,10 @@ miniLOL.module.create('blog', {
                     },
                 });
 
-                blog.template = res.template;
-                blog.editors  = res.editors;
                 blog.data     = res.data;
                 blog.cache    = res.cache;
+                blog.template = res.template;
+                blog.editors  = res.editors;
             }
         };
 
