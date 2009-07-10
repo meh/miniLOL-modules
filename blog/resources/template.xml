@@ -49,7 +49,7 @@
     <post><![CDATA[
         <div class="post">
             <div class="header">
-                <span class="title"><a href="#{link}">#{title}</a></span>
+                <span class="title"><a href="#{link}">#{title}</a></span> <div style="float: right">#{admin}</div>
             </div>
             <div class="content">#{content}</div>
             <div class="by">Posted by <span class="author">#{author}</span> on <span class="date">#{date}</span></div>
@@ -90,11 +90,15 @@
     </post>
 
     <manage>
+        <admin><![CDATA[
+            {[<a href="#module=blog&edit&id=#{post_id}">edit</a>] [<a href="#module=blog&delete&do&id=#{post_id}">delete</a>]}
+        ]]></admin>
+
         <post><![CDATA[
             <form onsubmit="miniLOL.module.execute('blog', { post: true, do: true, title: encodeURIComponent($('title').value), author: encodeURIComponent($('author').value), date: encodeURIComponent(new Date().toString()), content: encodeURIComponent($('editor').value) });">
                 <table>
                     <tr><td>Title:</td><td><input type="text" id="title"/></td></tr>
-                    <tr><td>Author:</td><td><input type="text" id="author"/></td>
+                    <tr><td>Author:</td><td><input type="text" id="author" value="#{author}"/></td>
                 </table><br/>
                 Content:<br/>
                 #{editor}
@@ -102,28 +106,26 @@
             </form>
 
             <script>
-            if (miniLOL.config.blog.author) {
-                $("author").value = miniLOL.config.blog.author;
-            }
-
             $('editor').setStyle({ height: (($('body').getHeight() - 150)) + 'px' });
             </script>
         ]]></post>
 
         <edit><![CDATA[
-            <form onsubmit="miniLOL.module.execute('blog', { edit: true, do: true, id: $('post_id').value, title: encodeURIComponent($('title').value), author: encodeURIComponent($('author').value), date: encodeURIComponent(new Date().toString()), content: encodeURIComponent($('editor').value) });">
+            <form onsubmit="miniLOL.module.execute('blog', { edit: true, do: true, id: $('post_id').value, title: encodeURIComponent($('title').value), author: encodeURIComponent($('author').value), date: encodeURIComponent($('date').value), content: encodeURIComponent($('editor').value) });">
                 <table>
-                    <tr><td>Title:</td><td><input type="text" id="title"/></td></tr>
-                    <tr><td>Author:</td><td><input type="text" id="author"/></td>
+                    <tr><td>Title:</td><td><input type="text" id="title" value="#{title}"/></td></tr>
+                    <tr><td>Author:</td><td><input type="text" id="author" value="#{author}"/></td>
                 </table><br/>
                 Content:<br/>
                 #{editor}
-                <input type="hidden" id="post_id"/>
+                <input type="hidden" id="post_id" value="#{post_id}"/>
+                <input type="hidden" id="date" value="#{date}"/>
                 <br/><br/><input type="submit" value="Post"/>
             </form>
 
             <script>
             $('editor').setStyle({ height: (($('body').getHeight() - 150)) + 'px' });
+            $('editor').value = miniLOL.modules.list.blog.data.getElementById("#{post_id}").firstChild.nodeValue;
             </script>
         ]]></edit>
     </manage>

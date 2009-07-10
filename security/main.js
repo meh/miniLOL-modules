@@ -18,11 +18,14 @@ miniLOL.module.create('security', {
 
         new Ajax.Request(this.root+"/main.php?build", {
             method: 'get',
+            asynchronous: false,
 
             onFailure: function () {
                 $(miniLOL.config.contentNode).innerHTML = "Failed to build the configuration tree.";
-            }
+            },
         });
+
+        this.execute({ connected: true });
     },
 
     execute: function (args) {
@@ -88,7 +91,7 @@ miniLOL.module.create('security', {
                 },
             });
 
-            return result == "true";
+            return this.connected = (result == "true");
         }
         else if (args["get"]) {
             var result = "";

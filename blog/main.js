@@ -34,6 +34,11 @@ miniLOL.module.create('blog', {
                     method: 'get',
                     asynchronous: false,
 
+                    requestHeaders: {
+                        'Cache-Control': 'must-revalidate',
+                        'Pragma':        'no-cache',
+                    },
+
                     onSuccess: function (http) {
                         http.responseXML.$ = _$;
                         res.data = http.responseXML;
@@ -82,8 +87,9 @@ miniLOL.module.create('blog', {
 
                         var manage = template.getElementsByTagName('manage')[0];
                         res.template.manage = new Object;
-                        res.template.manage.post = manage.getElementsByTagName('post')[0].firstChild.nodeValue;
-                        res.template.manage.edit = manage.getElementsByTagName('edit')[0].firstChild.nodeValue;
+                        res.template.manage.admin = manage.getElementsByTagName('admin')[0].firstChild.nodeValue;
+                        res.template.manage.post  = manage.getElementsByTagName('post')[0].firstChild.nodeValue;
+                        res.template.manage.edit  = manage.getElementsByTagName('edit')[0].firstChild.nodeValue;
                     },
                 });
 
@@ -130,18 +136,19 @@ miniLOL.module.create('blog', {
 
         if (args["post"]) {
             if (args["do"]) {
-                args["title"]  = args["title"]  || "";
-                args["date"]   = args["date"]   || new Date().toString();
-                args["author"] = args["author"] || miniLOL.config.blog.author;
+                args["title"]  = args["title"]    || "";
+                args["date"]   = args["date"]     || new Date().toString();
+                args["author"] = args["author"]   || miniLOL.config.blog.author;
+                args["content"] = args["content"] || "";
 
                 new Ajax.Request(this.root+"/main.php?post", {
                     method: 'post',
 
                     parameters: {
-                        'title':   args["title"],
-                        'date':    args["date"],
-                        'author':  args["author"],
-                        'content': args["content"],
+                        title:   args["title"],
+                        date:    args["date"],
+                        author:  args["author"],
+                        content: args["content"],
                     },
 
                     onSuccess: function (http) {
@@ -160,14 +167,38 @@ miniLOL.module.create('blog', {
                     return false;
                 }
 
-                $(miniLOL.config.contentNode).innerHTML = this.templetize(null, 'new_post');
+                $(miniLOL.config.contentNode).innerHTML = this.templetize([miniLOL.config.blog.author], 'new_post');
                 $(miniLOL.config.contentNode).innerHTML.evalScripts();
             }
         }
         else if (args["edit"]) {
             if (args["id"]) {
                 if (args["do"]) {
+                    args["title"]   = args["title"]   || "";
+                    args["date"]    = args["date"]    || new Date().toString();
+                    args["author"]  = args["author"]  || miniLOL.config.blog.author;
+                    args["content"] = args["content"] || "";
 
+                    new Ajax.Request(this.root+"/main.php?edit", {
+                        method: 'post',
+
+                        parameters: {
+                            id:      args["id"],
+                            title:   args["title"],
+                            date:    args["date"],
+                            author:  args["author"],
+                            content: args["content"],
+                        },
+
+                        onSuccess: function (http) {
+                            $(miniLOL.config.contentNode).innerHTML = http.responseText;
+                            miniLOL.resource.reload(miniLOL.resource.blog);
+                        },
+
+                        onFailure: function () {
+                            $(miniLOL.config.contentNode).innerHTML = "Something went deeply wrong.";
+                        },
+                    });
                 }
                 else {
                     if (!miniLOL.module.execute('security', { connected: true })) {
@@ -175,19 +206,25 @@ miniLOL.module.create('blog', {
                         return false;
                     }
 
-                    new Ajax.Request(this.root+"/resources/#{0}_editor.tpl".interpolate([miniLOL.config.blog.editorType || 'simple']), {
-                        method: 'get',
-    
-                        onSuccess: function (http) {
-                            $(miniLOL.config.contentNode).innerHTML = http.responseText;
-                            $('editor').value = this.data.getElementById(args["id"]);
-                            http.responseText.evalScripts();
-                        },
-                    })
+                    var post = this.data.getElementById(args["id"]);
+
+                    if (post == null) {
+                        $(miniLOL.config.contentNode).innerHTML = "The post doesn't exist.";
+                        return false;
+                    }
+
+                    $(miniLOL.config.contentNode).innerHTML = this.templetize([
+                        post.getAttribute("title"),
+                        post.getAttribute("author"),
+                        post.getAttribute("date"),
+                        args["id"],
+                     ], 'edit_post');
+                    $(miniLOL.config.contentNode).innerHTML.evalScripts();
                 }
             }
             else {
-                
+                $(miniLOL.config.contentNode).innerHTML = "You're doing it wrong.";
+                return false;
             }
         }
         else if (args["delete"]) {
@@ -197,10 +234,26 @@ miniLOL.module.create('blog', {
             }
 
             if (args["do"]) {
+                new Ajax.Request(this.root+"/main.php?delete", {
+                    method: 'post',
 
+                    parameters: {
+                        id: args["id"],
+                    },
+
+                    onSuccess: function (http) {
+                        $(miniLOL.config.contentNode).innerHTML = http.responseText;
+                        miniLOL.resource.reload(miniLOL.resource.blog);
+                    },
+
+                    onFailure: function () {
+                        $(miniLOL.config.contentNode).innerHTML = "Something went deeply wrong.";
+                    },
+                });
             }
             else {
-
+                $(miniLOL.config.contentNode).innerHTML = "You're doing it wrong.";
+                return false;
             }
         }
         else if (args["retrieve"]) {
@@ -245,7 +298,12 @@ miniLOL.module.create('blog', {
     },
 
     templetize: function (data, type) {
-        if (type == "posts") {
+        if (type == "admin") {
+            return this.template.manage.admin.interpolate({
+                post_id: data[0],
+            });
+        }
+        else if (type == "posts") {
             var posts = new String;
             for (var i = 0; i < data[0].length; i++) {
                 posts += this.templetize([data[0][i], null], 'post');
@@ -270,6 +328,7 @@ miniLOL.module.create('blog', {
                 author: data[0].getAttribute('author'),
                 link: "#module=blog&id="+data[0].getAttribute('id'),
                 pager: pager,
+                admin: (miniLOL.modules.list.security.connected) ? this.templetize([data[0].getAttribute('id')], "admin") : "",
             });
 
             if (data[1] == null) {
@@ -382,6 +441,7 @@ miniLOL.module.create('blog', {
         else if (type == 'new_post') {
             return this.template.blog.interpolate({
                 content: this.template.manage.post.interpolate({
+                    author: data[0],
                     editor: this.editors[miniLOL.config.blog.editorType || 'simple'],
                 })
             });
@@ -389,6 +449,10 @@ miniLOL.module.create('blog', {
         else if (type == 'edit_post') {
             return this.template.blog.interpolate({
                 content: this.template.manage.edit.interpolate({
+                    title:   data[0],
+                    author:  data[1],
+                    date:    data[2],
+                    post_id: data[3],
                     editor: this.editors[miniLOL.config.blog.editorType || 'simple'],
                 })
             });
