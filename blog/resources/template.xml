@@ -95,14 +95,14 @@
         ]]></admin>
 
         <post><![CDATA[
-            <form onsubmit="miniLOL.module.execute('blog', { post: true, do: true, title: encodeURIComponent($('title').value), author: encodeURIComponent($('author').value), date: encodeURIComponent(new Date().toString()), content: encodeURIComponent($('editor').value) });">
+            <form>
                 <table>
                     <tr><td>Title:</td><td><input type="text" id="title"/></td></tr>
                     <tr><td>Author:</td><td><input type="text" id="author" value="#{author}"/></td>
                 </table><br/>
                 Content:<br/>
                 #{editor}
-                <br/><br/><input type="submit" value="Post"/>
+                <br/><br/><input type="button" value="Post" onclick="miniLOL.module.execute('blog', { post: true, do: true, title: encodeURIComponent($('title').value), author: encodeURIComponent($('author').value), date: encodeURIComponent(new Date().toString()), content: encodeURIComponent($('editor').value) });"/>
             </form>
 
             <script>
@@ -111,7 +111,7 @@
         ]]></post>
 
         <edit><![CDATA[
-            <form onsubmit="miniLOL.module.execute('blog', { edit: true, do: true, id: $('post_id').value, title: encodeURIComponent($('title').value), author: encodeURIComponent($('author').value), date: encodeURIComponent($('date').value), content: encodeURIComponent($('editor').value) });">
+            <form>
                 <table>
                     <tr><td>Title:</td><td><input type="text" id="title" value="#{title}"/></td></tr>
                     <tr><td>Author:</td><td><input type="text" id="author" value="#{author}"/></td>
@@ -120,7 +120,7 @@
                 #{editor}
                 <input type="hidden" id="post_id" value="#{post_id}"/>
                 <input type="hidden" id="date" value="#{date}"/>
-                <br/><br/><input type="submit" value="Post"/>
+                <br/><br/><input type="button" value="Post" onclick="miniLOL.module.execute('blog', { edit: true, do: true, id: $('post_id').value, title: encodeURIComponent($('title').value), author: encodeURIComponent($('author').value), date: encodeURIComponent($('date').value), content: encodeURIComponent($('editor').value) });"/>
             </form>
 
             <script>

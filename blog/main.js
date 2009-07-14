@@ -11,7 +11,7 @@
  *********************************************************************/
 
 miniLOL.module.create('blog', {
-    version: '0.2',
+    version: '0.2.2',
 
     dependencies: ['security'],
 
@@ -35,7 +35,7 @@ miniLOL.module.create('blog', {
                     delete blog.editors;
                 } var res = this.res;
 
-                new Ajax.Request(data, {
+                new Ajax.Request(data + "?failCache=" + Math.random(), {
                     method: 'get',
                     asynchronous: false,
 
@@ -270,7 +270,19 @@ miniLOL.module.create('blog', {
             if (args["id"]) {
                 var post = this.data.$(args["id"]);
                 if (post) {
-                    $(miniLOL.config.contentNode).innerHTML = this.templetize([post, parseInt(args["id"])], 'post');
+                    $(miniLOL.config.contentNode).innerHTML = this.templetize([post, $A(this.data.getElementsByTagName("post")).indexOf(post)+1], 'post');
+                    $(miniLOL.config.contentNode).innerHTML.evalScripts();
+                }
+                else {
+                    $(miniLOL.config.contentNode).innerHTML = "Post not found.";
+                    return false;
+                }
+            }
+            else if (args["number"]) {
+                var posts = this.data.getElementsByTagName("post");
+
+                if (args["number"] <= posts.length) {
+                    $(miniLOL.config.contentNode).innerHTML = this.templetize([posts[parseInt(args["number"])-1], parseInt(args["number"])], 'post');
                     $(miniLOL.config.contentNode).innerHTML.evalScripts();
                 }
                 else {
@@ -323,7 +335,7 @@ miniLOL.module.create('blog', {
         }
         else if (type == "post") {
             var pager = (data[1] != null)
-                ? this.templetize(['id', data[1], this.data.getElementsByTagName('post').length], 'pager_overall')
+                ? this.templetize(['number', data[1], this.data.getElementsByTagName('post').length], 'pager_overall')
                 : "";
 
             var content = this.template.post.overall.interpolate({
@@ -344,7 +356,7 @@ miniLOL.module.create('blog', {
         }
         else if (type == 'pager_overall') {
             var template;
-            if (data[0] == 'id') {
+            if (data[0] == 'number') {
                 template = this.template.post.pager_overall;
             }
             else if (data[0] == 'page') {
@@ -359,7 +371,7 @@ miniLOL.module.create('blog', {
         }
         else if (type == 'pager_previous') {
             var template;
-            if (data[0] == 'id') {
+            if (data[0] == 'number') {
                 template = this.template.post.pager_previous;
             }
             else if (data[0] == 'page') {
@@ -375,7 +387,7 @@ miniLOL.module.create('blog', {
         }
         else if (type == 'pager_numbers') {
             var template;
-            if (data[0] == 'id') {
+            if (data[0] == 'number') {
                 template = this.template.post;
             }
             else if (data[0] == 'page') {
@@ -429,7 +441,7 @@ miniLOL.module.create('blog', {
         }
         else if (type == 'pager_next') {
             var template;
-            if (data[0] == 'id') {
+            if (data[0] == 'number') {
                 template = this.template.post.pager_next;
             }
             else if (data[0] == 'page') {
