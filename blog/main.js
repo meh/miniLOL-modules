@@ -1,19 +1,19 @@
 /*********************************************************************
- *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE             *
- *                   Version 2, December 2004                        *
- *                                                                   *
- *  Copyleft meh.                                                    *
- *                                                                   *
- *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE             *
- *  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION  *
- *                                                                   *
- *  0. You just DO WHAT THE FUCK YOU WANT TO.                        *
- *********************************************************************/
+*           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE              *
+*                   Version 2, December 2004                         *
+*                                                                    *
+*  Copyleft meh.                                                     *
+*                                                                    *
+*           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE              *
+*  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION   *
+*                                                                    *
+*  0. You just DO WHAT THE FUCK YOU WANT TO.                         *
+*********************************************************************/
 
 miniLOL.module.create('blog', {
     version: '0.2.2',
 
-    dependencies: ['security'],
+    dependencies: [/* 'security' // It could be a `just show` blog. */],
 
     onLoad: function() {
         miniLOL.resource.blog = {
@@ -140,6 +140,10 @@ miniLOL.module.create('blog', {
         }
 
         if (args["post"]) {
+            if (!miniLOL.modules.list.security) {
+                throw new Error("You can't post without the `security` module.");
+            }
+
             if (args["do"]) {
                 args["title"]  = args["title"]    || "";
                 args["date"]   = args["date"]     || new Date().toString();
@@ -177,6 +181,10 @@ miniLOL.module.create('blog', {
             }
         }
         else if (args["edit"]) {
+            if (!miniLOL.modules.list.security) {
+                throw new Error("You can't edit without the `security` module.");
+            }
+
             if (args["id"]) {
                 if (args["do"]) {
                     args["title"]   = args["title"]   || "";
@@ -233,6 +241,10 @@ miniLOL.module.create('blog', {
             }
         }
         else if (args["delete"]) {
+            if (!miniLOL.modules.list.security) {
+                throw new Error("You can't delete without the `security` module.");
+            }
+
             if (!args["id"]) {
                 $(miniLOL.config.contentNode).innerHTML = "You're doing it wrong.";
                 return false;
