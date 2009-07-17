@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<languages>
+    <language>AS3</language>
+    <language>Bash</language>
+    <language>Cpp</language>
+    <language>CSharp</language>
+    <language>Css</language>
+    <language>Delphi</language>
+    <language>Diff</language>
+    <language>Groovy</language>
+    <language>JavaFX</language>
+    <language>Java</language>
+    <language>JScript</language>
+    <language>Perl</language>
+    <language>Php</language>
+    <language>Plain</language>
+    <language>PowerShell</language>
+    <language>Python</language>
+    <language>Ruby</language>
+    <language>Scala</language>
+    <language>Sql</language>
+    <language>Vb</language>
+    <language>Xml</language>
+</languages>

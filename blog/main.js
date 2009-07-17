@@ -11,14 +11,14 @@
 *********************************************************************/
 
 miniLOL.module.create('blog', {
-    version: '0.2.2',
+    version: '0.2.3',
 
     dependencies: [/* 'security' // It could be a `just show` blog. */],
 
     onLoad: function() {
         miniLOL.resource.blog = {
             name: 'blog',
-            res: null,
+            res:  null,
 
             load: function (data, template, editors, blog) {
                 if (this.res == null) {
