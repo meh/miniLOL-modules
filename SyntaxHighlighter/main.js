@@ -14,13 +14,17 @@ miniLOL.module.create('SyntaxHighlighter', {
     version: '0.1',
 
     onLoad: function () {
-        miniLOL.resource.load(miniLOL.resource.functions, this.root+"/resources/functions.xml");
-        miniLOL.resource.load(miniLOL.resource.config,    this.root+"/resources/config.xml");
+        Import(this.root+"/system/shCore.js");
+
+        miniLOL.resource.load(miniLOL.resources.functions, this.root+"/resources/functions.xml");
+        miniLOL.resource.load(miniLOL.resources.config,    this.root+"/resources/config.xml");
+
+        SyntaxHighlighter.config["tagName"] = "code";
 
         for (var conf in miniLOL.config.SyntaxHighlighter) {
-            SyntaxHighlighter.defaults[arg] = (args[arg][0] == '[' && args[arg][args[arg].length-1] == ']')
-                ? eval(args[arg])
-                : args[arg];
+            SyntaxHighlighter.defaults[conf] = (miniLOL.config.SyntaxHighlighter[conf][0] == '[' && confs[conf][confs[conf].length-1] == ']')
+                ? eval(miniLOL.config.SyntaxHighlighter[conf])
+                : miniLOL.config.SyntaxHighlighter[conf];
         }
 
         var sh   = this;
@@ -45,16 +49,20 @@ miniLOL.module.create('SyntaxHighlighter', {
         });
 
         include("css", this.root+"/resources/styles/shCore.css");
-        include("css", this.root+"/resources/styles/"+miniLOL.config.SyntaxHighlighter.style);
+        include("css", this.root+"/resources/styles/shTheme"+miniLOL.config.SyntaxHighlighter.style+".css");
     },
 
     execute: function (args) {
+        var defaults = Object.extend({}, SyntaxHighlighter.defaults);
+
         for (var arg in args) {
             SyntaxHighlighter.defaults[arg] = (args[arg][0] == '[' && args[arg][args[arg].length-1] == ']')
                 ? eval(args[arg])
                 : args[arg];
         }
 
-        SyntaxHighlighter.all();
+        SyntaxHighlighter.highlight();
+
+        SyntaxHighlighter.defaults = defaults;
     },
 });

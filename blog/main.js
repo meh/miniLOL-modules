@@ -16,7 +16,7 @@ miniLOL.module.create('blog', {
     dependencies: [/* 'security' // It could be a `just show` blog. */],
 
     onLoad: function() {
-        miniLOL.resource.blog = {
+        miniLOL.resources.blog = {
             name: 'blog',
             res:  null,
 
@@ -119,8 +119,8 @@ miniLOL.module.create('blog', {
             }
         };
 
-        miniLOL.resource.load(miniLOL.resource.blog, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml", this);
-        miniLOL.resource.load(miniLOL.resource.config, this.root+"/resources/config.xml");
+        miniLOL.resource.load(miniLOL.resources.blog, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml", this);
+        miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
 
         include("css", this.root+"/resources/style.css");
 
@@ -131,7 +131,7 @@ miniLOL.module.create('blog', {
             }
         });
 
-        new PeriodicalExecuter(function(){miniLOL.resource.reload(miniLOL.resource.blog)}, miniLOL.config.refreshEvery);
+        new PeriodicalExecuter(function(){miniLOL.resource.reload(miniLOL.resources.blog)}, miniLOL.config.refreshEvery);
     },
 
     execute: function (args) {
@@ -162,7 +162,7 @@ miniLOL.module.create('blog', {
 
                     onSuccess: function (http) {
                         $(miniLOL.config.contentNode).innerHTML = http.responseText;
-                        miniLOL.resource.reload(miniLOL.resource.blog);
+                        miniLOL.resource.reload(miniLOL.resources.blog);
                     },
 
                     onFailure: function () {
@@ -205,7 +205,7 @@ miniLOL.module.create('blog', {
 
                         onSuccess: function (http) {
                             $(miniLOL.config.contentNode).innerHTML = http.responseText;
-                            miniLOL.resource.reload(miniLOL.resource.blog);
+                            miniLOL.resource.reload(miniLOL.resources.blog);
                         },
 
                         onFailure: function () {
@@ -260,7 +260,7 @@ miniLOL.module.create('blog', {
 
                     onSuccess: function (http) {
                         $(miniLOL.config.contentNode).innerHTML = http.responseText;
-                        miniLOL.resource.reload(miniLOL.resource.blog);
+                        miniLOL.resource.reload(miniLOL.resources.blog);
                     },
 
                     onFailure: function () {

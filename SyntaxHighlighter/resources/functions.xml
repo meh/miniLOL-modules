@@ -11,17 +11,20 @@
     <function name="source"><![CDATA[
         text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+        delete args.type;
+        delete args.page;
+        delete args.module;
+        delete args.menu;
+
         var options = '';
         for (var arg in args) {
-            options += arg + ": " args[arg] + "; ";
+            options += arg + ": " + args[arg] + "; ";
         }
 
-        alert(options);
-
-        text = '<pre class="#{options}"></pre>'.interpolate({
+        text = '<code class="#{options}">#{source}</code><script>alert("lol"); miniLOL.module.execute("SyntaxHighlighter", #{args});</script>'.interpolate({
             options: options,
+            source:  text,
+            args:    "{" + options.replace(/;/g, ',') + "}",
         });
-
-        miniLOL.module.execute("SyntaxHighlighter", args);
     ]]></function>
 </functions>

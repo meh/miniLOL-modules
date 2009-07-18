@@ -5,4 +5,5 @@
 ]>
 
 <configuration domain="SyntaxHighlighter">
+    <style>Default</style>
 </configuration>
