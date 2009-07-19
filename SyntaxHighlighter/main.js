@@ -52,6 +52,10 @@ miniLOL.module.create('SyntaxHighlighter', {
         include("css", this.root+"/resources/styles/shTheme"+miniLOL.config.SyntaxHighlighter.style+".css");
     },
 
+    onGo: function () {
+        this.execute();
+    },
+
     execute: function (args) {
         var defaults = Object.extend({}, SyntaxHighlighter.defaults);
 
