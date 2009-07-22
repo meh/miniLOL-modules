@@ -1087,7 +1087,7 @@ var sh = {
 
 			// local params take precedence over globals
 			params = sh.utils.merge(globalParams, params);
-			brushName = params['brush'];
+			brushName = params['brush'] || params['lang'];
 
 			if (brushName == null)
 				continue;

@@ -273,8 +273,12 @@ miniLOL.module.create('blog', {
                 return false;
             }
         }
-        else if (args["retrieve"]) {
-
+        else if (args["build"]) {
+            $(miniLOL.config.contentNode).innerHTML = "Not yet implemented.";
+            return false;
+        }
+        else if (args["comment"]) {
+            if (args["
         }
         else {
             args["page"] = args["page"] || 1;

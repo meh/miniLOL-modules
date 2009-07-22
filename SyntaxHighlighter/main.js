@@ -23,7 +23,7 @@ miniLOL.module.create('SyntaxHighlighter', {
 
         for (var conf in miniLOL.config.SyntaxHighlighter) {
             SyntaxHighlighter.defaults[conf] = (miniLOL.config.SyntaxHighlighter[conf][0] == '[' && confs[conf][confs[conf].length-1] == ']')
-                ? eval(miniLOL.config.SyntaxHighlighter[conf])
+                ? eval(miniLOL.config.SyntaxHighlighter[conf]..replace(/[^\d\[\],]/g, ''))
                 : miniLOL.config.SyntaxHighlighter[conf];
         }
 
@@ -61,9 +61,11 @@ miniLOL.module.create('SyntaxHighlighter', {
 
         for (var arg in args) {
             SyntaxHighlighter.defaults[arg] = (args[arg][0] == '[' && args[arg][args[arg].length-1] == ']')
-                ? eval(args[arg])
+                ? eval(args[arg].replace(/[^\d\[\],]/g, ''))
                 : args[arg];
         }
+
+        SyntaxHighlighter.defaults['brush'] = args['brush'] || args['lang'];
 
         SyntaxHighlighter.highlight();
 
