@@ -6,12 +6,27 @@
         total CDATA #REQUIRED
     >
 
-    <!ELEMENT post (#PCDATA)>
+    <!ELEMENT post (#PCDATA, comments)>
     <!ATTLIST post
         title  CDATA #REQUIRED
         date   CDATA #REQUIRED
         id     ID    #REQUIRED
         author CDATA #REQUIRED
+    >
+
+    <!ELEMENT comments (comment*)>
+    <!ATTLIST comments
+        total CDATA #REQUIRED
+    >
+
+    <!ELEMENT comment (#PCDATA)>
+    <!ATTLIST comment
+        date    CDATA #REQUIRED
+        id      ID    #REQUIRED
+
+        author  CDATA #IMPLIED
+        email   CDATA #IMPLIED
+        website CDATA #IMPLIED
     >
 ]>
 

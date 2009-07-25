@@ -6,4 +6,5 @@
 
 <configuration domain="SyntaxHighlighter">
     <style>Default</style>
+    <tagName>code</tagName>
 </configuration>

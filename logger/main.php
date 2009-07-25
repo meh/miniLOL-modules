@@ -59,13 +59,13 @@ if (!isset($_REQUEST['url']) || !isset($_REQUEST['date'])) {
     exit;
 }
 
-while (file_exists('resources/.logging')) {
+while (file_exists('resources/.lock')) {
     usleep(rand()%1000000);
 }
 
 $fp = fopen($file, 'r+');
 
-touch('resources/.logging');
+touch('resources/.lock');
 
 fseek($fp, -12, SEEK_END);
 
@@ -86,6 +86,6 @@ fwrite($fp, $xml->outputMemory(true));
 fwrite($fp, "</logs>\n*/?>");
 fclose($fp);
 
-unlink('resources/.logging');
+unlink('resources/.lock');
 
 ?>

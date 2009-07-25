@@ -11,7 +11,7 @@
 *********************************************************************/
 
 miniLOL.module.create('blog', {
-    version: '0.2.3',
+    version: '0.3',
 
     dependencies: [/* 'security' // It could be a `just show` blog. */],
 

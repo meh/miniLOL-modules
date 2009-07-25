@@ -19,7 +19,7 @@ miniLOL.module.create('SyntaxHighlighter', {
         miniLOL.resource.load(miniLOL.resources.functions, this.root+"/resources/functions.xml");
         miniLOL.resource.load(miniLOL.resources.config,    this.root+"/resources/config.xml");
 
-        SyntaxHighlighter.config["tagName"] = "code";
+        SyntaxHighlighter.config["tagName"] = miniLOL.config.SyntaxHighlighter.tagName;
 
         for (var conf in miniLOL.config.SyntaxHighlighter) {
             SyntaxHighlighter.defaults[conf] = (miniLOL.config.SyntaxHighlighter[conf][0] == '[' && confs[conf][confs[conf].length-1] == ']')
