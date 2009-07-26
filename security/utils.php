@@ -35,4 +35,13 @@ function security_waitUnlock ($lock = 'resources/.lock', $maxCycles = 1337)
     }
 }
 
+function security_getRequest($name)
+{
+    if (!isset($_REQUEST[$name])) {
+        return null;
+    }
+
+    return (get_magic_quotes_gpc() ? stripslashes($_REQUEST[$name]) : $_REQUEST[$name]);
+}
+
 ?>

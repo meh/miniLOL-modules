@@ -69,22 +69,27 @@ $xml->startElement('log');
 $xml->startElement('arguments');
 
 $i = 0;
-while (isset($_REQUEST[$i])) {
+while (security_getRequest($i)) {
     $xml->startElement('argument');
-        $xml->writeCData(str_replace(']]>', ']&#93;>', $_REQUEST[$i]));
+        $xml->writeCData(str_replace(']]>', ']&#93;>', security_getRequest($i)));
     $xml->endElement();
     $i++;
 }
 
 $xml->endElement();
 
-$xml->startElement('date');
-    $xml->startElement('server'); $xml->writeCData(date('D M j Y H:i:s \G\M\TO (T)')); $xml->endElement();
-    $xml->startElement('user');   $xml->writeCData(str_replace(']]>', ']&#93;>', $_REQUEST['date']));       $xml->endElement();
+$xml->startElement('server');
+    $xml->startElement('date'); $xml->writeCData(date('D M j Y H:i:s \G\M\TO (T)')); $xml->endElement();
 $xml->endElement();
-$xml->startElement('ip'); $xml->writeCData($_SERVER['REMOTE_ADDR']); $xml->endElement();
-$xml->startElement('user_agent'); $xml->writeCData(str_replace(']]>', ']&#93;>', $_SERVER['HTTP_USER_AGENT'])); $xml->endElement();
+
+$xml->startElement('user');
+    $xml->startElement('date'); $xml->writeCData(str_replace(']]>', ']&#93;>', security_getRequest('date'))); $xml->endElement();
+    $xml->startElement('ip'); $xml->writeCData($_SERVER['REMOTE_ADDR']); $xml->endElement();
+    $xml->startElement('agent'); $xml->writeCData(str_replace(']]>', ']&#93;>', $_SERVER['HTTP_USER_AGENT'])); $xml->endElement();
+$xml->endElement();
+
 $xml->startElement('referer'); $xml->writeCData(str_replace(']]>', ']&#93;>', $_SERVER['HTTP_REFERER'])); $xml->endElement();
+
 $xml->endElement();
 
 fwrite($fp, $xml->outputMemory(true));
