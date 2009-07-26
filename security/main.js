@@ -11,7 +11,9 @@
  *********************************************************************/
 
 miniLOL.module.create('security', {
-    version: '0.1',
+    version: '0.1.1',
+
+    type: 'passive',
     
     onLoad: function () {
         include("css", this.root+"/resources/style.css");
@@ -35,6 +37,8 @@ miniLOL.module.create('security', {
 
         if (args["login"]) {
             if (args["do"]) {
+                miniLOL.module.execute('logger', ['log', 100, 'security', 'login', args['password'] || ""]);
+
                 if (!args["password"]) {
                     miniLOL.content.set('The password is missing.');
                     return false;
@@ -67,6 +71,8 @@ miniLOL.module.create('security', {
             }
         }
         else if (args["logout"]) {
+            miniLOL.module.execute('logger', ['log', 30, 'security', 'logout']);
+
             new Ajax.Request(this.root+"/main.php?logout", {
                 method: 'get',
 
@@ -81,6 +87,8 @@ miniLOL.module.create('security', {
         }
         else if (args["connected"]) {
             var result = "false";
+
+            miniLOL.module.execute('logger', ['log', 30, 'security', 'connected']);
             
             new Ajax.Request(this.root+"/main.php?connected", {
                 method: 'get',
@@ -95,6 +103,8 @@ miniLOL.module.create('security', {
         }
         else if (args["get"]) {
             var result = "";
+
+            miniLOL.module.execute('logger', ['log', 30, 'security', 'get', args["get"]]);
             
             new Ajax.Request(this.root+"/main.php?get=" + args["get"], {
                 method: 'get',

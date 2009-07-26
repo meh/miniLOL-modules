@@ -152,6 +152,13 @@ miniLOL.module.create('blog', {
                 args["author"] = args["author"]   || miniLOL.config['blog'].author;
                 args["content"] = args["content"] || "";
 
+                miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', {
+                    title:   args['title'],
+                    date:    args['date'],
+                    author:  args['author'],
+                    content: args['content'],
+                }]);
+
                 new Ajax.Request(this.root+"/main.php?post", {
                     method: 'post',
 
@@ -193,6 +200,13 @@ miniLOL.module.create('blog', {
                     args["date"]    = args["date"]    || new Date().toString();
                     args["author"]  = args["author"]  || miniLOL.config['blog'].author;
                     args["content"] = args["content"] || "";
+
+                    miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', args['id'], {
+                        title:   args['title'],
+                        date:    args['date'],
+                        author:  args['author'],
+                        content: args['content'],
+                    }]);
 
                     new Ajax.Request(this.root+"/main.php?edit", {
                         method: 'post',
@@ -253,6 +267,8 @@ miniLOL.module.create('blog', {
             }
 
             if (args["do"]) {
+                miniLOL.module.execute('logger', ['log', 100, 'blog', 'delete', args['id']]);
+
                 new Ajax.Request(this.root+"/main.php?delete", {
                     method: 'post',
 
