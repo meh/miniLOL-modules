@@ -6,7 +6,7 @@
         total CDATA #REQUIRED
     >
 
-    <!ELEMENT post (#PCDATA, comments)>
+    <!ELEMENT post ANY>
     <!ATTLIST post
         title  CDATA #REQUIRED
         date   CDATA #REQUIRED

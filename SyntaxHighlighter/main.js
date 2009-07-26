@@ -57,6 +57,7 @@ miniLOL.module.create('SyntaxHighlighter', {
     },
 
     execute: function (args) {
+        args         = args || {};
         var defaults = Object.extend({}, SyntaxHighlighter.defaults);
 
         for (var arg in args) {

@@ -11,15 +11,12 @@
  *  0. You just DO WHAT THE FUCK YOU WANT TO.                        *
  *********************************************************************/
 
-define('__VERSION__', '0.1');
+define('__VERSION__', '0.2');
+
+require_once('../security/utils.php');
 
 session_set_cookie_params(60*60*24*365, '/');
 session_start();
-
-function fixCData ($string)
-{
-    return preg_replace('#\]\]>#', '] ]>', $string);
-}
 
 $config    = simplexml_load_file('resources/config.xml');
 $protected = $config->protected == 'true';
@@ -39,7 +36,7 @@ if (!file_exists($file)) {
     fclose($fp);
 }
 
-if (!isset($_REQUEST['url']) || !isset($_REQUEST['date'])) {
+if (!isset($_REQUEST['data']) || !isset($_REQUEST['date'])) {
     if ($_SESSION['miniLOL']['admin']) {
         if (isset($_REQUEST['retrieve'])) {
             header('Content-Type: text/xml');
@@ -59,33 +56,41 @@ if (!isset($_REQUEST['url']) || !isset($_REQUEST['date'])) {
     exit;
 }
 
-while (file_exists('resources/.lock')) {
-    usleep(rand()%1000000);
-}
+security_waitUnlock();
+security_lock();
 
 $fp = fopen($file, 'r+');
-
-touch('resources/.lock');
 
 fseek($fp, -12, SEEK_END);
 
 $xml = new XMLWriter();
 $xml->openMemory();
 $xml->startElement('log');
-$xml->startElement('url'); $xml->writeCData(fixCData($_REQUEST['url'])); $xml->endElement();
+$xml->startElement('arguments');
+
+$i = 0;
+while (isset($_REQUEST[$i])) {
+    $xml->startElement('argument');
+        $xml->writeCData(str_replace(']]>', ']&#93;>', $_REQUEST[$i]));
+    $xml->endElement();
+    $i++;
+}
+
+$xml->endElement();
+
 $xml->startElement('date');
     $xml->startElement('server'); $xml->writeCData(date('D M j Y H:i:s \G\M\TO (T)')); $xml->endElement();
-    $xml->startElement('user');   $xml->writeCData(fixCData($_REQUEST['date']));       $xml->endElement();
+    $xml->startElement('user');   $xml->writeCData(str_replace(']]>', ']&#93;>', $_REQUEST['date']));       $xml->endElement();
 $xml->endElement();
 $xml->startElement('ip'); $xml->writeCData($_SERVER['REMOTE_ADDR']); $xml->endElement();
-$xml->startElement('user_agent'); $xml->writeCData(fixCData($_SERVER['HTTP_USER_AGENT'])); $xml->endElement();
-$xml->startElement('referer'); $xml->writeCData(fixCData($_SERVER['HTTP_REFERER'])); $xml->endElement();
+$xml->startElement('user_agent'); $xml->writeCData(str_replace(']]>', ']&#93;>', $_SERVER['HTTP_USER_AGENT'])); $xml->endElement();
+$xml->startElement('referer'); $xml->writeCData(str_replace(']]>', ']&#93;>', $_SERVER['HTTP_REFERER'])); $xml->endElement();
 $xml->endElement();
 
 fwrite($fp, $xml->outputMemory(true));
 fwrite($fp, "</logs>\n*/?>");
 fclose($fp);
 
-unlink('resources/.lock');
+security_unlock();
 
 ?>

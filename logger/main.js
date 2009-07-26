@@ -11,16 +11,19 @@
  *********************************************************************/
 
 miniLOL.module.create('logger', {
-    version: '0.1',
+    version: '0.2',
 
     dependencies: ['security'],
 
-    onGo: function (url) {
-        url      = url.match(/#(.*)$/);
-        url      = encodeURIComponent(url ? (url[1].empty() ? miniLOL.config.homePage : url[1]) : miniLOL.config.homePage);
+    onAction: function (args) {
+        var argv = "";
+        for (var i = 0; i < args.length; i++) {
+            argv += i + '=' + encodeURIComponent((typeof args[i] != 'object') ? args[i] : Object.toJSON(args[i])) + '&';
+        }
+
         var date = encodeURIComponent(new Date().toString());
 
-        new Ajax.Request(this.root+"/main.php?url="+url+"&date="+date, {
+        new Ajax.Request(this.root+"/main.php?data&" + argv + "date="+date, {
             method: 'get',
         });
     },

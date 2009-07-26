@@ -1,17 +1,19 @@
 <?php
 /*********************************************************************
- *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE             *
- *                   Version 2, December 2004                        *
- *                                                                   *
- *  Copyleft meh.                                                    *
- *                                                                   *
- *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE             *
- *  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION  *
- *                                                                   *
- *  0. You just DO WHAT THE FUCK YOU WANT TO.                        *
- *********************************************************************/
+*           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE              *
+*                   Version 2, December 2004                         *
+*                                                                    *
+*  Copyleft meh.                                                     *
+*                                                                    *
+*           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE              *
+*  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION   *
+*                                                                    *
+*  0. You just DO WHAT THE FUCK YOU WANT TO.                         *
+*********************************************************************/
 
 define('__VERSION__', '0.3');
+
+require_once('../security/utils.php');
 
 session_set_cookie_params(60*60*24*365, '/');
 session_start();
@@ -25,11 +27,8 @@ if (@!$_SESSION['miniLOL']['admin']) {
     exit;
 }
 
-while (file_exists('resources/.lock')) {
-    usleep(rand()%1000000);
-}
-
-touch('resources/.lock');
+security_waitUnlock();
+security_lock();
 
 $data = DOMDocument::load('resources/data.xml');
 $data->preserveWhiteSpace = false;
@@ -48,6 +47,7 @@ if (isset($_REQUEST['build'])) {
 
     }
 
+    security_unlock();
     exit;
 }
 
@@ -74,11 +74,13 @@ else {
 
         echo 'The post has been added.';
 
+        security_unlock();
         exit;
     }
 
     if (!isset($_REQUEST['id'])) {
         echo "You're doing it wrong.";
+        security_unlock();
         exit;
     }
 
@@ -86,6 +88,7 @@ else {
 
     if (!$post) {
         echo "The post doesn't exist.";
+        security_unlock();
         exit;
     }
 
@@ -113,5 +116,7 @@ else {
         }
     }
 }
+
+security_unlock();
     
 ?>
