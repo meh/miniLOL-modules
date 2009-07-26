@@ -2,9 +2,13 @@
 
 <!DOCTYPE configuration [
     <!ELEMENT configuration ANY>
+    <!ATTLIST configuration
+        domain CDATA #REQUIRED
+    >
 ]>
 
 <configuration domain="logger">
     <fileName>logs.php</fileName>
     <protected>true</protected>
+    <priority>50</priority>
 </configuration>

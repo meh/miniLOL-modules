@@ -13,6 +13,8 @@
 miniLOL.module.create('blog', {
     version: '0.3',
 
+    type: 'active',
+
     dependencies: [/* 'security' // It could be a `just show` blog. */],
 
     onLoad: function() {
@@ -124,14 +126,14 @@ miniLOL.module.create('blog', {
 
         include("css", this.root+"/resources/style.css");
 
-        miniLOL.module.addEvent('window.onresize', function () {
+        miniLOL.event.add('window.onresize', function () {
             var editor = $('editor');
             if (editor) {
                 editor.setStyle({ height: (($('body').getHeight() - 150)) + 'px' });
             }
         });
 
-        new PeriodicalExecuter(function(){miniLOL.resource.reload(miniLOL.resources.blog)}, miniLOL.config.refreshEvery);
+        new PeriodicalExecuter(function(){miniLOL.resource.reload(miniLOL.resources.blog)}, miniLOL.config['core'].refreshEvery);
     },
 
     execute: function (args) {
@@ -140,14 +142,14 @@ miniLOL.module.create('blog', {
         }
 
         if (args["post"]) {
-            if (!miniLOL.modules.list.security) {
+            if (!miniLOL.modules.security) {
                 throw new Error("You can't post without the `security` module.");
             }
 
             if (args["do"]) {
                 args["title"]  = args["title"]    || "";
                 args["date"]   = args["date"]     || new Date().toString();
-                args["author"] = args["author"]   || miniLOL.config.blog.author;
+                args["author"] = args["author"]   || miniLOL.config['blog'].author;
                 args["content"] = args["content"] || "";
 
                 new Ajax.Request(this.root+"/main.php?post", {
@@ -161,27 +163,27 @@ miniLOL.module.create('blog', {
                     },
 
                     onSuccess: function (http) {
-                        $(miniLOL.config.contentNode).innerHTML = http.responseText;
+                        miniLOL.content.set(http.responseText);
                         miniLOL.resource.reload(miniLOL.resources.blog);
                     },
 
                     onFailure: function () {
-                        $(miniLOL.config.contentNode).innerHTML = "Something went deeply wrong.";
+                        miniLOL.content.set("Something went deeply wrong.");
                     },
                 });
             }
             else {
                 if (!miniLOL.module.execute('security', { connected: true })) {
-                    $(miniLOL.config.contentNode).innerHTML = "You're doing it wrong.";
+                    miniLOL.content.set("You're doing it wrong.");
                     return false;
                 }
 
-                $(miniLOL.config.contentNode).innerHTML = this.templetize([miniLOL.config.blog.author], 'new_post');
-                $(miniLOL.config.contentNode).innerHTML.evalScripts();
+                miniLOL.content.set(this.templetize([miniLOL.config['blog'].author], 'new_post'));
+                miniLOL.content.get().evalScripts();
             }
         }
         else if (args["edit"]) {
-            if (!miniLOL.modules.list.security) {
+            if (!miniLOL.modules.security) {
                 throw new Error("You can't edit without the `security` module.");
             }
 
@@ -189,7 +191,7 @@ miniLOL.module.create('blog', {
                 if (args["do"]) {
                     args["title"]   = args["title"]   || "";
                     args["date"]    = args["date"]    || new Date().toString();
-                    args["author"]  = args["author"]  || miniLOL.config.blog.author;
+                    args["author"]  = args["author"]  || miniLOL.config['blog'].author;
                     args["content"] = args["content"] || "";
 
                     new Ajax.Request(this.root+"/main.php?edit", {
@@ -204,49 +206,49 @@ miniLOL.module.create('blog', {
                         },
 
                         onSuccess: function (http) {
-                            $(miniLOL.config.contentNode).innerHTML = http.responseText;
+                            miniLOL.content.set(http.responseText);
                             miniLOL.resource.reload(miniLOL.resources.blog);
                         },
 
                         onFailure: function () {
-                            $(miniLOL.config.contentNode).innerHTML = "Something went deeply wrong.";
+                            miniLOL.content.set("Something went deeply wrong.");
                         },
                     });
                 }
                 else {
                     if (!miniLOL.module.execute('security', { connected: true })) {
-                        $(miniLOL.config.contentNode).innerHTML = "You're doing it wrong.";
+                        miniLOL.content.set("You're doing it wrong.");
                         return false;
                     }
 
                     var post = this.data.getElementById(args["id"]);
 
                     if (post == null) {
-                        $(miniLOL.config.contentNode).innerHTML = "The post doesn't exist.";
+                        miniLOL.content.set("The post doesn't exist.");
                         return false;
                     }
 
-                    $(miniLOL.config.contentNode).innerHTML = this.templetize([
+                    miniLOL.content.set(this.templetize([
                         post.getAttribute("title"),
                         post.getAttribute("author"),
                         post.getAttribute("date"),
                         args["id"],
-                     ], 'edit_post');
-                    $(miniLOL.config.contentNode).innerHTML.evalScripts();
+                     ], 'edit_post'));
+                    miniLOL.content.get().evalScripts();
                 }
             }
             else {
-                $(miniLOL.config.contentNode).innerHTML = "You're doing it wrong.";
+                miniLOL.content.set("You're doing it wrong.");
                 return false;
             }
         }
         else if (args["delete"]) {
-            if (!miniLOL.modules.list.security) {
+            if (!miniLOL.modules.security) {
                 throw new Error("You can't delete without the `security` module.");
             }
 
             if (!args["id"]) {
-                $(miniLOL.config.contentNode).innerHTML = "You're doing it wrong.";
+                miniLOL.content.set("You're doing it wrong.");
                 return false;
             }
 
@@ -259,26 +261,28 @@ miniLOL.module.create('blog', {
                     },
 
                     onSuccess: function (http) {
-                        $(miniLOL.config.contentNode).innerHTML = http.responseText;
+                        miniLOL.content.set(http.responseText);
                         miniLOL.resource.reload(miniLOL.resources.blog);
                     },
 
                     onFailure: function () {
-                        $(miniLOL.config.contentNode).innerHTML = "Something went deeply wrong.";
+                        miniLOL.content.set("Something went deeply wrong.");
                     },
                 });
             }
             else {
-                $(miniLOL.config.contentNode).innerHTML = "You're doing it wrong.";
+                miniLOL.content.set("You're doing it wrong.");
                 return false;
             }
         }
         else if (args["build"]) {
-            $(miniLOL.config.contentNode).innerHTML = "Not yet implemented.";
+            miniLOL.content.set("Not yet implemented.");
             return false;
         }
         else if (args["comment"]) {
-            if (args["
+            if (args[""]) {
+
+            }
         }
         else {
             args["page"] = args["page"] || 1;
@@ -286,11 +290,11 @@ miniLOL.module.create('blog', {
             if (args["id"]) {
                 var post = this.data.$(args["id"]);
                 if (post) {
-                    $(miniLOL.config.contentNode).innerHTML = this.templetize([post, $A(this.data.getElementsByTagName("post")).indexOf(post)+1], 'post');
-                    $(miniLOL.config.contentNode).innerHTML.evalScripts();
+                    miniLOL.content.set(this.templetize([post, $A(this.data.getElementsByTagName("post")).indexOf(post)+1], 'post'));
+                    miniLOL.content.get().evalScripts();
                 }
                 else {
-                    $(miniLOL.config.contentNode).innerHTML = "Post not found.";
+                    miniLOL.content.set( "Post not found.");
                     return false;
                 }
             }
@@ -298,32 +302,32 @@ miniLOL.module.create('blog', {
                 var posts = this.data.getElementsByTagName("post");
 
                 if (args["number"] <= posts.length) {
-                    $(miniLOL.config.contentNode).innerHTML = this.templetize([posts[parseInt(args["number"])-1], parseInt(args["number"])], 'post');
-                    $(miniLOL.config.contentNode).innerHTML.evalScripts();
+                    miniLOL.content.set(this.templetize([posts[parseInt(args["number"])-1], parseInt(args["number"])], 'post'));
+                    miniLOL.content.get().evalScripts();
                 }
                 else {
-                    $(miniLOL.config.contentNode).innerHTML = "Post not found.";
+                    miniLOL.content.set("Post not found.");
                     return false;
                 }
             }
             else {
                 var allPosts = this.data.getElementsByTagName('post');
     
-                if (args["page"] > Math.ceil(allPosts.length/miniLOL.config.blog.postsPerPage) || args["page"] < 1) {
-                    $(miniLOL.config.contentNode).innerHTML = "Page not found.";
+                if (args["page"] > Math.ceil(allPosts.length/miniLOL.config['blog'].postsPerPage) || args["page"] < 1) {
+                    miniLOL.content.set("Page not found.");
                     return false;
                 }
     
                 var posts = new Array;
     
-                for (   var i = allPosts.length-1-(miniLOL.config.blog.postsPerPage*(args["page"]-1)), count = 0;
-                        count < miniLOL.config.blog.postsPerPage && i >= 0;
+                for (   var i = allPosts.length-1-(miniLOL.config['blog'].postsPerPage*(args["page"]-1)), count = 0;
+                        count < miniLOL.config['blog'].postsPerPage && i >= 0;
                         i--, count++) {
                     posts.push(allPosts[i]);
                 }
     
-                $(miniLOL.config.contentNode).innerHTML = this.templetize([posts, parseInt(args["page"])], 'posts');
-                $(miniLOL.config.contentNode).innerHTML.evalScripts();
+                miniLOL.content.set(this.templetize([posts, parseInt(args["page"])], 'posts'));
+                miniLOL.content.get().evalScripts();
             }
         }
 
@@ -345,7 +349,7 @@ miniLOL.module.create('blog', {
             return this.template.blog.interpolate({ content:
                 this.template.posts.overall.interpolate({
                     posts: posts,
-                    pager: this.templetize(['page', data[1], Math.ceil(this.data.getElementsByTagName('post').length/miniLOL.config.blog.postsPerPage)], 'pager_overall'),
+                    pager: this.templetize(['page', data[1], Math.ceil(this.data.getElementsByTagName('post').length/miniLOL.config['blog'].postsPerPage)], 'pager_overall'),
                 }),
             });
         }
@@ -361,7 +365,7 @@ miniLOL.module.create('blog', {
                 author: data[0].getAttribute('author'),
                 link: "#module=blog&id="+data[0].getAttribute('id'),
                 pager: pager,
-                admin: (miniLOL.modules.list.security.connected) ? this.templetize([data[0].getAttribute('id')], "admin") : "",
+                admin: (miniLOL.modules.security.connected) ? this.templetize([data[0].getAttribute('id')], "admin") : "",
             });
 
             if (data[1] == null) {
@@ -475,7 +479,7 @@ miniLOL.module.create('blog', {
             return this.template.blog.interpolate({
                 content: this.template.manage.post.interpolate({
                     author: data[0],
-                    editor: this.editors[miniLOL.config.blog.editorType || 'simple'],
+                    editor: this.editors[miniLOL.config['blog'].editorType || 'simple'],
                 })
             });
         }
@@ -486,7 +490,7 @@ miniLOL.module.create('blog', {
                     author:  data[1],
                     date:    data[2],
                     post_id: data[3],
-                    editor: this.editors[miniLOL.config.blog.editorType || 'simple'],
+                    editor: this.editors[miniLOL.config['blog'].editorType || 'simple'],
                 })
             });
         }

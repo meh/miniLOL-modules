@@ -13,6 +13,8 @@
 miniLOL.module.create('SyntaxHighlighter', {
     version: '0.1',
 
+    type: 'passive',
+
     onLoad: function () {
         Import(this.root+"/system/shCore.js");
 
@@ -44,7 +46,7 @@ miniLOL.module.create('SyntaxHighlighter', {
             },
 
             onFailure: function () {
-                $(miniLOL.config.contentNode).innerHTML = "Something went wrong while loading langs.xml.";
+                miniLOL.content.set("Something went wrong while loading langs.xml.");
             }
         });
 

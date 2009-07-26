@@ -125,7 +125,7 @@
 
             <script>
             $('editor').setStyle({ height: (($('body').getHeight() - 150)) + 'px' });
-            $('editor').value = miniLOL.modules.list.blog.data.getElementById("#{post_id}").firstChild.nodeValue;
+            $('editor').value = miniLOL.modules.blog.data.getElementById("#{post_id}").firstChild.nodeValue;
             </script>
         ]]></edit>
     </manage>

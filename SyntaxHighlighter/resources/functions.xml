@@ -21,9 +21,9 @@
             options += arg + ": " + args[arg] + "; ";
         }
 
-        miniLOL.modules.list.SyntaxHighlighter.options = args;
+        miniLOL.modules.SyntaxHighlighter.options = args;
 
-        text = '<code class="#{options}">#{source}</code><script>miniLOL.module.execute("SyntaxHighlighter", miniLOL.modules.list.SyntaxHighlighter.options); delete miniLOL.modules.list.SyntaxHighlighter.options</script>'.interpolate({
+        text = '<code class="#{options}">#{source}</code><script>miniLOL.module.execute("SyntaxHighlighter", miniLOL.modules.SyntaxHighlighter.options); delete miniLOL.modules.SyntaxHighlighter.options</script>'.interpolate({
             options: options,
             source:  text,
         });

@@ -13,9 +13,21 @@
 miniLOL.module.create('logger', {
     version: '0.2',
 
+    type: 'passive',
+
     dependencies: ['security'],
 
+    onLoad: function () {
+        miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
+    },
+
     onAction: function (args) {
+        var priority = args.shift();
+
+        if (priority < miniLOL.config['logger'].priority) {
+            return true;
+        }
+
         var argv = "";
         for (var i = 0; i < args.length; i++) {
             argv += i + '=' + encodeURIComponent((typeof args[i] != 'object') ? args[i] : Object.toJSON(args[i])) + '&';
@@ -23,7 +35,7 @@ miniLOL.module.create('logger', {
 
         var date = encodeURIComponent(new Date().toString());
 
-        new Ajax.Request(this.root+"/main.php?data&" + argv + "date="+date, {
+        new Ajax.Request(this.root+"/main.php?data&priority="+priority+"&" + argv + "date="+date, {
             method: 'get',
         });
     },

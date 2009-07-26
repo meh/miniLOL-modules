@@ -21,7 +21,7 @@ miniLOL.module.create('security', {
             asynchronous: false,
 
             onFailure: function () {
-                $(miniLOL.config.contentNode).innerHTML = "Failed to build the configuration tree.";
+                miniLOL.content.set("Failed to build the configuration tree.");
             },
         });
 
@@ -36,7 +36,7 @@ miniLOL.module.create('security', {
         if (args["login"]) {
             if (args["do"]) {
                 if (!args["password"]) {
-                    $(miniLOL.config.contentNode).innerHTML = 'The password is missing.';
+                    miniLOL.content.set('The password is missing.');
                     return false;
                 }
 
@@ -44,11 +44,11 @@ miniLOL.module.create('security', {
                     method: 'get',
 
                     onSuccess: function (http) {
-                        $(miniLOL.config.contentNode).innerHTML = http.responseText;
+                        miniLOL.content.set(http.responseText);
                     },
 
                     onFailure: function () {
-                        $(miniLOL.config.contentNode).innerHTML = 'Something went deeply wrong :(';
+                        miniLOL.content.set('Something went deeply wrong :(');
                     },
                 });
             }
@@ -57,11 +57,11 @@ miniLOL.module.create('security', {
                     method: 'get',
 
                     onSuccess: function (http) {
-                        $(miniLOL.config.contentNode).innerHTML = http.responseText;
+                        miniLOL.content.set(http.responseText);
                     },
 
                     onFailure: function () {
-                        $(miniLOL.config.contentNode).innerHTML = 'Something went deeply wrong :(';
+                        miniLOL.content.set('Something went deeply wrong :(');
                     },
                 });
             }
@@ -71,11 +71,11 @@ miniLOL.module.create('security', {
                 method: 'get',
 
                 onSuccess: function (http) {
-                    $(miniLOL.config.contentNode).innerHTML = http.responseText;
+                    miniLOL.content.set(http.responseText);
                 },
 
                 onFailure: function () {
-                    $(miniLOL.config.contentNode).innerHTML = 'Something went deeply wrong :(';
+                    miniLOL.content.set('Something went deeply wrong :(');
                 },
             });
         }

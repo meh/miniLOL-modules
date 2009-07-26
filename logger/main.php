@@ -37,7 +37,7 @@ if (!file_exists($file)) {
 }
 
 if (!isset($_REQUEST['data']) || !isset($_REQUEST['date'])) {
-    if ($_SESSION['miniLOL']['admin']) {
+    if ($_SESSION['miniLOL']['admin'] || !$protected) {
         if (isset($_REQUEST['retrieve'])) {
             header('Content-Type: text/xml');
 
@@ -56,6 +56,11 @@ if (!isset($_REQUEST['data']) || !isset($_REQUEST['date'])) {
     exit;
 }
 
+$priority = $config->priority || 0;
+if ($priority < security_getRequest('priority')) {
+    exit;
+}
+
 security_waitUnlock();
 security_lock();
 
@@ -66,6 +71,8 @@ fseek($fp, -12, SEEK_END);
 $xml = new XMLWriter();
 $xml->openMemory();
 $xml->startElement('log');
+$xml->writeAttribute('priority', (isset($_REQUEST['priority']) ? security_getRequest('priority') : 0));
+
 $xml->startElement('arguments');
 
 $i = 0;
