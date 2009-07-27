@@ -11,7 +11,7 @@
 *********************************************************************/
 
 miniLOL.module.create('SyntaxHighlighter', {
-    version: '0.1.1,
+    version: '0.1.1',
 
     type: 'passive',
 
@@ -21,11 +21,11 @@ miniLOL.module.create('SyntaxHighlighter', {
         miniLOL.resource.load(miniLOL.resources.functions, this.root+"/resources/functions.xml");
         miniLOL.resource.load(miniLOL.resources.config,    this.root+"/resources/config.xml");
 
-        SyntaxHighlighter.config["tagName"] = miniLOL.config.SyntaxHighlighter.tagName;
+        SyntaxHighlighter.config["tagName"] = miniLOL.config['SyntaxHighlighter'].tagName;
 
-        for (var conf in miniLOL.config.SyntaxHighlighter) {
-            SyntaxHighlighter.defaults[conf] = (miniLOL.config.SyntaxHighlighter[conf][0] == '[' && confs[conf][confs[conf].length-1] == ']')
-                ? eval(miniLOL.config.SyntaxHighlighter[conf]..replace(/[^\d\[\],]/g, ''))
+        for (var conf in miniLOL.config['SyntaxHighlighter']) {
+            SyntaxHighlighter.defaults[conf] = (miniLOL.config['SyntaxHighlighter'][conf][0] == '[' && confs[conf][confs[conf].length-1] == ']')
+                ? eval(miniLOL.config.SyntaxHighlighter[conf].replace(/[^\d\[\],]/g, ''))
                 : miniLOL.config.SyntaxHighlighter[conf];
         }
 

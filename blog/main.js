@@ -133,7 +133,7 @@ miniLOL.module.create('blog', {
             }
         });
 
-        new PeriodicalExecuter(function(){miniLOL.resource.reload(miniLOL.resources.blog)}, miniLOL.config['core'].refreshEvery);
+        new PeriodicalExecuter(function(){miniLOL.resource.reload(miniLOL.resources.blog)}, miniLOL.config['core'].refreshEvery || 360);
     },
 
     execute: function (args) {

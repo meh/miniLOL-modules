@@ -93,27 +93,23 @@ else {
     }
 
     if (isset($_REQUEST['edit'])) {
-        else {
-            $post->setAttribute('title', htmlentities(urldecode(security_getRequest('title')), ENT_QUOTES, 'UTF-8'));
-            $post->setAttribute('author', htmlentities(urldecode(security_getRequest('author')), ENT_QUOTES, 'UTF-8'));
-            $post->setAttribute('date', htmlentities(urldecode(security_getRequest('date')), ENT_QUOTES, 'UTF-8'));
-    
-            $post->removeChild($post->firstChild);
-            $content = $data->createCDataSection(str_replace(']]>', ']&#93;>', urldecode(security_getRequest('content'))));
-            $post->appendChild($content);
-    
-            $data->save('resources/data.xml');
-    
-            echo 'The post has been modified.';
-        }
+        $post->setAttribute('title', htmlentities(urldecode(security_getRequest('title')), ENT_QUOTES, 'UTF-8'));
+        $post->setAttribute('author', htmlentities(urldecode(security_getRequest('author')), ENT_QUOTES, 'UTF-8'));
+        $post->setAttribute('date', htmlentities(urldecode(security_getRequest('date')), ENT_QUOTES, 'UTF-8'));
+
+        $post->removeChild($post->firstChild);
+        $content = $data->createCDataSection(str_replace(']]>', ']&#93;>', urldecode(security_getRequest('content'))));
+        $post->appendChild($content);
+
+        $data->save('resources/data.xml');
+
+        echo 'The post has been modified.';
     }
     else if (isset($_REQUEST['delete'])) {
-        else {
-            $data->documentElement->removeChild($post);
-            $data->save('resources/data.xml');
+        $data->documentElement->removeChild($post);
+        $data->save('resources/data.xml');
     
-            echo 'The post has been deleted.';
-        }
+        echo 'The post has been deleted.';
     }
 }
 
