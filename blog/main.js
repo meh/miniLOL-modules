@@ -47,7 +47,7 @@ miniLOL.module.create('blog', {
                     },
 
                     onSuccess: function (http) {
-                        http.responseXML.$ = _$;
+                        _fix(http.responseXML);
                         res.data = http.responseXML;
                     },
                 });
@@ -57,7 +57,7 @@ miniLOL.module.create('blog', {
                     asynchronous: false,
 
                     onSuccess: function (http) {
-                        http.responseXML.$ = _$;
+                        _fix(http.responseXML);
 
                         var template      = http.responseXML;
                         res.template.blog = template.getElementsByTagName('blog')[0].firstChild.nodeValue;
@@ -105,7 +105,7 @@ miniLOL.module.create('blog', {
                     asynchronous: false,
 
                     onSuccess: function (http) {
-                        http.responseXML.$ = _$;
+                        _fix(http.responseXML);
 
                         var editors = http.responseXML.getElementsByTagName('editor');
                         for (var i = 0; i < editors.length; i++) {
@@ -133,7 +133,7 @@ miniLOL.module.create('blog', {
             }
         });
 
-        new PeriodicalExecuter(function(){miniLOL.resource.reload(miniLOL.resources.blog)}, miniLOL.config['core'].refreshEvery || 360);
+        new PeriodicalExecuter('miniLOL.resource.reload(miniLOL.resources.blog)', miniLOL.config['core'].refreshEvery || 360);
     },
 
     execute: function (args) {
@@ -141,89 +141,91 @@ miniLOL.module.create('blog', {
             throw new Error("An error occurred while loading data.xml");
         }
 
-        if (args["post"]) {
-            if (!miniLOL.modules.security) {
-                throw new Error("You can't post without the `security` module.");
+        if (args["comment"]) {
+            if (!args["id"]) {
+                miniLOL.content.set("You're doing it wrong.");
+                return false;
             }
 
-            if (args["do"]) {
-                args["title"]  = args["title"]    || "";
-                args["date"]   = args["date"]     || new Date().toString();
-                args["author"] = args["author"]   || miniLOL.config['blog'].author;
-                args["content"] = args["content"] || "";
-
-                miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', {
-                    title:   args['title'],
-                    date:    args['date'],
-                    author:  args['author'],
-                    content: args['content'],
-                }]);
-
-                new Ajax.Request(this.root+"/main.php?post", {
-                    method: 'post',
-
-                    parameters: {
-                        title:   args["title"],
-                        date:    args["date"],
-                        author:  args["author"],
-                        content: args["content"],
-                    },
-
-                    onSuccess: function (http) {
-                        miniLOL.content.set(http.responseText);
-                        miniLOL.resource.reload(miniLOL.resources.blog);
-                    },
-
-                    onFailure: function () {
-                        miniLOL.content.set("Something went deeply wrong.");
-                    },
-                });
-            }
-            else {
-                if (!miniLOL.module.execute('security', { connected: true })) {
-                    miniLOL.content.set("You're doing it wrong.");
-                    return false;
-                }
-
-                miniLOL.content.set(this.templetize([miniLOL.config['blog'].author], 'new_post'));
-                miniLOL.content.get().evalScripts();
-            }
-        }
-        else if (args["edit"]) {
-            if (!miniLOL.modules.security) {
-                throw new Error("You can't edit without the `security` module.");
-            }
-
-            if (args["id"]) {
+            if (args["post"]) {
                 if (args["do"]) {
-                    args["title"]   = args["title"]   || "";
-                    args["date"]    = args["date"]    || new Date().toString();
-                    args["author"]  = args["author"]  || miniLOL.config['blog'].author;
-                    args["content"] = args["content"] || "";
-
-                    miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', args['id'], {
+                    args["title"]   = args["title"] || "Re: " this.topic(args["id"]).title;
+                    args["date"]    = new Date().toString();
+                    args["author"]  = args["author"] || miniLOL.config["blog"].commentAuthor;
+    
+                    miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', {
                         title:   args['title'],
                         date:    args['date'],
                         author:  args['author'],
                         content: args['content'],
                     }]);
-
-                    new Ajax.Request(this.root+"/main.php?edit", {
+    
+                    new Ajax.Request(this.root+"/main.php?post", {
                         method: 'post',
-
+    
                         parameters: {
-                            id:      args["id"],
                             title:   args["title"],
                             date:    args["date"],
                             author:  args["author"],
                             content: args["content"],
                         },
-
+    
                         onSuccess: function (http) {
                             miniLOL.content.set(http.responseText);
                             miniLOL.resource.reload(miniLOL.resources.blog);
                         },
+    
+                        onFailure: function () {
+                            miniLOL.content.set("Something went deeply wrong.");
+                        },
+                    });
 
+                }
+                else {
+                    if (!miniLOL.module.execute('security', { connected: true })) {
+                        miniLOL.content.set("You're doing it wrong.");
+                        return false;
+                    }
+    
+                    miniLOL.content.set(this.templetize([args["id"], 'new_comment'));
+                    miniLOL.content.get().evalScripts();
+                }
+            }
+        }
+        else {
+            if (!miniLOL.modules.security && (args["post"] || args["edit"] || args["delete"])) {
+                throw new Error("You can't post without the `security` module.");
+            }
+
+            if (args["post"]) {
+                if (args["do"]) {
+                    args["title"]   = args["title"]   || "";
+                    args["date"]    = args["date"]    || new Date().toString();
+                    args["author"]  = args["author"]  || miniLOL.config['blog'].author;
+                    args["content"] = args["content"] || "";
+    
+                    miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', {
+                        title:   args['title'],
+                        date:    args['date'],
+                        author:  args['author'],
+                        content: args['content'],
+                    }]);
+    
+                    new Ajax.Request(this.root+"/main.php?post", {
+                        method: 'post',
+    
+                        parameters: {
+                            title:   args["title"],
+                            date:    args["date"],
+                            author:  args["author"],
+                            content: args["content"],
+                        },
+    
+                        onSuccess: function (http) {
+                            miniLOL.content.set(http.responseText);
+                            miniLOL.resource.reload(miniLOL.resources.blog);
+                        },
+    
                         onFailure: function () {
                             miniLOL.content.set("Something went deeply wrong.");
                         },
@@ -234,116 +236,159 @@ miniLOL.module.create('blog', {
                         miniLOL.content.set("You're doing it wrong.");
                         return false;
                     }
-
+    
+                    miniLOL.content.set(this.templetize([miniLOL.config['blog'].author], 'new_post'));
+                    miniLOL.content.get().evalScripts();
+                }
+            }
+            else if (args["edit"]) {
+                if (args["id"]) {
+                    if (args["do"]) {
+                        args["title"]   = args["title"]   || "";
+                        args["date"]    = args["date"]    || new Date().toString();
+                        args["author"]  = args["author"]  || miniLOL.config['blog'].author;
+                        args["content"] = args["content"] || "";
+    
+                        miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', args['id'], {
+                            title:   args['title'],
+                            date:    args['date'],
+                            author:  args['author'],
+                            content: args['content'],
+                        }]);
+    
+                        new Ajax.Request(this.root+"/main.php?edit", {
+                            method: 'post',
+    
+                            parameters: {
+                                id:      args["id"],
+                                title:   args["title"],
+                                date:    args["date"],
+                                author:  args["author"],
+                                content: args["content"],
+                            },
+    
+                            onSuccess: function (http) {
+                                miniLOL.content.set(http.responseText);
+                                miniLOL.resource.reload(miniLOL.resources.blog);
+                            },
+    
+                            onFailure: function () {
+                                miniLOL.content.set("Something went deeply wrong.");
+                            },
+                        });
+                    }
+                    else {
+                        if (!miniLOL.module.execute('security', { connected: true })) {
+                            miniLOL.content.set("You're doing it wrong.");
+                            return false;
+                        }
+    
+                        var post = this.data.getElementById(args["id"]);
+    
+                        if (post == null) {
+                            miniLOL.content.set("The post doesn't exist.");
+                            return false;
+                        }
+    
+                        miniLOL.content.set(this.templetize([
+                            post.getAttribute("title"),
+                            post.getAttribute("author"),
+                            post.getAttribute("date"),
+                            args["id"],
+                         ], 'edit_post'));
+                        miniLOL.content.get().evalScripts();
+                    }
+                }
+                else {
+                    miniLOL.content.set("You're doing it wrong.");
+                    return false;
+                }
+            }
+            else if (args["delete"]) {
+                if (!args["id"]) {
+                    miniLOL.content.set("You're doing it wrong.");
+                    return false;
+                }
+    
+                if (args["do"]) {
+                    miniLOL.module.execute('logger', ['log', 100, 'blog', 'delete', args['id']]);
+    
+                    new Ajax.Request(this.root+"/main.php?delete", {
+                        method: 'post',
+    
+                        parameters: {
+                            id: args["id"],
+                        },
+    
+                        onSuccess: function (http) {
+                            miniLOL.content.set(http.responseText);
+                            miniLOL.resource.reload(miniLOL.resources.blog);
+                        },
+    
+                        onFailure: function () {
+                            miniLOL.content.set("Something went deeply wrong.");
+                        },
+                    });
+                }
+                else {
+                    miniLOL.content.set("You're doing it wrong.");
+                    return false;
+                }
+            }
+            else if (args["build"]) {
+                miniLOL.content.set("Not yet implemented.");
+                return false;
+            }
+            else if (args["comment"]) {
+                if (args[""]) {
+    
+                }
+            }
+            else {
+                args["page"] = args["page"] || 1;
+                
+                if (args["id"]) {
                     var post = this.data.getElementById(args["id"]);
-
-                    if (post == null) {
-                        miniLOL.content.set("The post doesn't exist.");
+                    if (post) {
+                        miniLOL.content.set(this.templetize([post, $A(this.data.getElementsByTagName("post")).indexOf(post)+1], 'post'));
+                        miniLOL.content.get().evalScripts();
+                    }
+                    else {
+                        miniLOL.content.set( "Post not found.");
                         return false;
                     }
-
-                    miniLOL.content.set(this.templetize([
-                        post.getAttribute("title"),
-                        post.getAttribute("author"),
-                        post.getAttribute("date"),
-                        args["id"],
-                     ], 'edit_post'));
-                    miniLOL.content.get().evalScripts();
                 }
-            }
-            else {
-                miniLOL.content.set("You're doing it wrong.");
-                return false;
-            }
-        }
-        else if (args["delete"]) {
-            if (!miniLOL.modules.security) {
-                throw new Error("You can't delete without the `security` module.");
-            }
-
-            if (!args["id"]) {
-                miniLOL.content.set("You're doing it wrong.");
-                return false;
-            }
-
-            if (args["do"]) {
-                miniLOL.module.execute('logger', ['log', 100, 'blog', 'delete', args['id']]);
-
-                new Ajax.Request(this.root+"/main.php?delete", {
-                    method: 'post',
-
-                    parameters: {
-                        id: args["id"],
-                    },
-
-                    onSuccess: function (http) {
-                        miniLOL.content.set(http.responseText);
-                        miniLOL.resource.reload(miniLOL.resources.blog);
-                    },
-
-                    onFailure: function () {
-                        miniLOL.content.set("Something went deeply wrong.");
-                    },
-                });
-            }
-            else {
-                miniLOL.content.set("You're doing it wrong.");
-                return false;
-            }
-        }
-        else if (args["build"]) {
-            miniLOL.content.set("Not yet implemented.");
-            return false;
-        }
-        else if (args["comment"]) {
-            if (args[""]) {
-
-            }
-        }
-        else {
-            args["page"] = args["page"] || 1;
-            
-            if (args["id"]) {
-                var post = this.data.$(args["id"]);
-                if (post) {
-                    miniLOL.content.set(this.templetize([post, $A(this.data.getElementsByTagName("post")).indexOf(post)+1], 'post'));
-                    miniLOL.content.get().evalScripts();
+                else if (args["number"]) {
+                    var posts = this.data.getElementsByTagName("post");
+    
+                    if (args["number"] <= posts.length) {
+                        miniLOL.content.set(this.templetize([posts[parseInt(args["number"])-1], parseInt(args["number"])], 'post'));
+                        miniLOL.content.get().evalScripts();
+                    }
+                    else {
+                        miniLOL.content.set("Post not found.");
+                        return false;
+                    }
                 }
                 else {
-                    miniLOL.content.set( "Post not found.");
-                    return false;
-                }
-            }
-            else if (args["number"]) {
-                var posts = this.data.getElementsByTagName("post");
-
-                if (args["number"] <= posts.length) {
-                    miniLOL.content.set(this.templetize([posts[parseInt(args["number"])-1], parseInt(args["number"])], 'post'));
+                    var allPosts = this.data.getElementsByTagName('post');
+        
+                    if (args["page"] > Math.ceil(allPosts.length/miniLOL.config['blog'].postsPerPage) || args["page"] < 1) {
+                        miniLOL.content.set("Page not found.");
+                        return false;
+                    }
+        
+                    var posts = new Array;
+        
+                    for (   var i = allPosts.length-1-(miniLOL.config['blog'].postsPerPage*(args["page"]-1)), count = 0;
+                            count < miniLOL.config['blog'].postsPerPage && i >= 0;
+                            i--, count++) {
+                        posts.push(allPosts[i]);
+                    }
+        
+                    miniLOL.content.set(this.templetize([posts, parseInt(args["page"])], 'posts'));
                     miniLOL.content.get().evalScripts();
                 }
-                else {
-                    miniLOL.content.set("Post not found.");
-                    return false;
-                }
-            }
-            else {
-                var allPosts = this.data.getElementsByTagName('post');
-    
-                if (args["page"] > Math.ceil(allPosts.length/miniLOL.config['blog'].postsPerPage) || args["page"] < 1) {
-                    miniLOL.content.set("Page not found.");
-                    return false;
-                }
-    
-                var posts = new Array;
-    
-                for (   var i = allPosts.length-1-(miniLOL.config['blog'].postsPerPage*(args["page"]-1)), count = 0;
-                        count < miniLOL.config['blog'].postsPerPage && i >= 0;
-                        i--, count++) {
-                    posts.push(allPosts[i]);
-                }
-    
-                miniLOL.content.set(this.templetize([posts, parseInt(args["page"])], 'posts'));
-                miniLOL.content.get().evalScripts();
             }
         }
 
@@ -375,6 +420,7 @@ miniLOL.module.create('blog', {
                 : "";
 
             var content = this.template.post.overall.interpolate({
+                id: data[0].getAttribute('id'),
                 content: data[0].firstChild.nodeValue,
                 title: data[0].getAttribute('title'),
                 date: data[0].getAttribute('date'),
@@ -510,5 +556,19 @@ miniLOL.module.create('blog', {
                 })
             });
         }
-    }
+    },
+
+    topic: function (id) {
+        var result = new Object;
+        var topic  = this.data.getElementById(id);
+        var attrs  = topic.attributes;
+
+        for (var i = 0; i < attrs.length; i++) {
+            result[attrs[i].nodeName] = attrs[i].nodeValue;
+        }
+
+        result.content = topic.firstChild.nodeValue;
+
+        return result;
+    },
 });

@@ -47,12 +47,15 @@
     </posts>
 
     <post><![CDATA[
-        <div class="post">
+        <div id="#{id}" class="post">
             <div class="header">
                 <span class="title"><a href="#{link}">#{title}</a></span> <div style="float: right">#{admin}</div>
             </div>
             <div class="content">#{content}</div>
             <div class="by">Posted by <span class="author">#{author}</span> on <span class="date">#{date}</span></div>
+
+            #{comments_show}
+
             #{pager}
         </div>
         ]]>
@@ -88,6 +91,21 @@
             ]]></next>
         </pager>       
     </post>
+
+    <comments>
+        <show><![CDATA[
+            <div>
+                <a onclick="$(this.parentNode.getElementsByTagName('div')[0]).toggle()">Show comments (#{comment_number})</a>
+                <div style="display: none">
+                #{comments}
+                </div>
+            </div>
+        ]]></show>
+
+        <comments><![CDATA[
+            
+        ]]></comments>
+    </comments>
 
     <manage>
         <admin><![CDATA[

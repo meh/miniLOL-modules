@@ -1,36 +1,7 @@
-/**
- * SyntaxHighlighter
- * http://alexgorbatchev.com/
- *
- * SyntaxHighlighter is donationware. If you are using it, please donate.
- * http://alexgorbatchev.com/wiki/SyntaxHighlighter:Donate
- *
- * @version
- * 2.0.320 (May 03 2009)
- * 
- * @copyright
- * Copyright (C) 2004-2009 Alex Gorbatchev.
- *
- * @license
- * This file is part of SyntaxHighlighter.
- * 
- * SyntaxHighlighter is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * SyntaxHighlighter is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with SyntaxHighlighter.  If not, see <http://www.gnu.org/copyleft/lesser.html>.
- */
 SyntaxHighlighter.brushes.Bash = function()
 {
 	var keywords =	'if fi then elif else for do done until while break continue case function return in eq ne gt lt ge le';
-	var commands =  'alias apropos awk bash bc bg builtin bzip2 cal cat cd cfdisk chgrp chmod chown chroot' +
+	var commands =  'alias apropos awk basename bash bc bg builtin bzip2 cal cat cd cfdisk chgrp chmod chown chroot' +
 					'cksum clear cmp comm command cp cron crontab csplit cut date dc dd ddrescue declare df ' +
 					'diff diff3 dig dir dircolors dirname dirs du echo egrep eject enable env ethtool eval ' +
 					'exec exit expand export expr false fdformat fdisk fg fgrep file find fmt fold format ' +
@@ -45,7 +16,28 @@ SyntaxHighlighter.brushes.Bash = function()
 					'uname unexpand uniq units unset unshar useradd usermod users uuencode uudecode v vdir ' +
 					'vi watch wc whereis which who whoami Wget xargs yes'
 					;
-    
+		/**
+		 * Applies all regular expression to the code and stores all found
+		 * matches in the `this.matches` array.
+		 * @param {Array} regexList             List of regular expressions.
+		 * @param {String} code                 Source code.
+		 * @return {Array}                              Returns list of matches.
+		 */
+		this.findMatches = function(regexList, code)
+		{
+				code = code.replace(/&gt;/g, '>').replace(/&lt;/g, '<');
+				this.code = code;
+				var result = [];
+
+				if (regexList != null)
+						for (var i = 0; i < regexList.length; i++)
+								result = result.concat(SyntaxHighlighter.utils.getMatches(code, regexList[i]));
+
+				// sort the matches
+				result = result.sort(SyntaxHighlighter.utils.matchesSortCallback);
+				return result;
+		};
+
 	this.regexList = [
 		{ regex: SyntaxHighlighter.regexLib.singleLinePerlComments,		css: 'comments' },		// one line comments
 		{ regex: SyntaxHighlighter.regexLib.doubleQuotedString,			css: 'string' },		// double quoted strings

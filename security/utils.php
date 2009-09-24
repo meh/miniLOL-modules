@@ -21,7 +21,7 @@ function security_unlock ($lock = 'resources/.lock')
     unlink($lock);
 }
 
-function security_waitUnlock ($lock = 'resources/.lock', $maxCycles = 1337)
+function security_waitUnlock ($lock = 'resources/.lock', $maxCycles = 1337, $unlock = false)
 {
     $cycles = 0;
     while (file_exists($lock)) {
@@ -29,13 +29,18 @@ function security_waitUnlock ($lock = 'resources/.lock', $maxCycles = 1337)
         $cycles++;
 
         if ($cycles > $maxCycles) {
-            echo "The request couldn't be fulfilled.";
-            exit;
+            if ($unlock) {
+                unlink($lock);
+            }
+            else {
+                echo "The request couldn't be fulfilled.";
+                exit;
+            }
         }
     }
 }
 
-function security_getRequest($name)
+function security_getRequest ($name)
 {
     if (!isset($_REQUEST[$name])) {
         return null;

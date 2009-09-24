@@ -30,11 +30,18 @@ if (@!$_SESSION['miniLOL']['admin']) {
 security_waitUnlock();
 security_lock();
 
+$config = simplexml_load_file('resources/config.xml');
+
 $data = DOMDocument::load('resources/data.xml');
 $data->preserveWhiteSpace = false;
 $data->formatOutput       = true;
 
 if (isset($_REQUEST['build'])) {
+    if (!isset($_REQUEST['type'])) {
+        $_REQUEST['type']    = $config->feed->type;
+        $_REQUEST['version'] = $config->feed->version;
+    }
+
     if ($_REQUEST['type'] == 'rss') {
         if ($_REQUEST['version'] == '1.0') {
             
@@ -52,7 +59,24 @@ if (isset($_REQUEST['build'])) {
 }
 
 if (isset($_REQUEST['comment'])) {
+    $post = $data->getElementById($_REQUEST['parent']);
 
+    if (!$post) {
+        echo "The post doesn't exist.";
+        security_unlock();
+        exit;
+    }
+
+    if (isset($_REQUEST['post'])) {
+        security_unlock();
+        exit;
+    }
+
+    if (!isset($_REQUEST['id'])) {
+        echo "You're doing it wrong.";
+        security_unlock();
+        exit;
+    }
 }
 else {
     if (isset($_REQUEST['post'])) {
@@ -60,13 +84,13 @@ else {
     
         $post = $data->createElement('post');
         $post->setAttribute('id', $id);
-        $post->setAttribute('title', htmlentities(urldecode(get_magic_quotes_gpc() ? stripslashes($_REQUEST['title']) : $_REQUEST['title']), ENT_QUOTES, 'UTF-8'));
-        $post->setAttribute('author', htmlentities(urldecode(get_magic_quotes_gpc() ? stripslashes($_REQUEST['author']) : $_REQUEST['author']), ENT_QUOTES, 'UTF-8'));
-        $post->setAttribute('date', htmlentities(urldecode(get_magic_quotes_gpc() ? stripslashes($_REQUEST['date']) : $_REQUEST['date']), ENT_QUOTES, 'UTF-8'));
+        $post->setAttribute('title', htmlentities(urldecode(security_getRequest('title')), ENT_QUOTES, 'UTF-8'));
+        $post->setAttribute('author', htmlentities(urldecode(security_getRequest('author')), ENT_QUOTES, 'UTF-8'));
+        $post->setAttribute('date', htmlentities(urldecode(security_getRequest('date')), ENT_QUOTES, 'UTF-8'));
 
         $data->documentElement->setAttribute('total', $id);
 
-        $content = $data->createCDataSection(str_replace(']]>', ']&#93;>', urldecode(get_magic_quotes_gpc() ? stripslashes($_REQUEST['content']) : $_REQUEST['content'])));
+        $content = $data->createCDataSection(str_replace(']]>', ']&#93;>', urldecode(security_getRequest('content'))));
         $post->appendChild($content);
         $data->documentElement->appendChild($post);
 

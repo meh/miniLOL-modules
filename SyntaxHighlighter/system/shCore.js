@@ -615,6 +615,8 @@ var sh = {
 				sh.vars.discoveredBrushes = brushes;
 			}
 			
+            alert(sh.brushes+"\n\n\n"+brushes[alias]+"\n\n\n"+alias+"\n\n\n"+sh.brushes[brushes[alias]]);
+
 			result = sh.brushes[brushes[alias]];
 
 			if (result == null && alert != false)
@@ -1087,7 +1089,7 @@ var sh = {
 
 			// local params take precedence over globals
 			params = sh.utils.merge(globalParams, params);
-			brushName = params['brush'] || params['lang'];
+			brushName = params['brush'];
 
 			if (brushName == null)
 				continue;
