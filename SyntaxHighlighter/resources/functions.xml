@@ -18,7 +18,7 @@
 
         var options = '';
         for (var arg in args) {
-            options += arg + ": " + args[arg] + "; ";
+            options += arg + ": " + args[arg].replace(/[^\w\d,\[\]].*$/, '') + "; ";
         }
 
         delete args.brush;

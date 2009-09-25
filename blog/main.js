@@ -47,8 +47,7 @@ miniLOL.module.create('blog', {
                     },
 
                     onSuccess: function (http) {
-                        _fix(http.responseXML);
-                        res.data = http.responseXML;
+                        res.data = _fix(http.responseXML);
                     },
                 });
 
@@ -149,7 +148,7 @@ miniLOL.module.create('blog', {
 
             if (args["post"]) {
                 if (args["do"]) {
-                    args["title"]   = args["title"] || "Re: " this.topic(args["id"]).title;
+                    args["title"]   = args["title"] || "Re: " + this.topic(args["id"]).title;
                     args["date"]    = new Date().toString();
                     args["author"]  = args["author"] || miniLOL.config["blog"].commentAuthor;
     
@@ -187,7 +186,7 @@ miniLOL.module.create('blog', {
                         return false;
                     }
     
-                    miniLOL.content.set(this.templetize([args["id"], 'new_comment'));
+                    miniLOL.content.set(this.templetize(args["id"], 'new_comment'));
                     miniLOL.content.get().evalScripts();
                 }
             }
