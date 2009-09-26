@@ -11,7 +11,7 @@
  *********************************************************************/
 
 miniLOL.module.create('security', {
-    version: '0.1.1',
+    version: '0.2',
 
     type: 'passive',
     
@@ -57,7 +57,7 @@ miniLOL.module.create('security', {
                 });
             }
             else {
-                new Ajax.Request(this.root+"/resources/login.tpl", {
+                new Ajax.Request(this.root+"/resources/template.php?login", {
                     method: 'get',
 
                     onSuccess: function (http) {
@@ -84,6 +84,57 @@ miniLOL.module.create('security', {
                     miniLOL.content.set('Something went deeply wrong :(');
                 },
             });
+        }
+        else if (args["change"]) {
+            if (args["do"]) {
+                miniLOL.module.execute('logger', ['log', 100, 'security', 'change', args['password'] || "", args['type'] || ""]);
+
+                if (!args["password"] || !args["type"]) {
+                    miniLOL.content.set('The password or the type are missing.');
+                    return false;
+                }
+
+                new Ajax.Request(this.root+"/main.php?change&password=#{0}&type=#{1}".interpolate([encodeURIComponent(args["password"]), encodeURIComponent(args["type"])]), {
+                    method: 'get',
+
+                    onSuccess: function (http) {
+                        miniLOL.content.set(http.responseText);
+                    },
+
+                    onFailure: function () {
+                        miniLOL.content.set('Something went deeply wrong :(');
+                    },
+                });
+            }
+            else {
+                new Ajax.Request(this.root+"/resources/template.php?change", {
+                    method: 'get',
+
+                    onSuccess: function (http) {
+                        miniLOL.content.set(http.responseText);
+                    },
+
+                    onFailure: function () {
+                        miniLOL.content.set('Something went deeply wrong :(');
+                    },
+                });
+            }
+        }
+        else if (args["logout"]) {
+            miniLOL.module.execute('logger', ['log', 30, 'security', 'logout']);
+
+            new Ajax.Request(this.root+"/main.php?logout", {
+                method: 'get',
+
+                onSuccess: function (http) {
+                    miniLOL.content.set(http.responseText);
+                },
+
+                onFailure: function () {
+                    miniLOL.content.set('Something went deeply wrong :(');
+                },
+            });
+
         }
         else if (args["connected"]) {
             var result = "false";

@@ -11,7 +11,7 @@
  *  0. You just DO WHAT THE FUCK YOU WANT TO.                        *
  *********************************************************************/
 
-define('__VERSION__', '0.1.1');
+define('__VERSION__', '0.2');
 
 function simpleXMLToArray ($xml)
 {
@@ -28,16 +28,7 @@ function simpleXMLToArray ($xml)
     return $result;
 }
 
-function buildConfig ($file)
-{
-    // Secure config file
-    $xml = file($file);
-    array_shift($xml);
-    array_pop($xml);
-    $xml = join("\n", $xml);
-
-    return simplexml_load_string($xml);
-}
+include_once('utils.php');
 
 session_set_cookie_params(60*60*24*365, '/');
 session_start();
@@ -53,14 +44,25 @@ if (isset($_REQUEST['connected'])) {
     exit;
 }
 else if (isset($_REQUEST['build'])) {
-    $_SESSION['miniLOL']['config'] = simpleXMLToArray(buildConfig('resources/config.php'));
+    $_SESSION['miniLOL']['config'] = simpleXMLToArray(simplexml_load_string(security_loadConfig('resources/config.php')));
     exit;
 }
 
 if (isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
-    $_SESSION['miniLOL']['config'] = simpleXMLToArray(buildConfig('resources/config.php'));
+    $_SESSION['miniLOL']['config'] = simpleXMLToArray(simplexml_load_string(security_loadConfig('resources/config.php')));
 
-    if ($_REQUEST['password'] == $_SESSION['miniLOL']['config']['admin']['password']) {
+    $password = security_getRequest('password');
+
+    if ($_SESSION['miniLOL']['config']['admin']['password']['type'] != 'text') {
+        $password = @hash(strtolower($_SESSION['miniLOL']['config']['admin']['password']['type']), $password);
+
+        if (!$password) {
+            echo "The hashing algorithm isn't present.";
+            exit;
+        }
+    }
+    
+    if ($password == $_SESSION['miniLOL']['config']['admin']['password']['data']) {
         $_SESSION['miniLOL']['admin']  = true;
 
         echo 'Logged in succesfully.';
@@ -75,6 +77,29 @@ else if (isset($_REQUEST['logout'])) {
     unset($_SESSION['miniLOL']);
 
     echo 'Logged out.';
+    exit;
+}
+else if (isset($_REQUEST['change']) && isset($_REQUEST['password']) && isset($_REQUEST['type'])) {
+    if (@!$_SESSION['miniLOL']['admin']) {
+        echo 'You fail at auditing.';
+        exit;
+    }
+
+    $config = simplexml_load_string(security_loadConfig('resources/config.php'));
+    $config->admin->password->type = security_getRequest('type');
+    $config->admin->password->data = @hash(strtolower(security_getRequest('type')), security_getRequest('password'));
+
+    if (!$config->admin->password->data) {
+        echo "The hashing algorithm isn't present.";
+        exit;
+    }
+
+    security_saveConfig('resources/config.php', "\n".preg_replace('#^\s*\n#ms', '', $config->asXML()));
+
+    $_SESSION['miniLOL']['config'] = simpleXMLToArray($config);
+
+    echo 'Password changed.';
+
     exit;
 }
 

@@ -49,4 +49,18 @@ function security_getRequest ($name)
     return (get_magic_quotes_gpc() ? stripslashes($_REQUEST[$name]) : $_REQUEST[$name]);
 }
 
+function security_loadConfig ($file)
+{
+    // Secure config file
+    $xml = file($file);
+    array_shift($xml);
+    array_pop($xml);
+    return join("\n", $xml);
+}
+
+function security_saveConfig ($file, $config)
+{
+    file_put_contents($file, "<?php die('You fail.'); /*\n" . $config . "\n*/?>");
+}
+
 ?>

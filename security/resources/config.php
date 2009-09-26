@@ -2,7 +2,10 @@
 
 <config>
     <admin>
-        <password>lolwat</password>
+        <password>
+            <type>text</type>
+            <data>password</data>
+        </password>
     </admin>
 </config>
 

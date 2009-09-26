@@ -5,7 +5,11 @@
 ]>
 
 <configuration domain="blog">
-    <author>Anonymous</author>
+    <author>
+        <post>Owner</post>
+        <comment>Anonymous</comment>
+    </author>
+
     <postsPerPage>5</postsPerPage>
     <editorType>simple</editorType>
 

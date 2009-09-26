@@ -56,9 +56,7 @@ miniLOL.module.create('blog', {
                     asynchronous: false,
 
                     onSuccess: function (http) {
-                        _fix(http.responseXML);
-
-                        var template      = http.responseXML;
+                        var template      = _fix(http.responseXML);
                         res.template.blog = template.getElementsByTagName('blog')[0].firstChild.nodeValue;
 
                         var posts   = template.getElementsByTagName('posts')[0];
@@ -104,9 +102,7 @@ miniLOL.module.create('blog', {
                     asynchronous: false,
 
                     onSuccess: function (http) {
-                        _fix(http.responseXML);
-
-                        var editors = http.responseXML.getElementsByTagName('editor');
+                        var editors = _fix(http.responseXML).getElementsByTagName('editor');
                         for (var i = 0; i < editors.length; i++) {
                             res.editors[editors[i].getAttribute('type')] = editors[i].firstChild.nodeValue;
                         }
@@ -150,7 +146,7 @@ miniLOL.module.create('blog', {
                 if (args["do"]) {
                     args["title"]   = args["title"] || "Re: " + this.topic(args["id"]).title;
                     args["date"]    = new Date().toString();
-                    args["author"]  = args["author"] || miniLOL.config["blog"].commentAuthor;
+                    args["author"]  = args["author"] || miniLOL.config["blog"].author.comment;
     
                     miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', {
                         title:   args['title'],
@@ -200,7 +196,7 @@ miniLOL.module.create('blog', {
                 if (args["do"]) {
                     args["title"]   = args["title"]   || "";
                     args["date"]    = args["date"]    || new Date().toString();
-                    args["author"]  = args["author"]  || miniLOL.config['blog'].author;
+                    args["author"]  = args["author"]  || miniLOL.config['blog'].author.post;
                     args["content"] = args["content"] || "";
     
                     miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', {
@@ -236,7 +232,7 @@ miniLOL.module.create('blog', {
                         return false;
                     }
     
-                    miniLOL.content.set(this.templetize([miniLOL.config['blog'].author], 'new_post'));
+                    miniLOL.content.set(this.templetize([miniLOL.config['blog'].author.post], 'new_post'));
                     miniLOL.content.get().evalScripts();
                 }
             }
@@ -245,7 +241,7 @@ miniLOL.module.create('blog', {
                     if (args["do"]) {
                         args["title"]   = args["title"]   || "";
                         args["date"]    = args["date"]    || new Date().toString();
-                        args["author"]  = args["author"]  || miniLOL.config['blog'].author;
+                        args["author"]  = args["author"]  || miniLOL.config['blog'].author.post;
                         args["content"] = args["content"] || "";
     
                         miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', args['id'], {
@@ -423,7 +419,7 @@ miniLOL.module.create('blog', {
                 content: data[0].firstChild.nodeValue,
                 title: data[0].getAttribute('title'),
                 date: data[0].getAttribute('date'),
-                author: data[0].getAttribute('author'),
+                author: data[2].getAttribute('author'),
                 link: "#module=blog&id="+data[0].getAttribute('id'),
                 pager: pager,
                 admin: (miniLOL.modules.security.connected) ? this.templetize([data[0].getAttribute('id')], "admin") : "",
@@ -567,6 +563,56 @@ miniLOL.module.create('blog', {
         }
 
         result.content = topic.firstChild.nodeValue;
+
+        return result;
+    },
+
+    comment: function (topic, type) {
+        var result    = null;
+        var resultDOM = null;
+        var topic     = this.data.getElementById(topic);
+        var comments  = topic.getElementsByTagName("comments")[0].getElementsByTagName("comment");
+
+        if (type.number) {
+            for (var i = 0; i < comments.length; i++) {
+                if (i == type.number-1) {
+                    resultDOM = comments[i];
+                    break;
+                }
+            }
+        }
+        else if (type.id) {
+            for (var i = 0; i < comments.length; i++) {
+                if (comments[i].getAttribute("id") == type.id) {
+                    resultDOM = comments[i];
+                    break;
+                }
+            }
+        }
+
+        if (resultDOM) {
+            var attrs = resultDOM.attributes;
+
+            result        = new Object;
+            result.number = i+1;
+
+            for (var i = 0; i < attrs.length; i++) {
+                result[attrs[i].nodeName] = attrs[i].nodeValue;
+            }
+
+            result.content = resultDOM.firstChild.nodeValue;
+        }
+
+        return result;
+    },
+
+    comments: function (topic) {
+        var result = new Array;
+        var length = topic.getElementsByTagName("comments")[0].getElementsByTagName("comment").length;
+
+        for (var i = 0; i < length; i++) {
+            result.push(this.comment(topic, { number: i+1 }));
+        }
 
         return result;
     },
