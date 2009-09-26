@@ -54,6 +54,8 @@ function security_loadConfig ($file)
     // Secure config file
     $xml = file($file);
     array_shift($xml);
+    array_shift($xml);
+    array_pop($xml);
     array_pop($xml);
     return join("\n", $xml);
 }
