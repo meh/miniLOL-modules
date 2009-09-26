@@ -85,9 +85,11 @@ else if (isset($_REQUEST['change']) && isset($_REQUEST['password']) && isset($_R
         exit;
     }
 
+    $type = security_getRequest('type');
+
     $config = simplexml_load_string(security_loadConfig('resources/config.php'));
-    $config->admin->password->type = security_getRequest('type');
-    $config->admin->password->data = @hash(strtolower(security_getRequest('type')), security_getRequest('password'));
+    $config->admin->password->type = $type;
+    $config->admin->password->data = ($type == 'text') ? security_getRequest('password') : @hash(strtolower($type), security_getRequest('password'));
 
     if (!$config->admin->password->data) {
         echo "The hashing algorithm isn't present.";

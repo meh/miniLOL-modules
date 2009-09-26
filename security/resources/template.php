@@ -18,6 +18,7 @@ HTML;
 else if (isset($_REQUEST['change'])) {
     $algos = '';
 
+    $algos .= '<option value="text">Plain</option>';
     foreach (hash_algos() as $hash) {
         $algos .= '<option value="' . $hash . '">' . strtoupper($hash) . '</option>';
     }

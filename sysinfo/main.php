@@ -13,6 +13,7 @@
 
 define('__VERSION__', '0.1');
 
+header('Content-Type: text/xml');
 
 
 ?>
