@@ -33,7 +33,7 @@ miniLOL.module.create('sysinfo', {
                     miniLOL.content.set(http.responseText);
                 }
                 else {
-                    result = http.responseText;
+                    result = http.responseXML;
                 }
             },
 
