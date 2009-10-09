@@ -615,8 +615,6 @@ var sh = {
 				sh.vars.discoveredBrushes = brushes;
 			}
 			
-            alert(sh.brushes+"\n\n\n"+brushes[alias]+"\n\n\n"+alias+"\n\n\n"+sh.brushes[brushes[alias]]);
-
 			result = sh.brushes[brushes[alias]];
 
 			if (result == null && alert != false)
