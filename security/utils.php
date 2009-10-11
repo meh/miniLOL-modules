@@ -65,4 +65,43 @@ function security_saveConfig ($file, $config)
     file_put_contents($file, "<?php die('You fail.'); /*\n" . $config . "\n*/?>");
 }
 
+function security_rmdir ($directory, $recursive = false, $empty = false)
+{
+    if (!$recursive) {
+        return rmdir($directory);
+    }
+
+    if (substr($directory, -1) == '/') {
+        $directory = substr($directory, 0, -1);
+    }
+
+    if (!file_exists($directory) || !is_dir($directory)) {
+        return false;
+    }
+    else if (is_readable($directory)) {
+        $handle = opendir($directory);
+
+        while (($item = readdir($handle)) !== false) {
+            if ($item != '.' && $item != '..') {
+                $path = $directory.'/'.$item;
+
+                if (is_dir($path)) {
+                    security_rmdir($path, true, $empty);
+                }
+                else {
+                    unlink($path);
+                }
+            }
+        }
+
+        closedir($handle);
+
+        if ($empty == false) {
+            return (bool) rmdir($directory);
+        }
+    }
+
+    return true;
+}
+
 ?>
