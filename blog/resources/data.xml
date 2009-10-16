@@ -30,34 +30,15 @@
     >
 ]>
 
-<data total="7">
+<!--
+
+Example:
+
     <post date="Mon Mar 30 2009 20:35:46 GMT+0200 (CET)" id="1" title="LOL I STOLE YOUR BLOG" author="Dix"><![CDATA[
         I say, the nigga.
     ]]></post>
 
-    <post date="Mon Mar 30 2009 20:36:46 GMT+0200 (CET)" id="2" title="Imma lost .(" author="Dix"><![CDATA[
-        WHERE DA HOOD AT?
-    ]]></post>
+-->
 
-    <post date="Mon Mar 30 2009 20:37:46 GMT+0200 (CET)" id="3" title="Look at you haquer" author="Cockmongler"><![CDATA[
-        :E
-    ]]></post>
-
-    <post date="Mon Mar 30 2009 20:38:46 GMT+0200 (CET)" id="4" title="LIAR" author="Grinman"><![CDATA[
-        YOU TRAITOR
-    ]]></post>
-
-    <post date="Mon Mar 30 2009 20:39:46 GMT+0200 (CET)" id="5" title="Remember remember, wat, I forgot :(" author="EFG"><![CDATA[
-        Oh look, the twins :O
-    ]]></post>
-
-    <post date="Mon Mar 30 2009 20:40:46 GMT+0200 (CET)" id="6" title="FBI" author="Chris Hansen"><![CDATA[
-        Have a seat.
-    ]]></post>
-
-    <post date="Mon Mar 30 2009 20:41:46 GMT+0200 (CET)" id="7" title="g00nz" author="h4qu3r"><![CDATA[
-        <pre class="sh_perl">$lol = "NIGGER";
-print $lol, "\n";</pre>
-        Test for source highlight in blog posts :)
-    ]]></post>
+<data total="0">
 </data>
