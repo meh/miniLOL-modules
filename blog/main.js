@@ -367,6 +367,11 @@ miniLOL.module.create('blog', {
                 }
                 else {
                     var allPosts = this.data.getElementsByTagName('post');
+
+                    if (allPosts.length == 0) {
+                        miniLOL.content.set("The blog is empty :(");
+                        return false;
+                    }
         
                     if (args["page"] > Math.ceil(allPosts.length/miniLOL.config['blog'].postsPerPage) || args["page"] < 1) {
                         miniLOL.content.set("Page not found.");
@@ -419,7 +424,7 @@ miniLOL.module.create('blog', {
                 content: data[0].firstChild.nodeValue,
                 title: data[0].getAttribute('title'),
                 date: data[0].getAttribute('date'),
-                author: data[2].getAttribute('author'),
+                author: data[0].getAttribute('author'),
                 link: "#module=blog&id="+data[0].getAttribute('id'),
                 pager: pager,
                 admin: (miniLOL.modules.security.connected) ? this.templetize([data[0].getAttribute('id')], "admin") : "",
