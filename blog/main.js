@@ -121,13 +121,6 @@ miniLOL.module.create('blog', {
 
         include("css", this.root+"/resources/style.css");
 
-        miniLOL.event.add('window.onresize', function () {
-            var editor = $('editor');
-            if (editor) {
-                editor.setStyle({ height: (($('body').getHeight() - 150)) + 'px' });
-            }
-        });
-
         new PeriodicalExecuter('miniLOL.resource.reload(miniLOL.resources.blog)', miniLOL.config['core'].refreshEvery || 360);
     },
 
