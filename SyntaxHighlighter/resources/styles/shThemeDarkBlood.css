@@ -43,17 +43,14 @@
 /* First line */
 .syntaxhighlighter .line.alt1 .content
 {
-	background-color: #000000 !important;
+	background-color: #060606 !important;
+    width: 100% !important;
 }
 
 /* Second line */
 .syntaxhighlighter .line.alt2 .content
 {
-	background-color: #060606 !important;
-}
-
-.syntaxhighlighter .line .content .block
-{
+	background-color: #000000 !important;
 }
 
 .syntaxhighlighter .ruler
