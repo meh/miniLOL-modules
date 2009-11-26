@@ -10,6 +10,8 @@ if (isset($_REQUEST['login'])) {
     <form onsubmit="miniLOL.module.execute('security', [{ login: true, do: true, password: $('login_password').value }]); return false;">
         <input style="margin-right: 10px;" id="login_password" type="password"/><input type="submit" value="login"/>
     </form>
+
+    <script>$('login_password').focus();</script>
 </div>
 </center>
 
@@ -32,6 +34,8 @@ else if (isset($_REQUEST['change'])) {
     <form onsubmit="miniLOL.module.execute('security', [{ change: true, do: true, password: $('change_password').value, type: $('change_type').getElementsByTagName('option')[$('change_type').selectedIndex].value}]); return false;">
         <input style="margin-right: 10px;" id="change_password" type="password"/><select id="change_type">{$algos}</select><br/><input style="margin-top: 5px;" type="submit" value="change"/>
     </form>
+
+    <script>$('change_password').focus();</script>
 </div>
 </center>
    

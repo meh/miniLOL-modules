@@ -176,7 +176,6 @@ miniLOL.module.create('blog', {
                     }
     
                     miniLOL.content.set(this.templetize(args["id"], 'new_comment'));
-                    miniLOL.content.get().evalScripts();
                 }
             }
         }
@@ -226,7 +225,6 @@ miniLOL.module.create('blog', {
                     }
     
                     miniLOL.content.set(this.templetize([miniLOL.config['blog'].author.post], 'new_post'));
-                    miniLOL.content.get().evalScripts();
                 }
             }
             else if (args["edit"]) {
@@ -284,7 +282,6 @@ miniLOL.module.create('blog', {
                             post.getAttribute("date"),
                             args["id"],
                          ], 'edit_post'));
-                        miniLOL.content.get().evalScripts();
                     }
                 }
                 else {
@@ -339,7 +336,6 @@ miniLOL.module.create('blog', {
                     var post = this.data.getElementById(args["id"]);
                     if (post) {
                         miniLOL.content.set(this.templetize([post, $A(this.data.getElementsByTagName("post")).indexOf(post)+1], 'post'));
-                        miniLOL.content.get().evalScripts();
                     }
                     else {
                         miniLOL.content.set( "Post not found.");
@@ -351,7 +347,6 @@ miniLOL.module.create('blog', {
     
                     if (args["number"] <= posts.length) {
                         miniLOL.content.set(this.templetize([posts[parseInt(args["number"])-1], parseInt(args["number"])], 'post'));
-                        miniLOL.content.get().evalScripts();
                     }
                     else {
                         miniLOL.content.set("Post not found.");
@@ -380,7 +375,6 @@ miniLOL.module.create('blog', {
                     }
         
                     miniLOL.content.set(this.templetize([posts, parseInt(args["page"])], 'posts'));
-                    miniLOL.content.get().evalScripts();
                 }
             }
         }
