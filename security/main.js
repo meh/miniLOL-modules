@@ -11,7 +11,7 @@
  *********************************************************************/
 
 miniLOL.module.create('security', {
-    version: '0.2',
+    version: '0.2.1',
 
     type: 'passive',
     
@@ -84,8 +84,7 @@ miniLOL.module.create('security', {
 
                 onSuccess: function (http) {
                     miniLOL.content.set(http.responseText);
-                    this.connected = false;
-
+                    miniLOL.modules.security.connected = false;
                     window.onsecurity("logout");
                 },
 
@@ -93,6 +92,8 @@ miniLOL.module.create('security', {
                     miniLOL.content.set('Something went deeply wrong :(');
                 },
             });
+
+            
         }
         else if (args["change"]) {
             if (args["do"]) {
