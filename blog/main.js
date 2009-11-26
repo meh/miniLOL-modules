@@ -17,7 +17,7 @@ miniLOL.module.create('blog', {
 
     dependencies: [/* 'security' // It could be a `just show` blog. */],
 
-    onLoad: function() {
+    onLoad: function (reloading) {
         miniLOL.resources.blog = {
             name: 'blog',
             res:  null,
@@ -420,7 +420,7 @@ miniLOL.module.create('blog', {
                 author: data[0].getAttribute('author'),
                 link: "#module=blog&id="+data[0].getAttribute('id'),
                 pager: pager,
-                admin: (miniLOL.modules.security.connected) ? this.templetize([data[0].getAttribute('id')], "admin") : "",
+                admin: (miniLOL.module.execute("security", { connected: true, cached: true })) ? this.templetize([data[0].getAttribute('id')], "admin") : "",
             });
 
             if (data[1] == null) {

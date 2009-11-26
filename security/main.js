@@ -18,6 +18,8 @@ miniLOL.module.create('security', {
     onLoad: function () {
         include("css", this.root+"/resources/style.css");
 
+        miniLOL.event.add("window.onsecurity");
+
         new Ajax.Request(this.root+"/main.php?build", {
             method: 'get',
             asynchronous: false,
@@ -49,6 +51,10 @@ miniLOL.module.create('security', {
 
                     onSuccess: function (http) {
                         miniLOL.content.set(http.responseText);
+
+                        if (miniLOL.module.execute("security", { connected: true })) {
+                            window.onsecurity("login");
+                        }
                     },
 
                     onFailure: function () {
@@ -78,6 +84,9 @@ miniLOL.module.create('security', {
 
                 onSuccess: function (http) {
                     miniLOL.content.set(http.responseText);
+                    this.connected = false;
+
+                    window.onsecurity("logout");
                 },
 
                 onFailure: function () {
@@ -120,23 +129,11 @@ miniLOL.module.create('security', {
                 });
             }
         }
-        else if (args["logout"]) {
-            miniLOL.module.execute('logger', ['log', 30, 'security', 'logout']);
-
-            new Ajax.Request(this.root+"/main.php?logout", {
-                method: 'get',
-
-                onSuccess: function (http) {
-                    miniLOL.content.set(http.responseText);
-                },
-
-                onFailure: function () {
-                    miniLOL.content.set('Something went deeply wrong :(');
-                },
-            });
-
-        }
         else if (args["connected"]) {
+            if (args["cached"]) {
+                return this.connected;
+            }
+
             var result = "false";
 
             miniLOL.module.execute('logger', ['log', 30, 'security', 'connected']);
