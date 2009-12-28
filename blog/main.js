@@ -49,63 +49,61 @@ miniLOL.module.create('blog', {
                     },
                 });
 
-                new Ajax.Request(template, {
-                    method: 'get',
-                    asynchronous: false,
+                // load and parse blog's template
+                var template =  miniLOL.theme.template.load("blog/template")
+                             || miniLOL.theme.template.load("template", this.root+"/resources");
 
-                    onSuccess: function (http) {
-                        var template      = _fix(http.responseXML);
-                        res.template.blog = template.getElementsByTagName('blog')[0].firstChild.nodeValue;
+                if (template == false) {
+                    miniLOL.error("Couldn't find the blog's template.");
+                    return false;
+                }
 
-                        var posts   = template.getElementsByTagName('posts')[0];
-                        var pager   = posts.getElementsByTagName('pager')[0];
-                        var numbers = pager.getElementsByTagName('numbers')[0];
-                        res.template.posts                       = new Object;
-                        res.template.posts.overall               = posts.firstChild.nodeValue;
-                        res.template.posts.pager_overall         = pager.firstChild.nodeValue;
-                        res.template.posts.pager_previous        = posts.getElementsByTagName('previous')[0].firstChild.nodeValue;
-                        res.template.posts.pager_numbers         = numbers.firstChild.nodeValue;
-                        res.template.posts.pager_numbers_length  = parseInt(numbers.getAttribute('length'));
-                        res.template.posts.pager_numbers_first   = numbers.getElementsByTagName('first')[0].firstChild.nodeValue;
-                        res.template.posts.pager_numbers_inner   = numbers.getElementsByTagName('inner')[0].firstChild.nodeValue;
-                        res.template.posts.pager_numbers_current = numbers.getElementsByTagName('current')[0].firstChild.nodeValue;
-                        res.template.posts.pager_numbers_last    = numbers.getElementsByTagName('last')[0].firstChild.nodeValue;
-                        res.template.posts.pager_next            = pager.getElementsByTagName('next')[0].firstChild.nodeValue;
-                        
-                        var post    = template.getElementsByTagName('post')[0];
-                        var pager   = post.getElementsByTagName('pager')[0];
-                        var numbers = pager.getElementsByTagName('numbers')[0];
-                        res.template.post                       = new Object;
-                        res.template.post.overall               = post.firstChild.nodeValue;
-                        res.template.post.pager_overall         = pager.firstChild.nodeValue;
-                        res.template.post.pager_previous        = post.getElementsByTagName('previous')[0].firstChild.nodeValue;
-                        res.template.post.pager_numbers         = numbers.firstChild.nodeValue;
-                        res.template.post.pager_numbers_length  = parseInt(numbers.getAttribute('length'));
-                        res.template.post.pager_numbers_first   = numbers.getElementsByTagName('first')[0].firstChild.nodeValue;
-                        res.template.post.pager_numbers_inner   = numbers.getElementsByTagName('inner')[0].firstChild.nodeValue;
-                        res.template.post.pager_numbers_current = numbers.getElementsByTagName('current')[0].firstChild.nodeValue;
-                        res.template.post.pager_numbers_last    = numbers.getElementsByTagName('last')[0].firstChild.nodeValue;
-                        res.template.post.pager_next            = pager.getElementsByTagName('next')[0].firstChild.nodeValue;
+                res.template.blog = template.getElementsByTagName('blog')[0].firstChild.nodeValue;
 
-                        var manage = template.getElementsByTagName('manage')[0];
-                        res.template.manage = new Object;
-                        res.template.manage.admin = manage.getElementsByTagName('admin')[0].firstChild.nodeValue;
-                        res.template.manage.post  = manage.getElementsByTagName('post')[0].firstChild.nodeValue;
-                        res.template.manage.edit  = manage.getElementsByTagName('edit')[0].firstChild.nodeValue;
-                    },
-                });
+                var posts   = template.getElementsByTagName('posts')[0];
+                var pager   = posts.getElementsByTagName('pager')[0];
+                var numbers = pager.getElementsByTagName('numbers')[0];
+                res.template.posts                       = new Object;
+                res.template.posts.overall               = posts.firstChild.nodeValue;
+                res.template.posts.pager_overall         = pager.firstChild.nodeValue;
+                res.template.posts.pager_previous        = posts.getElementsByTagName('previous')[0].firstChild.nodeValue;
+                res.template.posts.pager_numbers         = numbers.firstChild.nodeValue;
+                res.template.posts.pager_numbers_length  = parseInt(numbers.getAttribute('length'));
+                res.template.posts.pager_numbers_first   = numbers.getElementsByTagName('first')[0].firstChild.nodeValue;
+                res.template.posts.pager_numbers_inner   = numbers.getElementsByTagName('inner')[0].firstChild.nodeValue;
+                res.template.posts.pager_numbers_current = numbers.getElementsByTagName('current')[0].firstChild.nodeValue;
+                res.template.posts.pager_numbers_last    = numbers.getElementsByTagName('last')[0].firstChild.nodeValue;
+                res.template.posts.pager_next            = pager.getElementsByTagName('next')[0].firstChild.nodeValue;
+                
+                var post    = template.getElementsByTagName('post')[0];
+                var pager   = post.getElementsByTagName('pager')[0];
+                var numbers = pager.getElementsByTagName('numbers')[0];
+                res.template.post                       = new Object;
+                res.template.post.overall               = post.firstChild.nodeValue;
+                res.template.post.pager_overall         = pager.firstChild.nodeValue;
+                res.template.post.pager_previous        = post.getElementsByTagName('previous')[0].firstChild.nodeValue;
+                res.template.post.pager_numbers         = numbers.firstChild.nodeValue;
+                res.template.post.pager_numbers_length  = parseInt(numbers.getAttribute('length'));
+                res.template.post.pager_numbers_first   = numbers.getElementsByTagName('first')[0].firstChild.nodeValue;
+                res.template.post.pager_numbers_inner   = numbers.getElementsByTagName('inner')[0].firstChild.nodeValue;
+                res.template.post.pager_numbers_current = numbers.getElementsByTagName('current')[0].firstChild.nodeValue;
+                res.template.post.pager_numbers_last    = numbers.getElementsByTagName('last')[0].firstChild.nodeValue;
+                res.template.post.pager_next            = pager.getElementsByTagName('next')[0].firstChild.nodeValue;
 
-                new Ajax.Request(editors, {
-                    method: 'get',
-                    asynchronous: false,
+                var manage = template.getElementsByTagName('manage')[0];
+                res.template.manage = new Object;
+                res.template.manage.admin = manage.getElementsByTagName('admin')[0].firstChild.nodeValue;
+                res.template.manage.post  = manage.getElementsByTagName('post')[0].firstChild.nodeValue;
+                res.template.manage.edit  = manage.getElementsByTagName('edit')[0].firstChild.nodeValue;
 
-                    onSuccess: function (http) {
-                        var editors = _fix(http.responseXML).getElementsByTagName('editor');
-                        for (var i = 0; i < editors.length; i++) {
-                            res.editors[editors[i].getAttribute('type')] = editors[i].firstChild.nodeValue;
-                        }
-                    },
-                });
+                // load and parse blog's editors
+                var editors =  miniLOL.theme.template.load("blog/editors")
+                            || miniLOL.theme.template.load("editors", this.root+"/resources");
+
+                editors = editors.getElementsByTagName("editor");
+                for (var i = 0; i < editors.length; i++) {
+                    res.editors[editors[i].getAttribute('type')] = editors[i].firstChild.nodeValue;
+                }
 
                 blog.data     = res.data;
                 blog.cache    = res.cache;
@@ -117,7 +115,9 @@ miniLOL.module.create('blog', {
         miniLOL.resource.load(miniLOL.resources.blog, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml", this);
         miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
 
-        miniLOL.theme.file.load("blog", this.root+"/resources");
+        if (!miniLOL.theme.style.exists("blog/style")) {
+            miniLOL.theme.style.load("blog", this.root+"/resources");
+        }
 
         new PeriodicalExecuter('miniLOL.resource.reload(miniLOL.resources.blog)', miniLOL.config['core'].refreshEvery || 360);
     },
