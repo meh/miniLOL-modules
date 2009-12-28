@@ -11,11 +11,9 @@
 *********************************************************************/
 
 miniLOL.module.create('blog', {
-    version: '0.3',
+    version: '0.3.1',
 
     type: 'active',
-
-    dependencies: [/* 'security' // It could be a `just show` blog. */],
 
     onLoad: function (reloading) {
         miniLOL.resources.blog = {
@@ -119,7 +117,7 @@ miniLOL.module.create('blog', {
         miniLOL.resource.load(miniLOL.resources.blog, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml", this);
         miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
 
-        include("css", this.root+"/resources/style.css");
+        miniLOL.theme.file.load("blog", this.root+"/resources");
 
         new PeriodicalExecuter('miniLOL.resource.reload(miniLOL.resources.blog)', miniLOL.config['core'].refreshEvery || 360);
     },
