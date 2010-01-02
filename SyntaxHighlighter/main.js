@@ -16,7 +16,7 @@ miniLOL.module.create('SyntaxHighlighter', {
     type: 'passive',
 
     onLoad: function () {
-        Import(this.root+"/system/shCore.js");
+        miniLOL.utils.import(this.root+"/system/shCore.js");
 
         miniLOL.resource.load(miniLOL.resources.functions, this.root+"/resources/functions.xml");
         miniLOL.resource.load(miniLOL.resources.config,    this.root+"/resources/config.xml");
@@ -66,7 +66,7 @@ miniLOL.module.create('SyntaxHighlighter', {
 
     loadFile: function (name) {
         if (name && !this.loaded[name]) {
-            if (Import(this.root+"/resources/langs/shBrush"+name+".js")) {
+            if (miniLOL.utils.import(this.root+"/resources/langs/shBrush"+name+".js")) {
                 this.loaded[name] = true;
 
                 SyntaxHighlighter.vars.discoveredBrushes = new Object;

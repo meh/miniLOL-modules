@@ -5,5 +5,5 @@
 ]>
 
 <configuration domain="shjs">
-    <style>sh_nedit.css</style>
+    <style>sh_nedit</style>
 </configuration>

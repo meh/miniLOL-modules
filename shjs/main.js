@@ -3,12 +3,10 @@ miniLOL.module.create('shjs', {
         miniLOL.resource.load(miniLOL.resource.functions, this.root+"/resources/functions.xml");
         miniLOL.resource.load(miniLOL.resource.config,    this.root+"/resources/config.xml");
 
-        include("css", this.root+"/resources/css/"+miniLOL.config.shjs.style);
-        Import(this.root+"/system/sh_main.min.js");
-    },
+        miniLOL.theme.style.load(miniLOL.config.shjs.style, this.root+"/resources/css");
+        miniLOL.utils.import(this.root+"/system/sh_main.min.js");
 
-    onGo: function () {
-        miniLOL.module.execute('shjs');
+        miniLOL.event.add("window.ongo", this.execute);
     },
 
     execute: function (args) {
