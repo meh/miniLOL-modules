@@ -4,7 +4,7 @@ miniLOL.module.create('shjs', {
         miniLOL.resource.load(miniLOL.resource.config,    this.root+"/resources/config.xml");
 
         miniLOL.theme.style.load(miniLOL.config.shjs.style, this.root+"/resources/css");
-        miniLOL.utils.import(this.root+"/system/sh_main.min.js");
+        miniLOL.utils.require(this.root+"/system/sh_main.min.js");
 
         miniLOL.event.add("window.ongo", this.execute);
     },
