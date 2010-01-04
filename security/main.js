@@ -16,7 +16,9 @@ miniLOL.module.create('security', {
     type: 'passive',
     
     initialize: function () {
-        include("css", this.root+"/resources/style.css");
+        if (!miniLOL.theme.style.exists("security/style")) {
+            miniLOL.theme.style.load("style", this.root+"/resources");
+        }
 
         miniLOL.event.add("window.onsecurity");
 
@@ -26,7 +28,7 @@ miniLOL.module.create('security', {
 
             onFailure: function () {
                 miniLOL.content.set("Failed to build the configuration tree.");
-            },
+            }
         });
 
         this.execute({ connected: true });
@@ -59,7 +61,7 @@ miniLOL.module.create('security', {
 
                     onFailure: function () {
                         miniLOL.content.set('Something went deeply wrong :(');
-                    },
+                    }
                 });
             }
             else {
@@ -72,7 +74,7 @@ miniLOL.module.create('security', {
 
                     onFailure: function () {
                         miniLOL.content.set('Something went deeply wrong :(');
-                    },
+                    }
                 });
             }
         }
@@ -90,7 +92,7 @@ miniLOL.module.create('security', {
 
                 onFailure: function () {
                     miniLOL.content.set('Something went deeply wrong :(');
-                },
+                }
             });
 
             
@@ -113,7 +115,7 @@ miniLOL.module.create('security', {
 
                     onFailure: function () {
                         miniLOL.content.set('Something went deeply wrong :(');
-                    },
+                    }
                 });
             }
             else {
@@ -126,7 +128,7 @@ miniLOL.module.create('security', {
 
                     onFailure: function () {
                         miniLOL.content.set('Something went deeply wrong :(');
-                    },
+                    }
                 });
             }
         }
@@ -145,7 +147,7 @@ miniLOL.module.create('security', {
 
                 onSuccess: function (http) {
                     result = http.responseText;
-                },
+                }
             });
 
             return this.connected = (result == "true");
@@ -161,11 +163,11 @@ miniLOL.module.create('security', {
 
                 onSuccess: function (http) {
                     result = http.responseText;
-                },
+                }
             });
 
             return result;
            
         }
-    },
+    }
 });

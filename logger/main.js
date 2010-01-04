@@ -39,8 +39,8 @@ miniLOL.module.create('logger', {
             var date = encodeURIComponent(new Date().toString());
     
             new Ajax.Request(this.root+"/main.php?data&priority="+priority+"&" + argv + "date="+date, {
-                method: 'get',
+                method: 'get'
             });
         }
-    },
+    }
 });
