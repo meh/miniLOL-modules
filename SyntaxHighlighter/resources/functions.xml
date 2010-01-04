@@ -25,7 +25,7 @@
 
         text = '<code class="#{options}">#{source}</code>'.interpolate({
             options: options,
-            source:  text,
+            source:  text
         });
     ]]></function>
 </functions>

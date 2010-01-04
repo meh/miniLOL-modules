@@ -122,5 +122,5 @@ miniLOL.module.create('SyntaxHighlighter', {
         SyntaxHighlighter.highlight();
 
         SyntaxHighlighter.defaults = defaults;
-    },
+    }
 });

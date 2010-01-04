@@ -137,9 +137,9 @@ miniLOL.module.create('blog', {
 
             if (args["post"]) {
                 if (args["do"]) {
-                    args["title"]   = args["title"] || "Re: " + this.topic(args["id"]).title;
-                    args["date"]    = new Date().toString();
-                    args["author"]  = args["author"] || miniLOL.config["blog"].author.comment;
+                    args["title"]  = args["title"] || "Re: " + this.topic(args["id"]).title;
+                    args["date"]   = new Date().toString();
+                    args["author"] = args["author"] || miniLOL.config["blog"].author.comment;
     
                     miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', {
                         title:   args['title'],
@@ -398,7 +398,7 @@ miniLOL.module.create('blog', {
                 this.template.posts.overall.interpolate({
                     posts: posts,
                     pager: this.templetize(['page', data[1], Math.ceil(this.data.getElementsByTagName('post').length/miniLOL.config['blog'].postsPerPage)], 'pager_overall')
-                }),
+                })
             });
         }
         else if (type == "post") {
@@ -487,7 +487,7 @@ miniLOL.module.create('blog', {
                 ? "pager_numbers_current" : "pager_numbers_first"].interpolate({
                     number: start,
                     link: "#module=blog&#{type}=#{value}".interpolate({ type: data[0], value: start })
-            });
+                });
 
             if (data[2] > 1) {
                 for (var i = start+1; i < end; i++) {
@@ -495,7 +495,7 @@ miniLOL.module.create('blog', {
                         ? "pager_numbers_current" : "pager_numbers_inner"].interpolate({
                             number: i,
                             link: "#module=blog&#{type}=#{value}".interpolate({ type: data[0], value: i })
-                    });
+                        });
                 }
                 content += template[(end == data[1])
                     ? "pager_numbers_current" : "pager_numbers_last"].interpolate({
