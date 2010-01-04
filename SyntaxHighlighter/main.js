@@ -15,7 +15,7 @@ miniLOL.module.create('SyntaxHighlighter', {
 
     type: 'passive',
 
-    onLoad: function () {
+    initialize: function () {
         miniLOL.utils.require(this.root+"/system/shCore.js");
 
         miniLOL.resource.load(miniLOL.resources.functions, this.root+"/resources/functions.xml");
@@ -56,12 +56,13 @@ miniLOL.module.create('SyntaxHighlighter', {
             }
         });
 
-        include("css", this.root+"/resources/styles/shCore.css");
-        include("css", this.root+"/resources/styles/shTheme"+miniLOL.config.SyntaxHighlighter.style+".css");
-    },
+        miniLOL.theme.style.load("shCore", this.root+"/resources/styles");
 
-    onGo: function () {
-        this.execute();
+        if (!miniLOL.theme.style.exists("SyntaxHighlighter/style")) {
+            miniLOL.theme.style.load("shTheme"+miniLOL.config.SyntaxHighlighter.style, this.root+"/resources/styles");
+        }
+
+        miniLOL.event.add('window.ongo', this.execute);
     },
 
     loadFile: function (name) {

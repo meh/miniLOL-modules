@@ -15,7 +15,7 @@ miniLOL.module.create('blog', {
 
     type: 'active',
 
-    onLoad: function (reloading) {
+    initialize: function () {
         miniLOL.resources.blog = {
             name: 'blog',
             res:  null,

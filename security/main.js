@@ -15,7 +15,7 @@ miniLOL.module.create('security', {
 
     type: 'passive',
     
-    onLoad: function () {
+    initialize: function () {
         include("css", this.root+"/resources/style.css");
 
         miniLOL.event.add("window.onsecurity");

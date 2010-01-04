@@ -1,5 +1,5 @@
 miniLOL.module.create('shjs', {
-    onLoad: function() {
+    initialize: function() {
         miniLOL.resource.load(miniLOL.resource.functions, this.root+"/resources/functions.xml");
         miniLOL.resource.load(miniLOL.resource.config,    this.root+"/resources/config.xml");
 

@@ -11,18 +11,16 @@
  *********************************************************************/
 
 miniLOL.module.create('logger', {
-    version: '0.2',
+    version: '0.2.1',
 
     type: 'passive',
 
     dependencies: ['security'],
 
-    onLoad: function () {
+    initialize: function () {
         miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
-    },
 
-    onGo: function (url) {
-        this.execute('log', 50, 'page', 'view', url);
+        miniLOL.event.add("window.ongo", function (url) { miniLOL.module.execute('logger', ['log', 50, 'page', 'view', url]); });
     },
 
     execute: function (type) {
