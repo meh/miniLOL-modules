@@ -30,7 +30,7 @@
 //
 // Begin anonymous function. This is used to contain local scope variables without polutting global scope.
 //
-if (!window.SyntaxHighlighter) var SyntaxHighlighter = function() { 
+if (!window.SyntaxHighlighter) window.SyntaxHighlighter = function() { 
 
 // Shortcut object which will be assigned to the SyntaxHighlighter variable.
 // This is a shorthand for local reference in order to avoid long namespace 

@@ -29,11 +29,11 @@ miniLOL.module.create('SyntaxHighlighter', {
                 : miniLOL.config.SyntaxHighlighter[conf];
         }
 
-        var sh     = this;
-        sh.loaded  = new Object;
-        sh.langs   = new Object;
-        sh.aliases = new Object;
+        this.loaded  = {};
+        this.langs   = {}
+        this.aliases = {};
 
+        var This = this;
         new Ajax.Request(this.root+"/resources/langs.xml", {
             method: 'get',
             asynchronous: false,
@@ -42,11 +42,11 @@ miniLOL.module.create('SyntaxHighlighter', {
                 var langs = http.responseXML.getElementsByTagName("language");
 
                 for (var i = 0; i < langs.length; i++) {
-                    sh.langs[langs[i].getAttribute("file")] = langs[i].getAttribute("aliases");
+                    This.langs[langs[i].getAttribute("file")] = langs[i].getAttribute("aliases");
             
                     var split = langs[i].getAttribute("aliases").split(/ /);
                     for (var h = 0; h < split.length; h++) {
-                        sh.aliases[split[h]] = langs[i].getAttribute("file");
+                        This.aliases[split[h]] = langs[i].getAttribute("file");
                     }
                 }
             },
