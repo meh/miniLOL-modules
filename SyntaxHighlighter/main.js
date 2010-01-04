@@ -58,7 +58,8 @@ miniLOL.module.create('SyntaxHighlighter', {
 
         miniLOL.theme.style.load("shCore", this.root+"/resources/styles");
 
-        if (!miniLOL.theme.style.exists("SyntaxHighlighter/style")) {
+        if (miniLOL.config.SyntaxHighlighter.style) {
+            miniLOL.theme.style.unload("SyntaxHighlighter/style");
             miniLOL.theme.style.load("shTheme"+miniLOL.config.SyntaxHighlighter.style, this.root+"/resources/styles");
         }
 
