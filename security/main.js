@@ -20,8 +20,6 @@ miniLOL.module.create('security', {
             miniLOL.theme.style.load("style", this.root+"/resources");
         }
 
-        miniLOL.event.add("window.onsecurity");
-
         new Ajax.Request(this.root+"/main.php?build", {
             method: 'get',
             asynchronous: false,
@@ -55,7 +53,7 @@ miniLOL.module.create('security', {
                         miniLOL.content.set(http.responseText);
 
                         if (miniLOL.module.execute("security", { connected: true })) {
-                            window.onsecurity("login");
+                            Event.fire(window, ':security', "login");
                         }
                     },
 
@@ -87,7 +85,7 @@ miniLOL.module.create('security', {
                 onSuccess: function (http) {
                     miniLOL.content.set(http.responseText);
                     miniLOL.modules.security.connected = false;
-                    window.onsecurity("logout");
+                    Event.fire(window, ':security', 'logout');
                 },
 
                 onFailure: function () {

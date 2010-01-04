@@ -20,7 +20,9 @@ miniLOL.module.create('logger', {
     initialize: function () {
         miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
 
-        miniLOL.event.add("window.ongo", function (url) { miniLOL.module.execute('logger', ['log', 50, 'page', 'view', url]); });
+        Event.observe(window, ':go', function (event) {
+            miniLOL.module.execute('logger', ['log', 50, 'page', 'view', event.memo]);
+        });
     },
 
     execute: function (type) {
