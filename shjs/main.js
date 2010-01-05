@@ -5,9 +5,11 @@ miniLOL.module.create('shjs', {
 
         miniLOL.theme.style.load(miniLOL.config.shjs.style, this.root+"/resources/css");
         miniLOL.utils.require(this.root+"/system/sh_main.min.js");
-
-        Event.observe(window, ':go', this.execute);
     },
+    
+    onGo: function () {
+        this.execute();
+    }
 
     execute: function () {
         var pres = document.getElementsByTagName("pre");

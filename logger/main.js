@@ -19,11 +19,11 @@ miniLOL.module.create('logger', {
 
     initialize: function () {
         miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
-
-        Event.observe(window, ':go', function (event) {
-            miniLOL.module.execute('logger', ['log', 50, 'page', 'view', event.memo]);
-        });
     },
+
+    onGo: function (event) {
+        this.execute('logger', ['log', 50, 'page', 'view', event.memo]);
+    }
 
     execute: function (type) {
         if (type == 'log') {
