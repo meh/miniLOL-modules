@@ -66,7 +66,7 @@ miniLOL.module.create('SyntaxHighlighter', {
 
     onGo: function () {
         this.execute();
-    }
+    },
 
     loadFile: function (name) {
         if (name && !this.loaded[name]) {

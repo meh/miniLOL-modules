@@ -53,7 +53,7 @@ miniLOL.module.create('security', {
                         miniLOL.content.set(http.responseText);
 
                         if (miniLOL.module.execute("security", { connected: true })) {
-                            Event.fire(window, ':security', "login");
+                            Event.fire(document, ':security', "login");
                         }
                     },
 
@@ -85,7 +85,7 @@ miniLOL.module.create('security', {
                 onSuccess: function (http) {
                     miniLOL.content.set(http.responseText);
                     miniLOL.modules.security.connected = false;
-                    Event.fire(window, ':security', 'logout');
+                    Event.fire(document, ':security', 'logout');
                 },
 
                 onFailure: function () {

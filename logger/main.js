@@ -23,7 +23,7 @@ miniLOL.module.create('logger', {
 
     onGo: function (event) {
         this.execute('logger', ['log', 50, 'page', 'view', event.memo]);
-    }
+    },
 
     execute: function (type) {
         if (type == 'log') {
