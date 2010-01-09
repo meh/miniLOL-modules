@@ -121,7 +121,9 @@ miniLOL.module.create('blog', {
             miniLOL.theme.style.load("style", this.root+"/resources");
         }
 
-        new PeriodicalExecuter('miniLOL.resource.reload(miniLOL.resources.blog)', miniLOL.config['core'].refreshEvery || 360);
+        Event.observe(document, ':refresh', function () {
+            miniLOL.resource.reload(miniLOL.resources.blog);
+        });
     },
 
     execute: function (args) {
