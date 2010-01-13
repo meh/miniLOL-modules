@@ -10,20 +10,19 @@
 *  0. You just DO WHAT THE FUCK YOU WANT TO.                         *
 *********************************************************************/
 
-miniLOL.module.create('blog', {
-    version: '0.3.1',
+miniLOL.module.create("blog", {
+    version: "0.3.1",
 
-    type: 'active',
+    type: "active",
 
     initialize: function () {
         var This = this;
 
         miniLOL.resources.blog = {
-            name: 'blog',
-            res:  null,
+            name: "blog",
 
             load: function (data, template, editors, blog) {
-                if (this.res == null) {
+                if (!this.res) {
                     this.res = {
                         data: null,
                         cache: {},
@@ -55,8 +54,11 @@ miniLOL.module.create('blog', {
                 var template =  miniLOL.theme.template.load("blog/template")
                              || miniLOL.theme.template.load("template", This.root+"/resources");
 
-                if (template == false) {
-                    miniLOL.error("Couldn't find the blog's template.");
+                if (!template) {
+                    if (!miniLOL.error()) {
+                        miniLOL.error("Couldn't find the blog's template.");
+                    }
+
                     return false;
                 }
 

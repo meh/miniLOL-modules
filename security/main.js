@@ -10,10 +10,10 @@
  *  0. You just DO WHAT THE FUCK YOU WANT TO.                        *
  *********************************************************************/
 
-miniLOL.module.create('security', {
-    version: '0.2.2',
+miniLOL.module.create("security", {
+    version: "0.2.2",
 
-    type: 'passive',
+    type: "passive",
     
     initialize: function () {
         if (!miniLOL.theme.style.exists("security/style")) {
@@ -21,7 +21,7 @@ miniLOL.module.create('security', {
         }
 
         new Ajax.Request(this.root+"/main.php?build", {
-            method: 'get',
+            method: "get",
             asynchronous: false,
 
             onFailure: function () {
@@ -39,7 +39,7 @@ miniLOL.module.create('security', {
 
         if (args["login"]) {
             if (args["do"]) {
-                miniLOL.module.execute('logger', ['log', 100, 'security', 'login', args['password'] || ""]);
+                miniLOL.module.execute("logger", ["log", 100, "security", "login", args["password"] || '']);
 
                 if (!args["password"]) {
                     miniLOL.content.set('The password is missing.');
@@ -47,49 +47,49 @@ miniLOL.module.create('security', {
                 }
 
                 new Ajax.Request(this.root+"/main.php?login&password=#{0}".interpolate([encodeURIComponent(args["password"])]), {
-                    method: 'get',
+                    method: "get",
 
                     onSuccess: function (http) {
                         miniLOL.content.set(http.responseText);
 
                         if (miniLOL.module.execute("security", { connected: true })) {
-                            Event.fire(document, ':security', "login");
+                            Event.fire(document, ":security", "login");
                         }
                     },
 
                     onFailure: function () {
-                        miniLOL.content.set('Something went deeply wrong :(');
+                        miniLOL.error("Something went deeply wrong :(", miniLOL.theme.content());
                     }
                 });
             }
             else {
                 new Ajax.Request(this.root+"/resources/template.php?login", {
-                    method: 'get',
+                    method: "get",
 
                     onSuccess: function (http) {
                         miniLOL.content.set(http.responseText);
                     },
 
                     onFailure: function () {
-                        miniLOL.content.set('Something went deeply wrong :(');
+                        miniLOL.error("Something went deeply wrong :(", miniLOL.theme.content());
                     }
                 });
             }
         }
         else if (args["logout"]) {
-            miniLOL.module.execute('logger', ['log', 30, 'security', 'logout']);
+            miniLOL.module.execute("logger", ["log", 30, "security", "logout"]);
 
             new Ajax.Request(this.root+"/main.php?logout", {
-                method: 'get',
+                method: "get",
 
                 onSuccess: function (http) {
                     miniLOL.content.set(http.responseText);
                     miniLOL.modules.security.connected = false;
-                    Event.fire(document, ':security', 'logout');
+                    Event.fire(document, ":security", "logout");
                 },
 
                 onFailure: function () {
-                    miniLOL.content.set('Something went deeply wrong :(');
+                    miniLOL.error("Something went deeply wrong :(", miniLOL.theme.content());
                 }
             });
 
@@ -97,10 +97,10 @@ miniLOL.module.create('security', {
         }
         else if (args["change"]) {
             if (args["do"]) {
-                miniLOL.module.execute('logger', ['log', 100, 'security', 'change', args['password'] || "", args['type'] || ""]);
+                miniLOL.module.execute("logger", ["log", 100, "security", "change", args["password"] || '', args["type"] || '']);
 
                 if (!args["password"] || !args["type"]) {
-                    miniLOL.content.set('The password or the type are missing.');
+                    miniLOL.error("The password or the type are missing.", miniLOL.theme.content());
                     return false;
                 }
 
@@ -112,20 +112,20 @@ miniLOL.module.create('security', {
                     },
 
                     onFailure: function () {
-                        miniLOL.content.set('Something went deeply wrong :(');
+                        miniLOL.error("Something went deeply wrong :(", miniLOL.theme.content());
                     }
                 });
             }
             else {
                 new Ajax.Request(this.root+"/resources/template.php?change", {
-                    method: 'get',
+                    method: "get",
 
                     onSuccess: function (http) {
                         miniLOL.content.set(http.responseText);
                     },
 
                     onFailure: function () {
-                        miniLOL.content.set('Something went deeply wrong :(');
+                        miniLOL.error("Something went deeply wrong :(", miniLOL.theme.content());
                     }
                 });
             }
@@ -137,10 +137,10 @@ miniLOL.module.create('security', {
 
             var result = "false";
 
-            miniLOL.module.execute('logger', ['log', 30, 'security', 'connected']);
+            miniLOL.module.execute("logger", ["log", 30, "security", "connected"]);
             
             new Ajax.Request(this.root+"/main.php?connected", {
-                method: 'get',
+                method: "get",
                 asynchronous: false,
 
                 onSuccess: function (http) {
@@ -151,12 +151,12 @@ miniLOL.module.create('security', {
             return this.connected = (result == "true");
         }
         else if (args["get"]) {
-            var result = "";
+            var result = '';
 
-            miniLOL.module.execute('logger', ['log', 30, 'security', 'get', args["get"]]);
+            miniLOL.module.execute("logger", ["log", 30, "security", "get", args["get"]]);
             
             new Ajax.Request(this.root+"/main.php?get=" + args["get"], {
-                method: 'get',
+                method: "get",
                 asynchronous: false,
 
                 onSuccess: function (http) {
