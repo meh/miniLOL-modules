@@ -18,7 +18,7 @@ miniLOL.module.create("blog", {
     initialize: function () {
         var This = this;
 
-        miniLOL.resources.blog = {
+        this.resource = {
             name: "blog",
 
             load: function (data, template, editors, blog) {
@@ -37,12 +37,12 @@ miniLOL.module.create("blog", {
                 } var res = this.res;
 
                 new Ajax.Request(data + "?failCache=" + Math.random(), {
-                    method: 'get',
+                    method: "get",
                     asynchronous: false,
 
                     requestHeaders: {
-                        'Cache-Control': 'must-revalidate',
-                        'Pragma':        'no-cache'
+                        "Cache-Control": "must-revalidate",
+                        "Pragma":        "no-cache"
                     },
 
                     onSuccess: function (http) {
@@ -62,43 +62,43 @@ miniLOL.module.create("blog", {
                     return false;
                 }
 
-                res.template.blog = template.getElementsByTagName('blog')[0].firstChild.nodeValue;
+                res.template.blog = template.getElementsByTagName("blog")[0].firstChild.nodeValue;
 
-                var posts   = template.getElementsByTagName('posts')[0];
-                var pager   = posts.getElementsByTagName('pager')[0];
-                var numbers = pager.getElementsByTagName('numbers')[0];
-                res.template.posts                       = new Object;
+                var posts   = template.getElementsByTagName("posts")[0];
+                var pager   = posts.getElementsByTagName("pager")[0];
+                var numbers = pager.getElementsByTagName("numbers")[0];
+                res.template.posts                       = {};
                 res.template.posts.overall               = posts.firstChild.nodeValue;
                 res.template.posts.pager_overall         = pager.firstChild.nodeValue;
-                res.template.posts.pager_previous        = posts.getElementsByTagName('previous')[0].firstChild.nodeValue;
+                res.template.posts.pager_previous        = posts.getElementsByTagName("previous")[0].firstChild.nodeValue;
                 res.template.posts.pager_numbers         = numbers.firstChild.nodeValue;
-                res.template.posts.pager_numbers_length  = parseInt(numbers.getAttribute('length'));
-                res.template.posts.pager_numbers_first   = numbers.getElementsByTagName('first')[0].firstChild.nodeValue;
-                res.template.posts.pager_numbers_inner   = numbers.getElementsByTagName('inner')[0].firstChild.nodeValue;
-                res.template.posts.pager_numbers_current = numbers.getElementsByTagName('current')[0].firstChild.nodeValue;
-                res.template.posts.pager_numbers_last    = numbers.getElementsByTagName('last')[0].firstChild.nodeValue;
-                res.template.posts.pager_next            = pager.getElementsByTagName('next')[0].firstChild.nodeValue;
+                res.template.posts.pager_numbers_length  = parseInt(numbers.getAttribute("length"));
+                res.template.posts.pager_numbers_first   = numbers.getElementsByTagName("first")[0].firstChild.nodeValue;
+                res.template.posts.pager_numbers_inner   = numbers.getElementsByTagName("inner")[0].firstChild.nodeValue;
+                res.template.posts.pager_numbers_current = numbers.getElementsByTagName("current")[0].firstChild.nodeValue;
+                res.template.posts.pager_numbers_last    = numbers.getElementsByTagName("last")[0].firstChild.nodeValue;
+                res.template.posts.pager_next            = pager.getElementsByTagName("next")[0].firstChild.nodeValue;
                 
-                var post    = template.getElementsByTagName('post')[0];
-                var pager   = post.getElementsByTagName('pager')[0];
-                var numbers = pager.getElementsByTagName('numbers')[0];
-                res.template.post                       = new Object;
+                var post    = template.getElementsByTagName("post")[0];
+                var pager   = post.getElementsByTagName("pager")[0];
+                var numbers = pager.getElementsByTagName("numbers")[0];
+                res.template.post                       = {};
                 res.template.post.overall               = post.firstChild.nodeValue;
                 res.template.post.pager_overall         = pager.firstChild.nodeValue;
-                res.template.post.pager_previous        = post.getElementsByTagName('previous')[0].firstChild.nodeValue;
+                res.template.post.pager_previous        = post.getElementsByTagName("previous")[0].firstChild.nodeValue;
                 res.template.post.pager_numbers         = numbers.firstChild.nodeValue;
-                res.template.post.pager_numbers_length  = parseInt(numbers.getAttribute('length'));
-                res.template.post.pager_numbers_first   = numbers.getElementsByTagName('first')[0].firstChild.nodeValue;
-                res.template.post.pager_numbers_inner   = numbers.getElementsByTagName('inner')[0].firstChild.nodeValue;
-                res.template.post.pager_numbers_current = numbers.getElementsByTagName('current')[0].firstChild.nodeValue;
-                res.template.post.pager_numbers_last    = numbers.getElementsByTagName('last')[0].firstChild.nodeValue;
-                res.template.post.pager_next            = pager.getElementsByTagName('next')[0].firstChild.nodeValue;
+                res.template.post.pager_numbers_length  = parseInt(numbers.getAttribute("length"));
+                res.template.post.pager_numbers_first   = numbers.getElementsByTagName("first")[0].firstChild.nodeValue;
+                res.template.post.pager_numbers_inner   = numbers.getElementsByTagName("inner")[0].firstChild.nodeValue;
+                res.template.post.pager_numbers_current = numbers.getElementsByTagName("current")[0].firstChild.nodeValue;
+                res.template.post.pager_numbers_last    = numbers.getElementsByTagName("last")[0].firstChild.nodeValue;
+                res.template.post.pager_next            = pager.getElementsByTagName("next")[0].firstChild.nodeValue;
 
-                var manage = template.getElementsByTagName('manage')[0];
-                res.template.manage = new Object;
-                res.template.manage.admin = manage.getElementsByTagName('admin')[0].firstChild.nodeValue;
-                res.template.manage.post  = manage.getElementsByTagName('post')[0].firstChild.nodeValue;
-                res.template.manage.edit  = manage.getElementsByTagName('edit')[0].firstChild.nodeValue;
+                var manage = template.getElementsByTagName("manage")[0];
+                res.template.manage = {};
+                res.template.manage.admin = manage.getElementsByTagName("admin")[0].firstChild.nodeValue;
+                res.template.manage.post  = manage.getElementsByTagName("post")[0].firstChild.nodeValue;
+                res.template.manage.edit  = manage.getElementsByTagName("edit")[0].firstChild.nodeValue;
 
                 // load and parse blog's editors
                 var editors =  miniLOL.theme.template.load("blog/editors")
@@ -106,7 +106,7 @@ miniLOL.module.create("blog", {
 
                 editors = editors.getElementsByTagName("editor");
                 for (var i = 0; i < editors.length; i++) {
-                    res.editors[editors[i].getAttribute('type')] = editors[i].firstChild.nodeValue;
+                    res.editors[editors[i].getAttribute("type")] = editors[i].firstChild.nodeValue;
                 }
 
                 blog.data     = res.data;
@@ -116,15 +116,15 @@ miniLOL.module.create("blog", {
             }
         };
 
-        miniLOL.resource.load(miniLOL.resources.blog, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml", this);
+        miniLOL.resource.load(this.resource, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml", this);
         miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
 
         if (!miniLOL.theme.style.exists("blog/style")) {
             miniLOL.theme.style.load("style", this.root+"/resources");
         }
 
-        Event.observe(document, ':refresh', function () {
-            miniLOL.resource.reload(miniLOL.resources.blog);
+        Event.observe(document, ":refresh", function () {
+            miniLOL.resource.reload(miniLOL.module.get("blog").resource);
         });
     },
 
@@ -145,15 +145,15 @@ miniLOL.module.create("blog", {
                     args["date"]   = new Date().toString();
                     args["author"] = args["author"] || miniLOL.config["blog"].author.comment;
     
-                    miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', {
-                        title:   args['title'],
-                        date:    args['date'],
-                        author:  args['author'],
-                        content: args['content']
+                    miniLOL.module.execute("logger", ["log", 100, "blog", "post", {
+                        title:   args["title"],
+                        date:    args["date"],
+                        author:  args["author"],
+                        content: args["content"]
                     }]);
     
                     new Ajax.Request(this.root+"/main.php?post", {
-                        method: 'post',
+                        method: "post",
     
                         parameters: {
                             title:   args["title"],
@@ -164,7 +164,7 @@ miniLOL.module.create("blog", {
     
                         onSuccess: function (http) {
                             miniLOL.content.set(http.responseText);
-                            miniLOL.resource.reload(miniLOL.resources.blog);
+                            miniLOL.resource.reload(miniLOL.module.get("blog").resource);
                         },
     
                         onFailure: function () {
@@ -174,12 +174,12 @@ miniLOL.module.create("blog", {
 
                 }
                 else {
-                    if (!miniLOL.module.execute('security', { connected: true })) {
+                    if (!miniLOL.module.execute("security", { connected: true })) {
                         miniLOL.content.set("You're doing it wrong.");
                         return false;
                     }
     
-                    miniLOL.content.set(this.templetize(args["id"], 'new_comment'));
+                    miniLOL.content.set(this.templetize(args["id"], "new_comment"));
                 }
             }
         }
@@ -190,20 +190,20 @@ miniLOL.module.create("blog", {
 
             if (args["post"]) {
                 if (args["do"]) {
-                    args["title"]   = args["title"]   || "";
+                    args["title"]   = args["title"]   || '';
                     args["date"]    = args["date"]    || new Date().toString();
-                    args["author"]  = args["author"]  || miniLOL.config['blog'].author.post;
-                    args["content"] = args["content"] || "";
+                    args["author"]  = args["author"]  || miniLOL.config["blog"].author.post;
+                    args["content"] = args["content"] || '';
     
-                    miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', {
-                        title:   args['title'],
-                        date:    args['date'],
-                        author:  args['author'],
-                        content: args['content']
+                    miniLOL.module.execute("logger", ["log", 100, "blog", "post", {
+                        title:   args["title"],
+                        date:    args["date"],
+                        author:  args["author"],
+                        content: args["content"]
                     }]);
     
                     new Ajax.Request(this.root+"/main.php?post", {
-                        method: 'post',
+                        method: "post",
     
                         parameters: {
                             title:   args["title"],
@@ -214,7 +214,7 @@ miniLOL.module.create("blog", {
     
                         onSuccess: function (http) {
                             miniLOL.content.set(http.responseText);
-                            miniLOL.resource.reload(miniLOL.resources.blog);
+                            miniLOL.resource.reload(miniLOL.module.get("blog").resource);
                         },
     
                         onFailure: function () {
@@ -223,27 +223,27 @@ miniLOL.module.create("blog", {
                     });
                 }
                 else {
-                    if (!miniLOL.module.execute('security', { connected: true })) {
+                    if (!miniLOL.module.execute("security", { connected: true })) {
                         miniLOL.content.set("You're doing it wrong.");
                         return false;
                     }
     
-                    miniLOL.content.set(this.templetize([miniLOL.config['blog'].author.post], 'new_post'));
+                    miniLOL.content.set(this.templetize([miniLOL.config["blog"].author.post], "new_post"));
                 }
             }
             else if (args["edit"]) {
                 if (args["id"]) {
                     if (args["do"]) {
-                        args["title"]   = args["title"]   || "";
+                        args["title"]   = args["title"]   || '';
                         args["date"]    = args["date"]    || new Date().toString();
-                        args["author"]  = args["author"]  || miniLOL.config['blog'].author.post;
-                        args["content"] = args["content"] || "";
+                        args["author"]  = args["author"]  || miniLOL.config["blog"].author.post;
+                        args["content"] = args["content"] || '';
     
-                        miniLOL.module.execute('logger', ['log', 100, 'blog', 'post', args['id'], {
-                            title:   args['title'],
-                            date:    args['date'],
-                            author:  args['author'],
-                            content: args['content']
+                        miniLOL.module.execute("logger", ["log", 100, "blog", "post", args["id"], {
+                            title:   args["title"],
+                            date:    args["date"],
+                            author:  args["author"],
+                            content: args["content"]
                         }]);
     
                         new Ajax.Request(this.root+"/main.php?edit", {
@@ -259,7 +259,7 @@ miniLOL.module.create("blog", {
     
                             onSuccess: function (http) {
                                 miniLOL.content.set(http.responseText);
-                                miniLOL.resource.reload(miniLOL.resources.blog);
+                                miniLOL.resource.reload(miniLOL.module.get("blog").resource);
                             },
     
                             onFailure: function () {
@@ -268,7 +268,7 @@ miniLOL.module.create("blog", {
                         });
                     }
                     else {
-                        if (!miniLOL.module.execute('security', { connected: true })) {
+                        if (!miniLOL.module.execute("security", { connected: true })) {
                             miniLOL.content.set("You're doing it wrong.");
                             return false;
                         }
@@ -285,7 +285,7 @@ miniLOL.module.create("blog", {
                             post.getAttribute("author"),
                             post.getAttribute("date"),
                             args["id"]
-                         ], 'edit_post'));
+                         ], "edit_post"));
                     }
                 }
                 else {
@@ -300,10 +300,10 @@ miniLOL.module.create("blog", {
                 }
     
                 if (args["do"]) {
-                    miniLOL.module.execute('logger', ['log', 100, 'blog', 'delete', args['id']]);
+                    miniLOL.module.execute("logger", ["log", 100, "blog", "delete", args["id"]]);
     
                     new Ajax.Request(this.root+"/main.php?delete", {
-                        method: 'post',
+                        method: "post",
     
                         parameters: {
                             id: args["id"]
@@ -311,7 +311,7 @@ miniLOL.module.create("blog", {
     
                         onSuccess: function (http) {
                             miniLOL.content.set(http.responseText);
-                            miniLOL.resource.reload(miniLOL.resources.blog);
+                            miniLOL.resource.reload(miniLOL.module.get("blog").resource);
                         },
     
                         onFailure: function () {
@@ -329,9 +329,6 @@ miniLOL.module.create("blog", {
                 return false;
             }
             else if (args["comment"]) {
-                if (args[""]) {
-    
-                }
             }
             else {
                 args["page"] = args["page"] || 1;
@@ -339,10 +336,10 @@ miniLOL.module.create("blog", {
                 if (args["id"]) {
                     var post = this.data.getElementById(args["id"]);
                     if (post) {
-                        miniLOL.content.set(this.templetize([post, $A(this.data.getElementsByTagName("post")).indexOf(post)+1], 'post'));
+                        miniLOL.content.set(this.templetize([post, $A(this.data.getElementsByTagName("post")).indexOf(post)+1], "post"));
                     }
                     else {
-                        miniLOL.content.set( "Post not found.");
+                        miniLOL.content.set("Post not found.");
                         return false;
                     }
                 }
@@ -358,27 +355,27 @@ miniLOL.module.create("blog", {
                     }
                 }
                 else {
-                    var allPosts = this.data.getElementsByTagName('post');
+                    var allPosts = this.data.getElementsByTagName("post");
 
                     if (allPosts.length == 0) {
                         miniLOL.content.set("The blog is empty :(");
                         return false;
                     }
         
-                    if (args["page"] > Math.ceil(allPosts.length/miniLOL.config['blog'].postsPerPage) || args["page"] < 1) {
+                    if (args["page"] > Math.ceil(allPosts.length/miniLOL.config["blog"].postsPerPage) || args["page"] < 1) {
                         miniLOL.content.set("Page not found.");
                         return false;
                     }
         
-                    var posts = new Array;
-        
-                    for (   var i = allPosts.length-1-(miniLOL.config['blog'].postsPerPage*(args["page"]-1)), count = 0;
-                            count < miniLOL.config['blog'].postsPerPage && i >= 0;
+                    var posts = [];
+
+                    for (   var i = allPosts.length-1-(miniLOL.config["blog"].postsPerPage*(args["page"]-1)), count = 0;
+                            count < miniLOL.config["blog"].postsPerPage && i >= 0;
                             i--, count++) {
                         posts.push(allPosts[i]);
                     }
         
-                    miniLOL.content.set(this.templetize([posts, parseInt(args["page"])], 'posts'));
+                    miniLOL.content.set(this.templetize([posts, parseInt(args["page"])], "posts"));
                 }
             }
         }
@@ -393,32 +390,32 @@ miniLOL.module.create("blog", {
             });
         }
         else if (type == "posts") {
-            var posts = new String;
+            var posts = '';
             for (var i = 0; i < data[0].length; i++) {
-                posts += this.templetize([data[0][i], null], 'post');
+                posts += this.templetize([data[0][i], null], "post");
             }
 
             return this.template.blog.interpolate({ content:
                 this.template.posts.overall.interpolate({
                     posts: posts,
-                    pager: this.templetize(['page', data[1], Math.ceil(this.data.getElementsByTagName('post').length/miniLOL.config['blog'].postsPerPage)], 'pager_overall')
+                    pager: this.templetize(["page", data[1], Math.ceil(this.data.getElementsByTagName("post").length/miniLOL.config["blog"].postsPerPage)], "pager_overall")
                 })
             });
         }
         else if (type == "post") {
             var pager = (data[1] != null)
-                ? this.templetize(['number', data[1], this.data.getElementsByTagName('post').length], 'pager_overall')
-                : "";
+                ? this.templetize(["number", data[1], this.data.getElementsByTagName("post").length], "pager_overall")
+                : '';
 
             var content = this.template.post.overall.interpolate({
-                id: data[0].getAttribute('id'),
+                id: data[0].getAttribute("id"),
                 content: data[0].firstChild.nodeValue,
-                title: data[0].getAttribute('title'),
-                date: data[0].getAttribute('date'),
-                author: data[0].getAttribute('author'),
-                link: "#module=blog&id="+data[0].getAttribute('id'),
+                title: data[0].getAttribute("title"),
+                date: data[0].getAttribute("date"),
+                author: data[0].getAttribute("author"),
+                link: "#module=blog&id="+data[0].getAttribute("id"),
                 pager: pager,
-                admin: (miniLOL.module.execute("security", { connected: true, cached: true })) ? this.templetize([data[0].getAttribute('id')], "admin") : ""
+                admin: (miniLOL.module.execute("security", { connected: true, cached: true })) ? this.templetize([data[0].getAttribute("id")], "admin") : ''
             });
 
             if (data[1] == null) {
@@ -427,27 +424,27 @@ miniLOL.module.create("blog", {
 
             return this.template.blog.interpolate({ content: content });
         }
-        else if (type == 'pager_overall') {
+        else if (type == "pager_overall") {
             var template;
-            if (data[0] == 'number') {
+            if (data[0] == "number") {
                 template = this.template.post.pager_overall;
             }
-            else if (data[0] == 'page') {
+            else if (data[0] == "page") {
                 template = this.template.posts.pager_overall;
             }
 
             return template.interpolate({
-                previous: this.templetize(data, 'pager_previous'),
-                numbers:  this.templetize(data, 'pager_numbers'),
-                next:     this.templetize(data, 'pager_next')
+                previous: this.templetize(data, "pager_previous"),
+                numbers:  this.templetize(data, "pager_numbers"),
+                next:     this.templetize(data, "pager_next")
             });
         }
-        else if (type == 'pager_previous') {
+        else if (type == "pager_previous") {
             var template;
-            if (data[0] == 'number') {
+            if (data[0] == "number") {
                 template = this.template.post.pager_previous;
             }
-            else if (data[0] == 'page') {
+            else if (data[0] == "page") {
                 template = this.template.posts.pager_previous;
             }
 
@@ -458,12 +455,12 @@ miniLOL.module.create("blog", {
                 link: "#module=blog&#{type}=#{value}".interpolate({ type: data[0], value: num })
             });
         }
-        else if (type == 'pager_numbers') {
+        else if (type == "pager_numbers") {
             var template;
-            if (data[0] == 'number') {
+            if (data[0] == "number") {
                 template = this.template.post;
             }
-            else if (data[0] == 'page') {
+            else if (data[0] == "page") {
                 template = this.template.posts;
             }
 
@@ -485,9 +482,7 @@ miniLOL.module.create("blog", {
                 end = data[2];
             }
 
-            var content = new String;
-
-            content += template[(start == data[1])
+            var content = template[(start == data[1])
                 ? "pager_numbers_current" : "pager_numbers_first"].interpolate({
                     number: start,
                     link: "#module=blog&#{type}=#{value}".interpolate({ type: data[0], value: start })
@@ -512,12 +507,12 @@ miniLOL.module.create("blog", {
                 content: content
             });
         }
-        else if (type == 'pager_next') {
+        else if (type == "pager_next") {
             var template;
-            if (data[0] == 'number') {
+            if (data[0] == "number") {
                 template = this.template.post.pager_next;
             }
-            else if (data[0] == 'page') {
+            else if (data[0] == "page") {
                 template = this.template.posts.pager_next;
             }
 
@@ -525,32 +520,32 @@ miniLOL.module.create("blog", {
 
             return template.interpolate({
                 number: num,
-                link: "#module=blog&" + data[0] + "=" + num
+                link: "#module=blog&" + data[0] + '=' + num
             });
         }
-        else if (type == 'new_post') {
+        else if (type == "new_post") {
             return this.template.blog.interpolate({
                 content: this.template.manage.post.interpolate({
                     author: data[0],
-                    editor: this.editors[miniLOL.config['blog'].editorType || 'simple']
+                    editor: this.editors[miniLOL.config["blog"].editorType || "simple"]
                 })
             });
         }
-        else if (type == 'edit_post') {
+        else if (type == "edit_post") {
             return this.template.blog.interpolate({
                 content: this.template.manage.edit.interpolate({
                     title:   data[0],
                     author:  data[1],
                     date:    data[2],
                     post_id: data[3],
-                    editor: this.editors[miniLOL.config['blog'].editorType || 'simple']
+                    editor: this.editors[miniLOL.config["blog"].editorType || "simple"]
                 })
             });
         }
     },
 
     topic: function (id) {
-        var result = new Object;
+        var result = {};
         var topic  = this.data.getElementById(id);
         var attrs  = topic.attributes;
 
@@ -589,8 +584,8 @@ miniLOL.module.create("blog", {
         if (resultDOM) {
             var attrs = resultDOM.attributes;
 
-            result        = new Object;
-            result.number = i+1;
+            result        = {};
+            result.number = i + 1;
 
             for (var i = 0; i < attrs.length; i++) {
                 result[attrs[i].nodeName] = attrs[i].nodeValue;
@@ -603,7 +598,7 @@ miniLOL.module.create("blog", {
     },
 
     comments: function (topic) {
-        var result = new Array;
+        var result = [];
         var length = topic.getElementsByTagName("comments")[0].getElementsByTagName("comment").length;
 
         for (var i = 0; i < length; i++) {
