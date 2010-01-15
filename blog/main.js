@@ -135,7 +135,7 @@ miniLOL.module.create("blog", {
 
         if (args["comment"]) {
             if (!args["id"]) {
-                miniLOL.content.set("You're doing it wrong.");
+                miniLOL.error("You're doing it wrong.", miniLOL.theme.content(), true);
                 return false;
             }
 
@@ -168,14 +168,14 @@ miniLOL.module.create("blog", {
                         },
     
                         onFailure: function () {
-                            miniLOL.content.set("Something went deeply wrong.");
+                            miniLOL.error("Something went deeply wrong.", miniLOL.theme.content(), true);
                         }
                     });
 
                 }
                 else {
                     if (!miniLOL.module.execute("security", { connected: true })) {
-                        miniLOL.content.set("You're doing it wrong.");
+                        miniLOL.error("You're doing it wrong.", miniLOL.theme.content(), true);
                         return false;
                     }
     
@@ -218,13 +218,13 @@ miniLOL.module.create("blog", {
                         },
     
                         onFailure: function () {
-                            miniLOL.content.set("Something went deeply wrong.");
+                            miniLOL.error("Something went deeply wrong.", miniLOL.theme.content(), true);
                         }
                     });
                 }
                 else {
                     if (!miniLOL.module.execute("security", { connected: true })) {
-                        miniLOL.content.set("You're doing it wrong.");
+                        miniLOL.error("You're doing it wrong.", miniLOL.theme.content, true);
                         return false;
                     }
     
@@ -263,20 +263,20 @@ miniLOL.module.create("blog", {
                             },
     
                             onFailure: function () {
-                                miniLOL.content.set("Something went deeply wrong.");
+                                miniLOL.error("Something went deeply wrong.", miniLOL.theme.content(), true);
                             }
                         });
                     }
                     else {
                         if (!miniLOL.module.execute("security", { connected: true })) {
-                            miniLOL.content.set("You're doing it wrong.");
+                            miniLOL.error("You're doing it wrong.", miniLOL.theme.content(), true);
                             return false;
                         }
     
                         var post = this.data.getElementById(args["id"]);
     
                         if (post == null) {
-                            miniLOL.content.set("The post doesn't exist.");
+                            miniLOL.error("The post doesn't exist.", miniLOL.theme.content(), true);
                             return false;
                         }
     
@@ -289,13 +289,13 @@ miniLOL.module.create("blog", {
                     }
                 }
                 else {
-                    miniLOL.content.set("You're doing it wrong.");
+                    miniLOL.error("You're doing it wrong.", miniLOL.theme.content(), true);
                     return false;
                 }
             }
             else if (args["delete"]) {
                 if (!args["id"]) {
-                    miniLOL.content.set("You're doing it wrong.");
+                    miniLOL.error("You're doing it wrong.", miniLOL.theme.content(), true);
                     return false;
                 }
     
@@ -315,17 +315,17 @@ miniLOL.module.create("blog", {
                         },
     
                         onFailure: function () {
-                            miniLOL.content.set("Something went deeply wrong.");
+                            miniLOL.error("Something went deeply wrong.", miniLOL.theme.content(), true);
                         }
                     });
                 }
                 else {
-                    miniLOL.content.set("You're doing it wrong.");
+                    miniLOL.error("You're doing it wrong.", miniLOL.theme.content(), true);
                     return false;
                 }
             }
             else if (args["build"]) {
-                miniLOL.content.set("Not yet implemented.");
+                miniLOL.error("Not yet implemented.", miniLOL.theme.content(), true);
                 return false;
             }
             else if (args["comment"]) {
@@ -339,7 +339,7 @@ miniLOL.module.create("blog", {
                         miniLOL.content.set(this.templetize([post, $A(this.data.getElementsByTagName("post")).indexOf(post)+1], "post"));
                     }
                     else {
-                        miniLOL.content.set("Post not found.");
+                        miniLOL.error("Post not found.", miniLOL.theme.content(), true);
                         return false;
                     }
                 }
@@ -350,7 +350,7 @@ miniLOL.module.create("blog", {
                         miniLOL.content.set(this.templetize([posts[parseInt(args["number"])-1], parseInt(args["number"])], 'post'));
                     }
                     else {
-                        miniLOL.content.set("Post not found.");
+                        miniLOL.error("Post not found.", miniLOL.theme.content(), true);
                         return false;
                     }
                 }
@@ -358,12 +358,12 @@ miniLOL.module.create("blog", {
                     var allPosts = this.data.getElementsByTagName("post");
 
                     if (allPosts.length == 0) {
-                        miniLOL.content.set("The blog is empty :(");
+                        miniLOL.error("The blog is empty :(", miniLOL.theme.content(), true);
                         return false;
                     }
         
                     if (args["page"] > Math.ceil(allPosts.length/miniLOL.config["blog"].postsPerPage) || args["page"] < 1) {
-                        miniLOL.content.set("Page not found.");
+                        miniLOL.error("Page not found.", miniLOL.theme.content(), true);
                         return false;
                     }
         

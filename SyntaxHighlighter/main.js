@@ -62,10 +62,8 @@ miniLOL.module.create('SyntaxHighlighter', {
             miniLOL.theme.style.unload("SyntaxHighlighter/style");
             miniLOL.theme.style.load("shTheme"+miniLOL.config.SyntaxHighlighter.style, this.root+"/resources/styles");
         }
-    },
 
-    onGo: function () {
-        this.execute();
+        Event.observe(document, ":go", this.execute);
     },
 
     loadFile: function (name) {

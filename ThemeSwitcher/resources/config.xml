@@ -4,6 +4,6 @@
     <!ELEMENT configuration ANY>
 ]>
 
-<configuration domain="themeswitcher">
+<configuration domain="ThemeSwitcher">
     <defaultTheme>original</defaultTheme>
 </configuration>
