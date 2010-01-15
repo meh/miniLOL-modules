@@ -7,13 +7,13 @@
         </div>
         
         <div class="chooser" style="float: left; margin-left: 5px;">
-            <form><select>
+            <form><select onchange="var name = this.options.item(this.selectedIndex).value; miniLOL.module.execute('ThemeSwitcher', { choose: true, theme: name }); miniLOL.module.execute('ThemeSwitcher', { theme: name });">
                 #{data}
             </select></form>
         </div>
     ]]></global>
 
     <theme><![CDATA[
-        <option #{SELECTED} onclick="miniLOL.module.execute('ThemeSwitcher', { choose: true, theme: '#{name}' }); miniLOL.module.execute('ThemeSwitcher', { theme: '#{name}' });">#{name}</option>
+        <option #{SELECTED} value="#{name}">#{name}</option>
     ]]></theme>
 </template>
