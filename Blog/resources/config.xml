@@ -4,7 +4,7 @@
     <!ELEMENT configuration ANY>
 ]>
 
-<configuration domain="blog">
+<configuration domain="Blog">
     <author>
         <post>Owner</post>
         <comment>Anonymous</comment>
