@@ -10,22 +10,22 @@
  *  0. You just DO WHAT THE FUCK YOU WANT TO.                        *
  *********************************************************************/
 
-miniLOL.module.create('sysinfo', {
-    version: '0.1',
+miniLOL.module.create('SystemInformation', {
+    version: "0.1",
 
-    type: 'active',
+    type: "active",
 
     execute: function (args) {
         var type   = (args.show) ? true : false;
         var result = null;
-        var query  = "";
+        var query  = '';
 
         for (var key in args) {
             query += encodeURIComponent(key) + (args[key] ? '=' + encodeURIComponent(args[key]) : '') + '&';
         }
 
         new Ajax.Request(this.root+"/main.php?", {
-            method: 'get',
+            method: "get",
             asynchronous: type,
 
             onSuccess: function (http) {
@@ -38,7 +38,7 @@ miniLOL.module.create('sysinfo', {
             },
 
             onFailure: function () {
-                miniLOL.content.set('Something went deeply wrong :(');
+                miniLOL.error("Something went deeply wrong :(", miniLOL.theme.content(), true);
             },
         });
 

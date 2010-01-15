@@ -10,8 +10,8 @@
 *  0. You just DO WHAT THE FUCK YOU WANT TO.                         *
 *********************************************************************/
 
-miniLOL.module.create("blog", {
-    version: "0.3.1",
+miniLOL.module.create("Blog", {
+    version: "0.3",
 
     type: "active",
 
@@ -19,7 +19,7 @@ miniLOL.module.create("blog", {
         var This = this;
 
         this.resource = {
-            name: "blog",
+            name: "Blog",
 
             load: function (data, template, editors, blog) {
                 if (!this.res) {
@@ -51,7 +51,7 @@ miniLOL.module.create("blog", {
                 });
 
                 // load and parse blog's template
-                var template =  miniLOL.theme.template.load("blog/template")
+                var template =  miniLOL.theme.template.load("Blog/template")
                              || miniLOL.theme.template.load("template", This.root+"/resources");
 
                 if (!template) {
@@ -62,7 +62,7 @@ miniLOL.module.create("blog", {
                     return false;
                 }
 
-                res.template.blog = template.getElementsByTagName("blog")[0].firstChild.nodeValue;
+                res.template.blog = template.getElementsByTagName("Blog")[0].firstChild.nodeValue;
 
                 var posts   = template.getElementsByTagName("posts")[0];
                 var pager   = posts.getElementsByTagName("pager")[0];
@@ -101,7 +101,7 @@ miniLOL.module.create("blog", {
                 res.template.manage.edit  = manage.getElementsByTagName("edit")[0].firstChild.nodeValue;
 
                 // load and parse blog's editors
-                var editors =  miniLOL.theme.template.load("blog/editors")
+                var editors =  miniLOL.theme.template.load("Blog/editors")
                             || miniLOL.theme.template.load("editors", This.root+"/resources");
 
                 editors = editors.getElementsByTagName("editor");
@@ -119,12 +119,12 @@ miniLOL.module.create("blog", {
         miniLOL.resource.load(this.resource, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml", this);
         miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
 
-        if (!miniLOL.theme.style.exists("blog/style")) {
+        if (!miniLOL.theme.style.exists("Blog/style")) {
             miniLOL.theme.style.load("style", this.root+"/resources");
         }
 
         Event.observe(document, ":refresh", function () {
-            miniLOL.resource.reload(miniLOL.module.get("blog").resource);
+            miniLOL.resource.reload(miniLOL.module.get("Blog").resource);
         });
     },
 
@@ -143,9 +143,9 @@ miniLOL.module.create("blog", {
                 if (args["do"]) {
                     args["title"]  = args["title"] || "Re: " + this.topic(args["id"]).title;
                     args["date"]   = new Date().toString();
-                    args["author"] = args["author"] || miniLOL.config["blog"].author.comment;
+                    args["author"] = args["author"] || miniLOL.config["Blog"].author.comment;
     
-                    miniLOL.module.execute("logger", ["log", 100, "blog", "post", {
+                    miniLOL.module.execute("Logger", ["log", 100, "Blog", "post", {
                         title:   args["title"],
                         date:    args["date"],
                         author:  args["author"],
@@ -164,7 +164,7 @@ miniLOL.module.create("blog", {
     
                         onSuccess: function (http) {
                             miniLOL.content.set(http.responseText);
-                            miniLOL.resource.reload(miniLOL.module.get("blog").resource);
+                            miniLOL.resource.reload(miniLOL.module.get("Blog").resource);
                         },
     
                         onFailure: function () {
@@ -192,10 +192,10 @@ miniLOL.module.create("blog", {
                 if (args["do"]) {
                     args["title"]   = args["title"]   || '';
                     args["date"]    = args["date"]    || new Date().toString();
-                    args["author"]  = args["author"]  || miniLOL.config["blog"].author.post;
+                    args["author"]  = args["author"]  || miniLOL.config["Blog"].author.post;
                     args["content"] = args["content"] || '';
     
-                    miniLOL.module.execute("logger", ["log", 100, "blog", "post", {
+                    miniLOL.module.execute("Logger", ["log", 100, "Blog", "post", {
                         title:   args["title"],
                         date:    args["date"],
                         author:  args["author"],
@@ -214,7 +214,7 @@ miniLOL.module.create("blog", {
     
                         onSuccess: function (http) {
                             miniLOL.content.set(http.responseText);
-                            miniLOL.resource.reload(miniLOL.module.get("blog").resource);
+                            miniLOL.resource.reload(miniLOL.module.get("Blog").resource);
                         },
     
                         onFailure: function () {
@@ -228,7 +228,7 @@ miniLOL.module.create("blog", {
                         return false;
                     }
     
-                    miniLOL.content.set(this.templetize([miniLOL.config["blog"].author.post], "new_post"));
+                    miniLOL.content.set(this.templetize([miniLOL.config["Blog"].author.post], "new_post"));
                 }
             }
             else if (args["edit"]) {
@@ -236,10 +236,10 @@ miniLOL.module.create("blog", {
                     if (args["do"]) {
                         args["title"]   = args["title"]   || '';
                         args["date"]    = args["date"]    || new Date().toString();
-                        args["author"]  = args["author"]  || miniLOL.config["blog"].author.post;
+                        args["author"]  = args["author"]  || miniLOL.config["Blog"].author.post;
                         args["content"] = args["content"] || '';
     
-                        miniLOL.module.execute("logger", ["log", 100, "blog", "post", args["id"], {
+                        miniLOL.module.execute("Logger", ["log", 100, "Blog", "post", args["id"], {
                             title:   args["title"],
                             date:    args["date"],
                             author:  args["author"],
@@ -259,7 +259,7 @@ miniLOL.module.create("blog", {
     
                             onSuccess: function (http) {
                                 miniLOL.content.set(http.responseText);
-                                miniLOL.resource.reload(miniLOL.module.get("blog").resource);
+                                miniLOL.resource.reload(miniLOL.module.get("Blog").resource);
                             },
     
                             onFailure: function () {
@@ -300,7 +300,7 @@ miniLOL.module.create("blog", {
                 }
     
                 if (args["do"]) {
-                    miniLOL.module.execute("logger", ["log", 100, "blog", "delete", args["id"]]);
+                    miniLOL.module.execute("Logger", ["log", 100, "Blog", "delete", args["id"]]);
     
                     new Ajax.Request(this.root+"/main.php?delete", {
                         method: "post",
@@ -311,7 +311,7 @@ miniLOL.module.create("blog", {
     
                         onSuccess: function (http) {
                             miniLOL.content.set(http.responseText);
-                            miniLOL.resource.reload(miniLOL.module.get("blog").resource);
+                            miniLOL.resource.reload(miniLOL.module.get("Blog").resource);
                         },
     
                         onFailure: function () {
@@ -362,15 +362,15 @@ miniLOL.module.create("blog", {
                         return false;
                     }
         
-                    if (args["page"] > Math.ceil(allPosts.length/miniLOL.config["blog"].postsPerPage) || args["page"] < 1) {
+                    if (args["page"] > Math.ceil(allPosts.length/miniLOL.config["Blog"].postsPerPage) || args["page"] < 1) {
                         miniLOL.error("Page not found.", miniLOL.theme.content(), true);
                         return false;
                     }
         
                     var posts = [];
 
-                    for (   var i = allPosts.length-1-(miniLOL.config["blog"].postsPerPage*(args["page"]-1)), count = 0;
-                            count < miniLOL.config["blog"].postsPerPage && i >= 0;
+                    for (   var i = allPosts.length-1-(miniLOL.config["Blog"].postsPerPage*(args["page"]-1)), count = 0;
+                            count < miniLOL.config["Blog"].postsPerPage && i >= 0;
                             i--, count++) {
                         posts.push(allPosts[i]);
                     }
@@ -398,7 +398,7 @@ miniLOL.module.create("blog", {
             return this.template.blog.interpolate({ content:
                 this.template.posts.overall.interpolate({
                     posts: posts,
-                    pager: this.templetize(["page", data[1], Math.ceil(this.data.getElementsByTagName("post").length/miniLOL.config["blog"].postsPerPage)], "pager_overall")
+                    pager: this.templetize(["page", data[1], Math.ceil(this.data.getElementsByTagName("post").length/miniLOL.config["Blog"].postsPerPage)], "pager_overall")
                 })
             });
         }
@@ -527,7 +527,7 @@ miniLOL.module.create("blog", {
             return this.template.blog.interpolate({
                 content: this.template.manage.post.interpolate({
                     author: data[0],
-                    editor: this.editors[miniLOL.config["blog"].editorType || "simple"]
+                    editor: this.editors[miniLOL.config["Blog"].editorType || "simple"]
                 })
             });
         }
@@ -538,7 +538,7 @@ miniLOL.module.create("blog", {
                     author:  data[1],
                     date:    data[2],
                     post_id: data[3],
-                    editor: this.editors[miniLOL.config["blog"].editorType || "simple"]
+                    editor: this.editors[miniLOL.config["Blog"].editorType || "simple"]
                 })
             });
         }

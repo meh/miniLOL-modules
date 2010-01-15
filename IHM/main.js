@@ -10,7 +10,7 @@
  *  0. You just DO WHAT THE FUCK YOU WANT TO.                        *
  *********************************************************************/
 
-miniLOL.module.create("ihm", {
+miniLOL.module.create("IHM", {
     version: "0.1",
 
     type: "passive",
