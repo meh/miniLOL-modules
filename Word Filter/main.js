@@ -23,6 +23,6 @@ miniLOL.module.create("Word Filter", {
     },
 
     execute: function () {
-        miniLOL.content.set(this.filters.apply(miniLOL.content.get());
+        miniLOL.content.set(this.filters.apply(miniLOL.content.get()));
     }
 });
