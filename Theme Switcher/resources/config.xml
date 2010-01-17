@@ -5,5 +5,5 @@
 ]>
 
 <configuration domain="Theme Switcher">
-    <defaultTheme>original</defaultTheme>
+    <defaultTheme>Original</defaultTheme>
 </configuration>
