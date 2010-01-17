@@ -89,4 +89,4 @@ Filters.reload = function () {
 
 return Filters;
 
-)();
+})();
