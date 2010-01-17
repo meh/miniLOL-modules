@@ -10,10 +10,10 @@
 *  0. You just DO WHAT THE FUCK YOU WANT TO.                         *
 *********************************************************************/
 
-miniLOL.module.create('SyntaxHighlighter', {
-    version: '0.2.4',
+miniLOL.module.create("Syntax Highlighter", {
+    version: "0.2.5",
 
-    type: 'passive',
+    type: "passive",
 
     initialize: function () {
         miniLOL.utils.require(this.root+"/system/shCore.js");
@@ -21,10 +21,10 @@ miniLOL.module.create('SyntaxHighlighter', {
         miniLOL.resource.load(miniLOL.resources.functions, this.root+"/resources/functions.xml");
         miniLOL.resource.load(miniLOL.resources.config,    this.root+"/resources/config.xml");
 
-        SyntaxHighlighter.config["tagName"] = miniLOL.config['SyntaxHighlighter'].tagName;
+        SyntaxHighlighter.config["tagName"] = miniLOL.config["Syntax Highlighter"].tagName;
 
-        for (var conf in miniLOL.config['SyntaxHighlighter']) {
-            SyntaxHighlighter.defaults[conf] = (miniLOL.config['SyntaxHighlighter'][conf][0] == '[' && confs[conf][confs[conf].length-1] == ']')
+        for (var conf in miniLOL.config["Syntax Highlighter"]) {
+            SyntaxHighlighter.defaults[conf] = (miniLOL.config["Syntax Highlighter"][conf][0] == '[' && confs[conf][confs[conf].length-1] == ']')
                 ? eval(miniLOL.config.SyntaxHighlighter[conf].replace(/[^\d\[\],]/g, ''))
                 : miniLOL.config.SyntaxHighlighter[conf];
         }
@@ -35,7 +35,7 @@ miniLOL.module.create('SyntaxHighlighter', {
 
         var This = this;
         new Ajax.Request(this.root+"/resources/langs.xml", {
-            method: 'get',
+            method: "get",
             asynchronous: false,
 
             onSuccess: function (http) {
@@ -59,7 +59,7 @@ miniLOL.module.create('SyntaxHighlighter', {
         miniLOL.theme.style.load("shCore", this.root+"/resources/styles");
 
         if (miniLOL.config.SyntaxHighlighter.style) {
-            miniLOL.theme.style.unload("SyntaxHighlighter/style");
+            miniLOL.theme.style.unload("Syntax Highlighter/style");
             miniLOL.theme.style.load("shTheme"+miniLOL.config.SyntaxHighlighter.style, this.root+"/resources/styles");
         }
 
@@ -113,9 +113,9 @@ miniLOL.module.create('SyntaxHighlighter', {
                 : args[arg];
         }
 
-        SyntaxHighlighter.defaults['brush'] = args['lang'];
-        if (args['lang']) {
-            this.loadFile(this.aliases[args['lang']]);
+        SyntaxHighlighter.defaults["brush"] = args["lang"];
+        if (args["lang"]) {
+            this.loadFile(this.aliases[args["lang"]]);
         }
         this.loadTagFiles();
 

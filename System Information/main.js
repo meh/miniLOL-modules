@@ -10,7 +10,7 @@
  *  0. You just DO WHAT THE FUCK YOU WANT TO.                        *
  *********************************************************************/
 
-miniLOL.module.create('SystemInformation', {
+miniLOL.module.create("System Information", {
     version: "0.1",
 
     type: "active",

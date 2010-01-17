@@ -10,30 +10,99 @@
 *  0. You just DO WHAT THE FUCK YOU WANT TO.                         *
 *********************************************************************/
 
-miniLOL.module.create("Blog", {
-    version: "0.3",
+(function () {
 
-    type: "active",
-
+var Template = Class.create({
     initialize: function () {
-        var This = this;
+        // load and parse blog's template
+        var template = miniLOL.theme.template.load("Blog/template")
+                    || miniLOL.theme.template.load("template", This.root+"/resources");
 
+        if (!template) {
+            if (!miniLOL.error()) {
+                miniLOL.error("Couldn't find the blog's template.");
+            }
+            
+            return false;
+        }
+
+        this.template.blog = template.getElementsByTagName("blog")[0].firstChild.nodeValue;
+
+        var posts   = template.getElementsByTagName("posts")[0];
+        var pager   = posts.getElementsByTagName("pager")[0];
+        var numbers = pager.getElementsByTagName("numbers")[0];
+
+        this.template.posts                       = {};
+        this.template.posts.overall               = posts.firstChild.nodeValue;
+        this.template.posts.pager_overall         = pager.firstChild.nodeValue;
+        this.template.posts.pager_previous        = posts.getElementsByTagName("previous")[0].firstChild.nodeValue;
+        this.template.posts.pager_numbers         = numbers.firstChild.nodeValue;
+        this.template.posts.pager_numbers_length  = parseInt(numbers.getAttribute("length"));
+        this.template.posts.pager_numbers_first   = numbers.getElementsByTagName("first")[0].firstChild.nodeValue;
+        this.template.posts.pager_numbers_inner   = numbers.getElementsByTagName("inner")[0].firstChild.nodeValue;
+        this.template.posts.pager_numbers_current = numbers.getElementsByTagName("current")[0].firstChild.nodeValue;
+        this.template.posts.pager_numbers_last    = numbers.getElementsByTagName("last")[0].firstChild.nodeValue;
+        this.template.posts.pager_next            = pager.getElementsByTagName("next")[0].firstChild.nodeValue;
+        
+        var post    = template.getElementsByTagName("post")[0];
+        var pager   = post.getElementsByTagName("pager")[0];
+        var numbers = pager.getElementsByTagName("numbers")[0];
+
+        this.template.post                       = {};
+        this.template.post.overall               = post.firstChild.nodeValue;
+        this.template.post.pager_overall         = pager.firstChild.nodeValue;
+        this.template.post.pager_previous        = post.getElementsByTagName("previous")[0].firstChild.nodeValue;
+        this.template.post.pager_numbers         = numbers.firstChild.nodeValue;
+        this.template.post.pager_numbers_length  = parseInt(numbers.getAttribute("length"));
+        this.template.post.pager_numbers_first   = numbers.getElementsByTagName("first")[0].firstChild.nodeValue;
+        this.template.post.pager_numbers_inner   = numbers.getElementsByTagName("inner")[0].firstChild.nodeValue;
+        this.template.post.pager_numbers_current = numbers.getElementsByTagName("current")[0].firstChild.nodeValue;
+        this.template.post.pager_numbers_last    = numbers.getElementsByTagName("last")[0].firstChild.nodeValue;
+        this.template.post.pager_next            = pager.getElementsByTagName("next")[0].firstChild.nodeValue;
+
+        var manage = template.getElementsByTagName("manage")[0];
+
+        this.template.manage = {};
+        this.template.manage.admin = manage.getElementsByTagName("admin")[0].firstChild.nodeValue;
+        this.template.manage.post  = manage.getElementsByTagName("post")[0].firstChild.nodeValue;
+        this.template.manage.edit  = manage.getElementsByTagName("edit")[0].firstChild.nodeValue;
+
+        // load and parse blog's editors
+        var editors = miniLOL.theme.template.load("Blog/editors")
+                   || miniLOL.theme.template.load("editors", This.root+"/resources");
+
+        if (!editors) {
+            if (!miniLOL.error()) {
+                miniLOL.error("Couldn't find the blog's template.");
+            }
+
+            return false;
+        }
+
+        editors = editors.getElementsByTagName("editor");
+        for (var i = 0; i < editors.length; i++) {
+            this.editors[editors[i].getAttribute("type")] = editors[i].firstChild.nodeValue;
+        }
+    }
+});
+
+var Blog = Class.create({
+    initialize: function (root, data, config) {
+        this.root = root;
+
+        var This = this;
         this.resource = {
             name: "Blog",
 
-            load: function (data, template, editors, blog) {
+            load: function (data, template, editors) {
                 if (!this.res) {
                     this.res = {
                         data: null,
                         cache: {},
-                        template: {},
-                        editors: {}
                     };
 
-                    delete blog.data;
-                    delete blog.cache;
-                    delete blog.template;
-                    delete blog.editors;
+                    delete This._data;
+                    delete This._cache;
                 } var res = this.res;
 
                 new Ajax.Request(data + "?failCache=" + Math.random(), {
@@ -46,78 +115,98 @@ miniLOL.module.create("Blog", {
                     },
 
                     onSuccess: function (http) {
+                        var error = miniLOL.utils.checkXML(http.responseXML);
+                        if (error) {
+                            miniLOL.error("Error while parsing blog's data.xml<br/><br/>#{error}".interpolate({
+                                error: error.replace(/\n/g, "<br/>").replace(/ /g, "&nbsp;")
+                            }));
+
+                            return;
+                        }
+
                         res.data = miniLOL.utils.fixDOM(http.responseXML);
+                    },
+
+                    onFailure: function (http) {
+                        miniLOL.error("Error while loading config.xml (#{error})".interpolate({
+                            error: http.status
+                        }));
                     }
                 });
 
-                // load and parse blog's template
-                var template =  miniLOL.theme.template.load("Blog/template")
-                             || miniLOL.theme.template.load("template", This.root+"/resources");
-
-                if (!template) {
-                    if (!miniLOL.error()) {
-                        miniLOL.error("Couldn't find the blog's template.");
-                    }
-
+                if (!res.data) {
                     return false;
                 }
 
-                res.template.blog = template.getElementsByTagName("Blog")[0].firstChild.nodeValue;
-
-                var posts   = template.getElementsByTagName("posts")[0];
-                var pager   = posts.getElementsByTagName("pager")[0];
-                var numbers = pager.getElementsByTagName("numbers")[0];
-                res.template.posts                       = {};
-                res.template.posts.overall               = posts.firstChild.nodeValue;
-                res.template.posts.pager_overall         = pager.firstChild.nodeValue;
-                res.template.posts.pager_previous        = posts.getElementsByTagName("previous")[0].firstChild.nodeValue;
-                res.template.posts.pager_numbers         = numbers.firstChild.nodeValue;
-                res.template.posts.pager_numbers_length  = parseInt(numbers.getAttribute("length"));
-                res.template.posts.pager_numbers_first   = numbers.getElementsByTagName("first")[0].firstChild.nodeValue;
-                res.template.posts.pager_numbers_inner   = numbers.getElementsByTagName("inner")[0].firstChild.nodeValue;
-                res.template.posts.pager_numbers_current = numbers.getElementsByTagName("current")[0].firstChild.nodeValue;
-                res.template.posts.pager_numbers_last    = numbers.getElementsByTagName("last")[0].firstChild.nodeValue;
-                res.template.posts.pager_next            = pager.getElementsByTagName("next")[0].firstChild.nodeValue;
-                
-                var post    = template.getElementsByTagName("post")[0];
-                var pager   = post.getElementsByTagName("pager")[0];
-                var numbers = pager.getElementsByTagName("numbers")[0];
-                res.template.post                       = {};
-                res.template.post.overall               = post.firstChild.nodeValue;
-                res.template.post.pager_overall         = pager.firstChild.nodeValue;
-                res.template.post.pager_previous        = post.getElementsByTagName("previous")[0].firstChild.nodeValue;
-                res.template.post.pager_numbers         = numbers.firstChild.nodeValue;
-                res.template.post.pager_numbers_length  = parseInt(numbers.getAttribute("length"));
-                res.template.post.pager_numbers_first   = numbers.getElementsByTagName("first")[0].firstChild.nodeValue;
-                res.template.post.pager_numbers_inner   = numbers.getElementsByTagName("inner")[0].firstChild.nodeValue;
-                res.template.post.pager_numbers_current = numbers.getElementsByTagName("current")[0].firstChild.nodeValue;
-                res.template.post.pager_numbers_last    = numbers.getElementsByTagName("last")[0].firstChild.nodeValue;
-                res.template.post.pager_next            = pager.getElementsByTagName("next")[0].firstChild.nodeValue;
-
-                var manage = template.getElementsByTagName("manage")[0];
-                res.template.manage = {};
-                res.template.manage.admin = manage.getElementsByTagName("admin")[0].firstChild.nodeValue;
-                res.template.manage.post  = manage.getElementsByTagName("post")[0].firstChild.nodeValue;
-                res.template.manage.edit  = manage.getElementsByTagName("edit")[0].firstChild.nodeValue;
-
-                // load and parse blog's editors
-                var editors =  miniLOL.theme.template.load("Blog/editors")
-                            || miniLOL.theme.template.load("editors", This.root+"/resources");
-
-                editors = editors.getElementsByTagName("editor");
-                for (var i = 0; i < editors.length; i++) {
-                    res.editors[editors[i].getAttribute("type")] = editors[i].firstChild.nodeValue;
-                }
-
-                blog.data     = res.data;
-                blog.cache    = res.cache;
-                blog.template = res.template;
-                blog.editors  = res.editors;
+                This._data  = res.data;
+                This._cache = res.cache;
             }
         };
 
-        miniLOL.resource.load(this.resource, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml", this);
-        miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
+        miniLOL.resource.load(this.resource, data);
+        miniLOL.resource.load(miniLOL.resources.config, config);
+
+        this._template = new Template;
+    },
+
+    post: function () {
+        var data; 
+        var type;
+        if (Object.isString(arguments[0])) {
+            data = arguments[1];
+            type = arguments[0];
+        }
+        else {
+            data = arguments[0];
+            type = "post";
+        }
+
+        if (type == "post") {
+            new Ajax.Request(this.root+"/main.php?post", {
+                method: "post",
+
+                parameters: data,
+
+                onSuccess: function (http) {
+                    miniLOL.content.set(http.responseText);
+                    miniLOL.module.execute("Blog", "rehash");
+                },
+
+                onFailure: function () {
+                    miniLOL.error("Something went deeply wrong.", miniLOL.theme.content(), true);
+                }
+            });
+        }
+        else if (type == "comment") {
+            new Ajax.Request(this.root+"/main.php?post&comment", {
+                method: "post",
+
+                parameters: data,
+
+                onSuccess: function (http) {
+                    miniLOL.content.set(http.responseText);
+                    miniLOL.module.execute("Blog", "rehash");
+                },
+
+                onFailure: function () {
+                    miniLOL.error("Something went deeply wrong.", miniLOL.theme.content(), true);
+                }
+            });
+        }
+    },
+
+    rehash: function () {
+        miniLOL.resource.reload(this.resource);
+    }
+});
+
+miniLOL.module.create("Blog", {
+    version: "0.3",
+
+    type: "active",
+
+    initialize: function () {
+        this.blog = new Blog(this.root, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml", this.root+"/resources/config.xml");
 
         if (!miniLOL.theme.style.exists("Blog/style")) {
             miniLOL.theme.style.load("style", this.root+"/resources");
@@ -129,10 +218,6 @@ miniLOL.module.create("Blog", {
     },
 
     execute: function (args) {
-        if (!this.data) {
-            throw new Error("An error occurred while loading data.xml");
-        }
-
         if (args["comment"]) {
             if (!args["id"]) {
                 miniLOL.error("You're doing it wrong.", miniLOL.theme.content(), true);
@@ -145,46 +230,27 @@ miniLOL.module.create("Blog", {
                     args["date"]   = new Date().toString();
                     args["author"] = args["author"] || miniLOL.config["Blog"].author.comment;
     
-                    miniLOL.module.execute("Logger", ["log", 100, "Blog", "post", {
+                    miniLOL.module.execute("Logger", ["log", 70, "Blog", "post", "comment", {
                         title:   args["title"],
                         date:    args["date"],
                         author:  args["author"],
                         content: args["content"]
                     }]);
-    
-                    new Ajax.Request(this.root+"/main.php?post", {
-                        method: "post",
-    
-                        parameters: {
-                            title:   args["title"],
-                            date:    args["date"],
-                            author:  args["author"],
-                            content: args["content"]
-                        },
-    
-                        onSuccess: function (http) {
-                            miniLOL.content.set(http.responseText);
-                            miniLOL.resource.reload(miniLOL.module.get("Blog").resource);
-                        },
-    
-                        onFailure: function () {
-                            miniLOL.error("Something went deeply wrong.", miniLOL.theme.content(), true);
-                        }
-                    });
 
+                    this.blog.post("comment", {
+                        title:   args["title"],
+                        date:    args["date"],
+                        author:  args["author"],
+                        content: args["content"]
+                    });
                 }
                 else {
-                    if (!miniLOL.module.execute("security", { connected: true })) {
-                        miniLOL.error("You're doing it wrong.", miniLOL.theme.content(), true);
-                        return false;
-                    }
-    
                     miniLOL.content.set(this.templetize(args["id"], "new_comment"));
                 }
             }
         }
         else {
-            if (!miniLOL.modules.security && (args["post"] || args["edit"] || args["delete"])) {
+            if (args["post"] || args["edit"] || args["delete"]) {
                 throw new Error("You can't post without the `security` module.");
             }
 
@@ -201,37 +267,26 @@ miniLOL.module.create("Blog", {
                         author:  args["author"],
                         content: args["content"]
                     }]);
-    
-                    new Ajax.Request(this.root+"/main.php?post", {
-                        method: "post",
-    
-                        parameters: {
-                            title:   args["title"],
-                            date:    args["date"],
-                            author:  args["author"],
-                            content: args["content"]
-                        },
-    
-                        onSuccess: function (http) {
-                            miniLOL.content.set(http.responseText);
-                            miniLOL.resource.reload(miniLOL.module.get("Blog").resource);
-                        },
-    
-                        onFailure: function () {
-                            miniLOL.error("Something went deeply wrong.", miniLOL.theme.content(), true);
-                        }
+
+                    miniLOL.content.set("Posting...");
+
+                    this.blog.post({
+                        title:   args["title"],
+                        date:    args["date"],
+                        author:  args["author"],
+                        content: args["content"]
                     });
                 }
                 else {
-                    if (!miniLOL.module.execute("security", { connected: true })) {
-                        miniLOL.error("You're doing it wrong.", miniLOL.theme.content, true);
-                        return false;
-                    }
-    
                     miniLOL.content.set(this.templetize([miniLOL.config["Blog"].author.post], "new_post"));
                 }
             }
             else if (args["edit"]) {
+                if (!miniLOL.module.execute("security", { connected: true })) {
+                    miniLOL.error("You're doing it wrong.", miniLOL.theme.content, true);
+                    return false;
+                }
+
                 if (args["id"]) {
                     if (args["do"]) {
                         args["title"]   = args["title"]   || '';
@@ -608,3 +663,5 @@ miniLOL.module.create("Blog", {
         return result;
     }
 });
+
+})();
