@@ -14,6 +14,10 @@
 
 var Template = Class.create({
     initialize: function () {
+        this.load();
+    },
+
+    load: function () {
         // load and parse blog's template
         var template = miniLOL.theme.template.load("Blog/template")
                     || miniLOL.theme.template.load("template", This.root+"/resources");
@@ -25,6 +29,8 @@ var Template = Class.create({
             
             return false;
         }
+
+        this.template = {};
 
         this.template.blog = template.getElementsByTagName("blog")[0].firstChild.nodeValue;
 
@@ -83,6 +89,10 @@ var Template = Class.create({
         for (var i = 0; i < editors.length; i++) {
             this.editors[editors[i].getAttribute("type")] = editors[i].firstChild.nodeValue;
         }
+    },
+
+    reload: function () {
+        this.load();
     }
 });
 
@@ -206,14 +216,15 @@ miniLOL.module.create("Blog", {
     type: "active",
 
     initialize: function () {
-        this.blog = new Blog(this.root, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml", this.root+"/resources/config.xml");
+        this.blog     = new Blog(this.root, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml", this.root+"/resources/config.xml");
+        this.template = new Template;
 
         if (!miniLOL.theme.style.exists("Blog/style")) {
             miniLOL.theme.style.load("style", this.root+"/resources");
         }
 
         Event.observe(document, ":refresh", function () {
-            miniLOL.resource.reload(miniLOL.module.get("Blog").resource);
+            miniLOL.module.get("Blog").template.reload();
         });
     },
 
