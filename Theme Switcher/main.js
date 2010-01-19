@@ -11,7 +11,7 @@
 *********************************************************************/
 
 miniLOL.module.create("Theme Switcher", {
-    version: "0.1",
+    version: "0.1.1",
 
     type: "passive",
 
@@ -67,10 +67,16 @@ miniLOL.module.create("Theme Switcher", {
             return false;
         }
 
-        var theme = this.theme = new CookieJar().get("theme");
+        var theme = new CookieJar().get("theme");
+        if (this.themes.indexOf(theme) < 0) {
+            this.theme = miniLOL.config["Theme Switcher"].defaultTheme;
+        }
+        else {
+            this.theme = theme;
+        }
 
         Event.observe(document, ":initialized", function (event) {
-            miniLOL.module.execute("Theme Switcher", { theme: theme });
+            miniLOL.module.execute("Theme Switcher", { theme: miniLOL.module.get("Theme Switcher").theme });
         })
     },
 
