@@ -127,7 +127,7 @@ var Template = Class.create({
                 author:  data["post"].getAttribute("author"),
                 link:    "#module=Blog&id=#{id}".interpolate({ id: data["post"].getAttribute("id") }),
                 pager:   pager,
-                admin:   (miniLOL.module.execute("security", { connected: true, cached: true }))
+                admin:   (miniLOL.module.execute("Security", { connected: true, cached: true }))
                              ? this.apply("admin", { id: data["post"].getAttribute("id") })
                              : ''
             });

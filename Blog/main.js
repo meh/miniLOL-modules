@@ -54,11 +54,6 @@ miniLOL.module.create("Blog", {
                 }
             }
             else {
-                if (!miniLOL.module.exists("Security")) {
-                    miniLOL.content.set("You can't make a post without the Security module.");
-                    return false;
-                }
-
                 if (args["post"]) {
                     if (args["do"]) {
                         args["title"]   = args["title"]   || '';
@@ -80,11 +75,6 @@ miniLOL.module.create("Blog", {
                     }
                 }
                 else if (args["edit"]) {
-                    if (!miniLOL.module.execute("security", { connected: true })) {
-                        miniLOL.content.set("You're doing it wrong.");
-                        return false;
-                    }
-    
                     if (args["id"]) {
                         if (args["do"]) {
                             args["title"]   = args["title"]   || '';
@@ -101,11 +91,6 @@ miniLOL.module.create("Blog", {
                             });
                         }
                         else {
-                            if (!miniLOL.module.execute("security", { connected: true })) {
-                                miniLOL.error("You're doing it wrong.", miniLOL.theme.content(), true);
-                                return false;
-                            }
-        
                             var post = this.blog.getPost(args["id"]);
         
                             if (post == null) {

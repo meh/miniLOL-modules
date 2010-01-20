@@ -91,6 +91,13 @@ var Blog = Class.create({
 
         miniLOL.module.execute("Logger", ["log", 100, "Blog", "post", type, data]);
 
+        if (!type) {
+            if (!miniLOL.module.execute("Security", { connected: true })) {
+                miniLOL.content.set("You're doing it wrong.");
+                return false;
+            }
+        }
+
         new Ajax.Request(this.root+"/main.php?post&"+type, {
             method: "post",
 
@@ -122,6 +129,11 @@ var Blog = Class.create({
 
         miniLOL.module.execute("Logger", ["log", 100, "Blog", "post", type, data]);
 
+        if (!miniLOL.module.execute("Security", { connected: true })) {
+            miniLOL.content.set("You're doing it wrong.");
+            return false;
+        }
+
         new Ajax.Request(this.root+"/main.php?edit&"+type, {
             method: 'post',
 
@@ -152,6 +164,11 @@ var Blog = Class.create({
         }
 
         miniLOL.module.execute("Logger", ["log", 100, "Blog", "remove", type, data]);
+
+        if (!miniLOL.module.execute("Security", { connected: true })) {
+            miniLOL.content.set("You're doing it wrong.");
+            return false;
+        }
 
         new Ajax.Request(this.root+"/main.php?remove&"+type, {
             method: 'post',
