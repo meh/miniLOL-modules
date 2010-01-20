@@ -109,7 +109,7 @@
 
     <manage>
         <admin><![CDATA[
-            {[<a href="#module=blog&edit&id=#{id}">edit</a>] [<a href="#module=blog&delete&do&id=#{id}">delete</a>]}
+            {[<a href="#module=Blog&edit&id=#{id}">edit</a>] [<a href="#module=Blog&delete&do&id=#{id}">delete</a>]}
         ]]></admin>
 
         <post><![CDATA[
