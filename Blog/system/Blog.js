@@ -13,9 +13,8 @@
 (function () {
 
 var Blog = Class.create({
-    initialize: function (root, data, config) {
-        this.root     = root;
-        this.Template = miniLOL.utils.require(root+"/system/Template.js");
+    initialize: function (root, data, config, style, template, editors) {
+        this.root = root;
 
         var This = this;
         this.resource = {
@@ -32,7 +31,7 @@ var Blog = Class.create({
                     delete This._cache;
                 } var res = this.res;
 
-                new Ajax.Request(data + "?failCache=" + Math.random(), {
+                new Ajax.Request(This.root+data + "?failCache=" + Math.random(), {
                     method: "get",
                     asynchronous: false,
 
@@ -71,9 +70,10 @@ var Blog = Class.create({
         };
 
         miniLOL.resource.load(this.resource, data);
-        miniLOL.resource.load(miniLOL.resources.config, config);
+        miniLOL.resource.load(miniLOL.resources.config, This.root+config);
 
-        this.template = new this.Template(root);
+        this.Template = miniLOL.utils.require(this.root+"/system/Template.js");
+        this.template = new this.Template(root, style, template, editors);
     },
 
     post: function () {

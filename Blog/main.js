@@ -18,10 +18,8 @@ miniLOL.module.create("Blog", {
     type: "active",
 
     initialize: function () {
-        miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
-
         this.Blog = miniLOL.utils.require(this.root+"/system/Blog.js");
-        this.blog = new this.Blog(this.root, this.root+"/resources/data.xml", this.root+"/resources/template.xml", this.root+"/resources/editors.xml", this.root+"/resources/config.xml");
+        this.blog = new this.Blog(this.root, "/resources/data.xml", "/resources/config.xml", "/resources/style", "/resources/template", "/resources/editors");
 
         Event.observe(document, ":refresh", function () {
             miniLOL.module.get("Blog").blog.template.reload();
