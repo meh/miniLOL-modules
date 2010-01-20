@@ -11,6 +11,8 @@
 *********************************************************************/
 
 miniLOL.module.create("Word Filter", {
+    version: "0.1",
+
     initialize: function () {
         this.filters = miniLOL.utils.require(this.root+"/system/Filters.js");
         this.filters.load(this.root+"/resources/words.xml");
