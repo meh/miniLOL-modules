@@ -26,7 +26,7 @@ miniLOL.module.create("Theme Switcher", {
         }
 
         var theme = new CookieJar().get("theme");
-        if (this.themes.exists(theme) < 0) {
+        if (!this.themes.exists(theme)) {
             this.theme = miniLOL.config["Theme Switcher"].defaultTheme;
         }
         else {
