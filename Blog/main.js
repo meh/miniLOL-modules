@@ -155,7 +155,7 @@ miniLOL.module.create("Blog", {
                 var post = this.blog.getPost(args["id"]);
                 if (post) {
                     var posts = this.blog.getPosts();
-                    miniLOL.content.set(this.blog.template.apply("post", { post: post, position: posts.indexOf(post) + 1, total: posts.length }));
+                    miniLOL.content.set(this.blog.template.apply("post", { post: post, number: posts.indexOf(post) + 1, total: posts.length }));
                 }
                 else {
                     miniLOL.error("Post not found.", miniLOL.theme.content(), true);
@@ -166,7 +166,7 @@ miniLOL.module.create("Blog", {
                 var posts = this.blog.getPosts();
 
                 if (args["number"] <= posts.length) {
-                    miniLOL.content.set(this.blog.template.apply('post', { post: posts[parseInt(args["number"])-1], number: parseInt(args["number"])}));
+                    miniLOL.content.set(this.blog.template.apply("post", { post: posts[parseInt(args["number"])-1], number: parseInt(args["number"]), total: posts.length }));
                 }
                 else {
                     miniLOL.content.set("Post not found.");

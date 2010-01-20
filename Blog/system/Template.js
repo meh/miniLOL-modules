@@ -25,9 +25,8 @@ var Template = Class.create({
         this._callbacks = {
             "post": function (data) {
                 var pager = '';
-
-                if (data["position"]) {
-                    pager = this.apply("pager_overall", { type: "number", position: data["position"], total: data["total"] }); 
+                if (data["number"]) {
+                    pager = this.apply("pager_overall", { type: "number", position: data["number"], total: data["total"] }); 
                 }
     
                 var content = this._template.post.overall.interpolate({
@@ -36,14 +35,14 @@ var Template = Class.create({
                     title:   data["post"].getAttribute("title"),
                     date:    data["post"].getAttribute("date"),
                     author:  data["post"].getAttribute("author"),
-                    link:    "#module=blog&id=#{id}".interpolate({ id: data["post"].getAttribute("id") }),
+                    link:    "#module=Blog&id=#{id}".interpolate({ id: data["post"].getAttribute("id") }),
                     pager:   pager,
                     admin:   (miniLOL.module.execute("security", { connected: true, cached: true }))
                                  ? this.apply("admin", { id: data["post"].getAttribute("id") })
                                  : ''
                 });
     
-                if (Object.isUndefined(data["position"])) {
+                if (Object.isUndefined(data["number"])) {
                     return content;
                 }
                 else {
@@ -60,7 +59,7 @@ var Template = Class.create({
                 return this._template.blog.interpolate({ content:
                     this._template.posts.overall.interpolate({
                         posts: posts,
-                        pager: this.apply("pager_overall", { type: "page", position: data["position"], total: data["total"] })
+                        pager: this.apply("pager_overall", { type: "page", position: data["page"], total: data["total"] })
                     })
                 });
             },
@@ -94,7 +93,7 @@ var Template = Class.create({
 
                 return template.interpolate({
                     number: num,
-                    link:   "#module=blog&#{type}=#{value}".interpolate({ type: data[0], value: num })
+                    link:   "#module=Blog&#{type}=#{value}".interpolate({ type: data["type"], value: num })
                 });
             },
 
@@ -127,20 +126,20 @@ var Template = Class.create({
     
                 var content = template[(start == data["position"]) ? "pager_numbers_current" : "pager_numbers_first"].interpolate({
                     number: start,
-                    link: "#module=blog&#{type}=#{value}".interpolate({ type: data["type"], value: start })
+                    link: "#module=Blog&#{type}=#{value}".interpolate({ type: data["type"], value: start })
                 });
     
                 if (data["total"] > 1) {
                     for (var i = start + 1; i < end; i++) {
-                        content += template[(i == data[1]) ? "pager_numbers_current" : "pager_numbers_inner"].interpolate({
+                        content += template[(i == data["position"]) ? "pager_numbers_current" : "pager_numbers_inner"].interpolate({
                             number: i,
-                            link: "#module=blog&#{type}=#{value}".interpolate({ type: data[0], value: i })
+                            link: "#module=Blog&#{type}=#{value}".interpolate({ type: data["type"], value: i })
                         });
                     }
 
-                    content += template[(end == data[1]) ? "pager_numbers_current" : "pager_numbers_last"].interpolate({
+                    content += template[(end == data["position"]) ? "pager_numbers_current" : "pager_numbers_last"].interpolate({
                         number: end,
-                        link: "#module=blog&#{type}=#{value}".interpolate({ type: data[0], value: end })
+                        link: "#module=Blog&#{type}=#{value}".interpolate({ type: data["type"], value: end })
                     });
                 }
     
@@ -162,7 +161,7 @@ var Template = Class.create({
     
                 return template.interpolate({
                     number: num,
-                    link: "#module=blog&#{type}=#{value}".interpolate({ type: data["type"], value: num })
+                    link: "#module=Blog&#{type}=#{value}".interpolate({ type: data["type"], value: num })
                 });
             },
 
