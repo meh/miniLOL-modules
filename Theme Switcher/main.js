@@ -73,7 +73,7 @@ miniLOL.module.create("Theme Switcher", {
         else if (type == "theme") {
             return this.themes.template().theme.interpolate({
                 name: data,
-                SELECTED: (data == this.theme) ? "SELECTED" : ""
+                SELECTED: (data == this.theme) ? "SELECTED" : ''
             });
         }
     }
