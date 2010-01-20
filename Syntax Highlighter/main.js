@@ -63,7 +63,9 @@ miniLOL.module.create("Syntax Highlighter", {
             miniLOL.theme.style.load("shTheme"+miniLOL.config["Syntax Highlighter"].style, this.root+"/resources/styles");
         }
 
-        Event.observe(document, ":go", this.execute);
+        Event.observe(document, ":go", function () {
+            miniLOL.module.execute("Syntax Highlighter");
+        });
     },
 
     loadFile: function (name) {
