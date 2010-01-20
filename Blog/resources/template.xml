@@ -109,7 +109,7 @@
 
     <manage>
         <admin><![CDATA[
-            {[<a href="#module=blog&edit&id=#{post_id}">edit</a>] [<a href="#module=blog&delete&do&id=#{post_id}">delete</a>]}
+            {[<a href="#module=blog&edit&id=#{id}">edit</a>] [<a href="#module=blog&delete&do&id=#{id}">delete</a>]}
         ]]></admin>
 
         <post><![CDATA[
@@ -122,10 +122,6 @@
                 #{editor}
                 <br/><br/><input type="button" value="Post" onclick="miniLOL.module.execute('blog', { post: true, do: true, title: encodeURIComponent($('title').value), author: encodeURIComponent($('author').value), date: encodeURIComponent(new Date().toString()), content: encodeURIComponent($('editor').value) });"/>
             </form>
-
-            <script>
-            $('editor').setStyle({ height: (($('body').getHeight() - 150)) + 'px' });
-            </script>
         ]]></post>
 
         <edit><![CDATA[
@@ -136,14 +132,13 @@
                 </table><br/>
                 Content:<br/>
                 #{editor}
-                <input type="hidden" id="post_id" value="#{post_id}"/>
+                <input type="hidden" id="post_id" value="#{id}"/>
                 <input type="hidden" id="date" value="#{date}"/>
                 <br/><br/><input type="button" value="Post" onclick="miniLOL.module.execute('blog', { edit: true, do: true, id: $('post_id').value, title: encodeURIComponent($('title').value), author: encodeURIComponent($('author').value), date: encodeURIComponent($('date').value), content: encodeURIComponent($('editor').value) });"/>
             </form>
 
             <script>
-            $('editor').setStyle({ height: (($('body').getHeight() - 150)) + 'px' });
-            $('editor').value = miniLOL.modules.blog.data.getElementById("#{post_id}").firstChild.nodeValue;
+            $('editor').value = miniLOL.modules.blog.data.getElementById("#{id}").firstChild.nodeValue;
             </script>
         ]]></edit>
     </manage>

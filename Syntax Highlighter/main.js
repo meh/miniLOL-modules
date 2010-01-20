@@ -25,8 +25,8 @@ miniLOL.module.create("Syntax Highlighter", {
 
         for (var conf in miniLOL.config["Syntax Highlighter"]) {
             SyntaxHighlighter.defaults[conf] = (miniLOL.config["Syntax Highlighter"][conf][0] == '[' && confs[conf][confs[conf].length-1] == ']')
-                ? eval(miniLOL.config.SyntaxHighlighter[conf].replace(/[^\d\[\],]/g, ''))
-                : miniLOL.config.SyntaxHighlighter[conf];
+                ? eval(miniLOL.config["Syntax Highlighter"][conf].replace(/[^\d\[\],]/g, ''))
+                : miniLOL.config["Syntax Highlighter"][conf];
         }
 
         this.loaded  = {};
@@ -58,9 +58,9 @@ miniLOL.module.create("Syntax Highlighter", {
 
         miniLOL.theme.style.load("shCore", this.root+"/resources/styles");
 
-        if (miniLOL.config.SyntaxHighlighter.style) {
+        if (miniLOL.config["Syntax Highlighter"].style) {
             miniLOL.theme.style.unload("Syntax Highlighter/style");
-            miniLOL.theme.style.load("shTheme"+miniLOL.config.SyntaxHighlighter.style, this.root+"/resources/styles");
+            miniLOL.theme.style.load("shTheme"+miniLOL.config["Syntax Highlighter"].style, this.root+"/resources/styles");
         }
 
         Event.observe(document, ":go", this.execute);

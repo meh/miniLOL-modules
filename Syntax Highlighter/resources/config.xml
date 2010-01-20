@@ -4,7 +4,7 @@
     <!ELEMENT configuration ANY>
 ]>
 
-<configuration domain="SyntaxHighlighter">
+<configuration domain="Syntax Highlighter">
     <style>Default</style>
     <tagName>code</tagName>
 </configuration>

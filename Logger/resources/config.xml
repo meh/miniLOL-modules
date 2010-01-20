@@ -7,7 +7,7 @@
     >
 ]>
 
-<configuration domain="logger">
+<configuration domain="Logger">
     <fileName>logs.php</fileName>
     <protected>true</protected>
     <priority>50</priority>
