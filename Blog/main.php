@@ -129,11 +129,11 @@ else {
 
         echo 'The post has been modified.';
     }
-    else if (isset($_REQUEST['delete'])) {
+    else if (isset($_REQUEST['remove'])) {
         $data->documentElement->removeChild($post);
         $data->save('resources/data.xml');
     
-        echo 'The post has been deleted.';
+        echo 'The post has been removed.';
     }
 }
 

@@ -138,7 +138,7 @@ var Blog = Class.create({
         });
     },
 
-    delete: function () {
+    remove: function () {
         var data; 
         var type;
 
@@ -151,9 +151,9 @@ var Blog = Class.create({
             type = '';
         }
 
-        miniLOL.module.execute("Logger", ["log", 100, "Blog", "delete", type, data]);
+        miniLOL.module.execute("Logger", ["log", 100, "Blog", "remove", type, data]);
 
-        new Ajax.Request(this.root+"/main.php?delete&"+type, {
+        new Ajax.Request(this.root+"/main.php?remove&"+type, {
             method: 'post',
 
             parameters: data,    

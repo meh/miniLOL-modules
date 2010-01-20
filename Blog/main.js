@@ -27,7 +27,7 @@ miniLOL.module.create("Blog", {
     },
 
     execute: function (args) {
-        if (args["post"] || args["edit"] || args["delete"]) {
+        if (args["post"] || args["edit"] || args["remove"]) {
             // if there's no id and it's not posting a post (lol) go batshit.
             if (!args["id"] && !(args["post"] && !args["comment"])) {
                 miniLOL.content.set("You're doing it wrong.");
@@ -126,14 +126,14 @@ miniLOL.module.create("Blog", {
                         return false;
                     }
                 }
-                else if (args["delete"]) {
+                else if (args["remove"]) {
                     if (!args["id"]) {
                         miniLOL.content("You're doing it wrong.", miniLOL.theme.content(), true);
                         return false;
                     }
         
                     if (args["do"]) {
-                        this.blog.delete({ id: args["id"] });
+                        this.blog.remove({ id: args["id"] });
                     }
                     else {
                         miniLOL.content.set("You're doing it wrong.");
