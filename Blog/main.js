@@ -133,6 +133,9 @@ miniLOL.module.create("Blog", {
             miniLOL.content.set("Not implemented yet.");
             return false;
         }
+        else if (args["rehash"]) {
+            this.blog.rehash();
+        }
         else {
             args["page"] = args["page"] || 1;
             

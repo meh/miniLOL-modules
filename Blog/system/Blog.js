@@ -105,7 +105,7 @@ var Blog = Class.create({
 
             onSuccess: function (http) {
                 miniLOL.content.set(http.responseText);
-                miniLOL.module.execute("Blog", "rehash");
+                miniLOL.module.execute("Blog", { rehash: true });
             },
 
             onFailure: function () {

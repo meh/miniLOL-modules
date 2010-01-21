@@ -13,7 +13,7 @@
 
 define('__VERSION__', '0.3');
 
-require_once('../security/utils.php');
+require_once('../Security/utils.php');
 
 session_set_cookie_params(60*60*24*365, '/');
 session_start();
