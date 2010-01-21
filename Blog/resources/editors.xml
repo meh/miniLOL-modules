@@ -11,6 +11,6 @@
 
 <editors>
     <editor type="simple"><![CDATA[
-        <textarea style="height: 100%;" id="editor"></textarea>
+        <textarea id="editor"></textarea>
     ]]></editor>
 </editors>

@@ -15,6 +15,8 @@ miniLOL.module.create("Logger", {
 
     type: "passive",
 
+    aliases: ["logger"],
+
     dependencies: ["Security"],
 
     initialize: function () {

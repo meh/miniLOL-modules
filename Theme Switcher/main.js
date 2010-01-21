@@ -15,6 +15,8 @@ miniLOL.module.create("Theme Switcher", {
 
     type: "passive",
 
+    aliases: ["ThemeSwitcher"],
+
     initialize: function () {
         miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
 

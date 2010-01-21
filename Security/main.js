@@ -14,6 +14,8 @@ miniLOL.module.create("Security", {
     version: "0.2.3",
 
     type: "passive",
+
+    aliases: ["security"],
     
     initialize: function () {
         if (!miniLOL.theme.style.exists("Security/style")) {

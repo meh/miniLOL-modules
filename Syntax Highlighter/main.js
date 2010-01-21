@@ -15,6 +15,8 @@ miniLOL.module.create("Syntax Highlighter", {
 
     type: "passive",
 
+    aliases: ["SyntaxHighlighter"],
+
     initialize: function () {
         miniLOL.utils.require(this.root+"/system/shCore.js");
 

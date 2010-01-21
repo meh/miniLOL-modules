@@ -17,6 +17,8 @@ miniLOL.module.create("Blog", {
 
     type: "active",
 
+    aliases: ["blog"],
+
     initialize: function () {
         this.Blog = miniLOL.utils.require(this.root+"/system/Blog.js");
         this.blog = new this.Blog(this.root, "/resources/data.xml", "/resources/config.xml", "/resources/style", "/resources/template", "/resources/editors");
