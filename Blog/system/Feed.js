@@ -66,7 +66,7 @@ var Feed = Class.create({
             var max    = this._max || posts.length;
             
             result += ("<?xml version='1.0' encoding='utf-8'?>\n"
-                + "<rss vesion='2.0'>\n"
+                + "<rss version='2.0'>\n"
                 + "    <channel>\n"
                 + "        <title><![CDATA[#{title}]]></title>\n"
                 + "        <description><![CDATA[#{description}]]></description>\n"

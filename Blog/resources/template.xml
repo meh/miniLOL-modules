@@ -138,7 +138,7 @@
             </form>
 
             <script>
-            $('editor').value = miniLOL.modules.blog.data.getElementById("#{id}").firstChild.nodeValue;
+            $('editor').value = miniLOL.module.get("Blog").blog.getPost("#{id}").firstChild.nodeValue;
             </script>
         ]]></edit>
     </manage>
