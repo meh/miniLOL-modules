@@ -73,7 +73,19 @@ var Blog = Class.create({
         miniLOL.resource.load(miniLOL.resources.config, This.root+config);
 
         this.Template = miniLOL.utils.require(this.root+"/system/Template.js");
-        this.template = new this.Template(root, style, template, editors);
+        this.template = new this.Template(this.root, style, template, editors);
+
+        this.Feed = miniLOL.utils.require(this.root+"/system/Feed.js");
+        this.feed = new this.Feed(this.root, {
+            path:    miniLOL.config["Blog"].feed.path,
+            type:    miniLOL.config["Blog"].feed.type,
+            version: miniLOL.config["Blog"].feed.version,
+            max:     miniLOL.config["Blog"].feed.max,
+
+            title:       miniLOL.config["Blog"].feed.title,
+            description: miniLOL.config["Blog"].feed.description,
+            language:    miniLOL.config["Blog"].feed.language
+        });
     },
 
     post: function () {
@@ -141,7 +153,7 @@ var Blog = Class.create({
 
             onSuccess: function (http) {
                 miniLOL.content.set(http.responseText);
-                miniLOL.resource.reload(miniLOL.module.get("Blog").resource);
+                miniLOL.module.execute("Blog", { rehash: true });
             },
 
             onFailure: function () {
@@ -177,7 +189,7 @@ var Blog = Class.create({
 
             onSuccess: function (http) {
                 miniLOL.content.set(http.responseText);
-                miniLOL.resource.reload(miniLOL.module.get("Blog").resource);
+                miniLOL.module.execute("Blog", { rehash: true });
             },
 
             onFailure: function () {
@@ -188,6 +200,7 @@ var Blog = Class.create({
 
     rehash: function () {
         miniLOL.resource.reload(this.resource);
+        this.feed.update(this._data);
     },
 
     getPost: function (id) {

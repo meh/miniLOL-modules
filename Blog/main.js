@@ -129,10 +129,6 @@ miniLOL.module.create("Blog", {
                 }
             }
         }
-        else if (args["build"]) {
-            miniLOL.content.set("Not implemented yet.");
-            return false;
-        }
         else if (args["rehash"]) {
             this.blog.rehash();
         }

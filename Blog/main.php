@@ -18,10 +18,6 @@ require_once('../Security/utils.php');
 session_set_cookie_params(60*60*24*365, '/');
 session_start();
 
-if (isset($_REQUEST['retrieve'])) {
-    exit;
-}
-
 if (@!$_SESSION['miniLOL']['admin']) {
     echo "You're doing it wrong.";
     exit;
@@ -30,33 +26,18 @@ if (@!$_SESSION['miniLOL']['admin']) {
 security_waitUnlock();
 security_lock();
 
+if (isset($_REQUEST['feed'])) {
+    file_put_contents('../../'.security_getRequest('feed'), security_getRequest('content'));
+    security_unlock();
+    exit;
+}
+
 $config = simplexml_load_file('resources/config.xml');
 
 $data = DOMDocument::load('resources/data.xml');
 $data->preserveWhiteSpace = false;
 $data->formatOutput       = true;
 
-if (isset($_REQUEST['build'])) {
-    if (!isset($_REQUEST['type'])) {
-        $_REQUEST['type']    = $config->feed->type;
-        $_REQUEST['version'] = $config->feed->version;
-    }
-
-    if ($_REQUEST['type'] == 'rss') {
-        if ($_REQUEST['version'] == '1.0') {
-            
-        }
-        else if ($_REQUEST['version'] = '2.0') {
-
-        }
-    }
-    else if ($_REQUEST['type'] == 'atom') {
-
-    }
-
-    security_unlock();
-    exit;
-}
 
 if (isset($_REQUEST['comment'])) {
     $post = $data->getElementById($_REQUEST['parent']);
