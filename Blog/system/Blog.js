@@ -118,6 +118,7 @@ var Blog = Class.create({
             onSuccess: function (http) {
                 miniLOL.content.set(http.responseText);
                 miniLOL.module.execute("Blog", { rehash: true });
+                miniLOL.module.execute("Blog", { feed: true, build: true });
             },
 
             onFailure: function () {
@@ -154,6 +155,7 @@ var Blog = Class.create({
             onSuccess: function (http) {
                 miniLOL.content.set(http.responseText);
                 miniLOL.module.execute("Blog", { rehash: true });
+                miniLOL.module.execute("Blog", { feed: true, build: true });
             },
 
             onFailure: function () {
@@ -190,6 +192,7 @@ var Blog = Class.create({
             onSuccess: function (http) {
                 miniLOL.content.set(http.responseText);
                 miniLOL.module.execute("Blog", { rehash: true });
+                miniLOL.module.execute("Blog", { feed: true, build: true });
             },
 
             onFailure: function () {
@@ -200,7 +203,6 @@ var Blog = Class.create({
 
     rehash: function () {
         miniLOL.resource.reload(this.resource);
-        this.feed.update(this._data);
     },
 
     getPost: function (id) {

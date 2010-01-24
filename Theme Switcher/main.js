@@ -11,7 +11,7 @@
 *********************************************************************/
 
 miniLOL.module.create("Theme Switcher", {
-    version: "0.2",
+    version: "0.2.1",
 
     type: "passive",
 
@@ -19,10 +19,14 @@ miniLOL.module.create("Theme Switcher", {
 
     initialize: function () {
         miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
+        miniLOL.resource.load(miniLOL.resources.functions, this.root+"/resources/functions.xml");
 
         this.Themes = miniLOL.utils.require(this.root+"/system/Themes.js");
-        this.themes = new this.Themes("template", this.root+"/resources");
-        
+        this.themes = new this.Themes;
+
+        this.Template = miniLOL.utils.require(this.root+"/system/Template.js");
+        this.template = new this.Template("template", this.root+"/resources");
+
         if (!this.themes.load(this.root+"/resources/themes.xml")) {
             return false;
         }
@@ -36,7 +40,7 @@ miniLOL.module.create("Theme Switcher", {
         }
 
         Event.observe(document, ":module.loaded", function (event) {
-            if (event.memo == "Theme Switcher") {
+            if (event.memo == "Theme Switcher" && location.href.parseQuery().type != "theme") {
                 miniLOL.module.execute("Theme Switcher", { theme: miniLOL.module.get("Theme Switcher").theme });
             }
         })
@@ -51,32 +55,10 @@ miniLOL.module.create("Theme Switcher", {
             new CookieJar({ expires: 60 * 60 * 24 * 365 }).set("theme", args["theme"]);
         }
         else if (args["chooser"]) {
-            miniLOL.content.set(this.parse(null, this.themes.toArray()));
+            miniLOL.content.set(this.template.apply("global", this.themes.toArray()));
         }
         else {
             miniLOL.theme.load(args["theme"], true);
-        }
-    },
-
-    parse: function (type, data) {
-        if (!type) {
-            var themes = '';
-            for (var i = 0; i < data.length; i++) {
-                themes += this.parse("theme", data[i]);
-            }
-
-            return this.parse("global", themes);
-        }
-        else if (type == "global") {
-            return this.themes.template().global.interpolate({
-                data: data
-            });
-        }
-        else if (type == "theme") {
-            return this.themes.template().theme.interpolate({
-                name: data,
-                SELECTED: (data == this.theme) ? "SELECTED" : ''
-            });
         }
     }
 });

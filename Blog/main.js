@@ -24,7 +24,7 @@ miniLOL.module.create("Blog", {
         this.blog = new this.Blog(this.root, "/resources/data.xml", "/resources/config.xml", "/resources/style", "/resources/template", "/resources/editors");
 
         Event.observe(document, ":refresh", function () {
-            miniLOL.module.get("Blog").blog.template.reload();
+            miniLOL.module.get("Blog").blog.rehash();
         });
     },
 
@@ -131,6 +131,14 @@ miniLOL.module.create("Blog", {
         }
         else if (args["rehash"]) {
             this.blog.rehash();
+        }
+        else if (args["feed"]) {
+            if (args["build"]) {
+                this.blog.feed.update(this.blog._data);
+            }
+        }
+        else if (args["dashboard"]) {
+            miniLOL.content.set(this.blog.template.apply("dashboard"));
         }
         else {
             args["page"] = args["page"] || 1;

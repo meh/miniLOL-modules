@@ -13,14 +13,7 @@
 (function () {
 
 var Themes = Class.create({
-    initialize: function (template, path) {
-        this._template = miniLOL.theme.template.load("Theme Switcher/template")
-                      || miniLOL.theme.template.load(template, path);
-
-        if (!this._template) {
-            throw new Error("Theme Switcher template not found.");
-        }
-
+    initialize: function () {
         this._themes = [];
     },
 
@@ -49,13 +42,6 @@ var Themes = Class.create({
 
     exists: function (theme) {
         return this._themes.indexOf(theme) >= 0;
-    },
-
-    template: function () {
-        return {
-            global: this._template.getElementsByTagName("global")[0].firstChild.nodeValue,
-            theme:  this._template.getElementsByTagName("theme")[0].firstChild.nodeValue
-        };
     },
 
     toArray: function () {

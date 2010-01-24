@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE functions [
+    <!ELEMENT functions (function*)>
+
+    <!ELEMENT function (#PCDATA)>
+    <!ATTLIST function name CDATA #REQUIRED>
+]>
+
+<functions>
+    <function name="theme"><![CDATA[
+        if (args.theme != miniLOL.theme.name) {
+            miniLOL.module.execute("Theme Switcher", { theme: args.theme });
+        }
+    ]]></function>
+</functions>
