@@ -42,7 +42,7 @@ var Template = Class.create({
         "theme": function (data) {
             return this._template.getElementsByTagName("theme")[0].firstChild.nodeValue.interpolate({
                 name: data,
-                SELECTED: (data == this.theme) ? "SELECTED" : ''
+                SELECTED: (data == miniLOL.theme.name) ? "SELECTED" : ''
             });
         }
     }
