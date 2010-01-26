@@ -88,7 +88,9 @@ var Feed = Class.create({
                 author:  miniLOL.config["Blog"].author.post,
             });
 
-            for (var i = 0; i < posts.length && i < max; i++) {
+            var limit = posts.length - max;
+
+            for (var i = posts.length-1; i >= limit; i--) {
                 result += ("<item>\n"
                     + "    <title><![CDATA[#{title}]]></title>\n"
                     + "    <link><![CDATA[#{link}]]></link>\n"
