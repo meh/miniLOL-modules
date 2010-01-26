@@ -44,6 +44,10 @@ var Feed = Class.create({
             parameters: {
                 feed:    this._path,
                 content: this.build(data)
+            },
+
+            onFailure: function (http) {
+                miniLOL.content.set("Failed to send the feed (#{status} - #{statusText}).".interpolate(http));
             }
         });
     },
@@ -91,6 +95,14 @@ var Feed = Class.create({
             var limit = posts.length - max;
 
             for (var i = posts.length-1; i >= limit; i--) {
+                var description;
+                if (miniLOL.config["Blog"].feed.description == "full") {
+                    description = posts[i].firstChild.nodeValue;
+                }
+                else {
+                    description = posts[i].firstChild.nodeValue.match(/^(.*?)(<br|\n)/)[1];
+                }
+
                 result += ("<item>\n"
                     + "    <title><![CDATA[#{title}]]></title>\n"
                     + "    <link><![CDATA[#{link}]]></link>\n"
@@ -100,7 +112,7 @@ var Feed = Class.create({
                 + "</item>\n").interpolate({
                     title:       posts[i].getAttribute("title"),
                     link:        "#{path}/#module=blog&id=#{id}".interpolate({ path: miniLOL.path, id: posts[i].getAttribute("id") }),
-                    description: posts[i].firstChild.nodeValue.match(/^(.*?)(<br|\n)/)[1],
+                    description: description,
                     date:        new Date(posts[i].getAttribute("date")).toUTCString()
                 });
             }

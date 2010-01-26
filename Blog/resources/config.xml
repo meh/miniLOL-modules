@@ -17,5 +17,7 @@
         <path>/feed.rss</path>
         <type>rss</type>
         <version>2.0</version>
+        <description>full</description>
+        <max>10</max>
     </feed>
 </configuration>
