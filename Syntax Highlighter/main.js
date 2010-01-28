@@ -44,11 +44,13 @@ miniLOL.module.create("Syntax Highlighter", {
                 var langs = http.responseXML.getElementsByTagName("language");
 
                 for (var i = 0; i < langs.length; i++) {
-                    This.langs[langs[i].getAttribute("file")] = langs[i].getAttribute("aliases");
+                    var file = This.langs[langs[i].getAttribute("file")] = langs[i].getAttribute("aliases");
             
-                    var split = langs[i].getAttribute("aliases").split(/ /);
-                    for (var h = 0; h < split.length; h++) {
-                        This.aliases[split[h]] = langs[i].getAttribute("file");
+                    if (file) {
+                        var split = file.split(/ /);
+                        for (var h = 0; h < split.length; h++) {
+                            This.aliases[split[h]] = file;
+                        }
                     }
                 }
             },
@@ -99,9 +101,9 @@ miniLOL.module.create("Syntax Highlighter", {
 
         var tags = $$(SyntaxHighlighter.config["tagName"]);
         for (var i = 0; i < tags.length; i++) {
-            var alias = tags[i].getAttribute("class").match(/brush:\s*(.*?)(;|$)/);
+            var alias = tags[i].getAttribute("class");
 
-            if (alias) {
+            if (alias = alias.match(/brush:\s*(.*?)(;|$)/)) {
                 this.loadFile(this.aliases[alias[1]]);
             }
         }

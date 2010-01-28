@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE template [
+    <!ELEMENT template ANY>
+]>
+
+<template>
+    <PS1><![CDATA[
+        <div class="PS1">#{PWD}<div class="command"><input type="text" id="command"/></div></div>
+    ]]></PS1>
+</template>

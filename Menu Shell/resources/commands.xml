@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE commands [
+    <!ELEMENT commands (command*)>
+
+    <!ELEMENT command (PCDATA)>
+    <!ATTLIST command
+        name    CDATA   #REQUIRED
+    >
+]>
+
+<commands>
+    <command name="cd" length="1"><![CDATA[
+        return arguments[0];
+    ]]></command>
+
+    <command name="export">
+        
+    </command>
+</commands>
