@@ -103,8 +103,10 @@ miniLOL.module.create("Syntax Highlighter", {
         for (var i = 0; i < tags.length; i++) {
             var alias = tags[i].getAttribute("class");
 
-            if (alias = alias.match(/brush:\s*(.*?)(;|$)/)) {
-                this.loadFile(this.aliases[alias[1]]);
+            if (alias) {
+                if (alias = alias.match(/brush:\s*(.*?)(;|$)/)) {
+                    this.loadFile(this.aliases[alias[1]]);
+                }
             }
         }
     },
