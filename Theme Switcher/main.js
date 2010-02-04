@@ -11,15 +11,15 @@
 *********************************************************************/
 
 miniLOL.module.create("Theme Switcher", {
-    version: "0.2.1",
+    version: "0.2.2",
 
     type: "passive",
 
     aliases: ["ThemeSwitcher"],
 
     initialize: function () {
-        miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
-        miniLOL.resource.load(miniLOL.resources.functions, this.root+"/resources/functions.xml");
+        miniLOL.resources.config.load(this.root+"/resources/config.xml");
+        miniLOL.resources.functions.load(this.root+"/resources/functions.xml");
 
         this.Themes = miniLOL.utils.require(this.root+"/system/Themes.js");
         this.themes = new this.Themes;

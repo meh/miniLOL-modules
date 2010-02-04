@@ -20,7 +20,7 @@ miniLOL.module.create("Logger", {
     dependencies: ["Security"],
 
     initialize: function () {
-        miniLOL.resource.load(miniLOL.resources.config, this.root+"/resources/config.xml");
+        miniLOL.resources.config.load(this.root+"/resources/config.xml");
     },
 
     onGo: function (event) {

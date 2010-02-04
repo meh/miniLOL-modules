@@ -20,8 +20,8 @@ miniLOL.module.create("Syntax Highlighter", {
     initialize: function () {
         miniLOL.utils.require(this.root+"/system/shCore.js");
 
-        miniLOL.resource.load(miniLOL.resources.functions, this.root+"/resources/functions.xml");
-        miniLOL.resource.load(miniLOL.resources.config,    this.root+"/resources/config.xml");
+        miniLOL.resources.functions.load(this.root+"/resources/functions.xml");
+        miniLOL.resources.config.load(this.root+"/resources/config.xml");
 
         SyntaxHighlighter.config["tagName"] = miniLOL.config["Syntax Highlighter"].tagName;
 

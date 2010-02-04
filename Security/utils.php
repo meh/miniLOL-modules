@@ -11,17 +11,17 @@
 *  0. You just DO WHAT THE FUCK YOU WANT TO.                         *
 *********************************************************************/
 
-function security_lock ($lock = 'resources/.lock')
+function security_lock ($lock = '.lock')
 {
     touch($lock);
 }
 
-function security_unlock ($lock = 'resources/.lock')
+function security_unlock ($lock = '.lock')
 {
     unlink($lock);
 }
 
-function security_waitUnlock ($lock = 'resources/.lock', $maxCycles = 1337, $unlock = false)
+function security_waitUnlock ($lock = '.lock', $maxCycles = 1337, $unlock = false)
 {
     $cycles = 0;
     while (file_exists($lock)) {
