@@ -16,11 +16,11 @@ var Template = Class.create({
     initialize: function (root) {
         this.root = root;
 
-        this._template = miniLOL.theme.template.load("Theme Switcher/template")
+        this._template = miniLOL.theme.template.load("Language/template")
                       || miniLOL.theme.template.load("/resources/template", this.root);
 
         if (!this._template) {
-            throw new Error("Theme Switcher template not found.");
+            throw new Error("Language template not found.");
         }
     },
 
@@ -33,7 +33,7 @@ var Template = Class.create({
             var themes = '';
 
             for (var i = 0; i < data.length; i++) {
-                themes += this.apply("theme", data[i]);
+                themes += this.apply("language", data[i]);
             }
            
             return this._template.getElementsByTagName("global")[0].firstChild.nodeValue.interpolate({
@@ -41,8 +41,8 @@ var Template = Class.create({
             });
         },
 
-        "theme": function (data) {
-            return this._template.getElementsByTagName("theme")[0].firstChild.nodeValue.interpolate({
+        "language": function (data) {
+            return this._template.getElementsByTagName("language")[0].firstChild.nodeValue.interpolate({
                 name: data,
                 SELECTED: (data == miniLOL.theme.name) ? "SELECTED" : ''
             });

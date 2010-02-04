@@ -55,7 +55,30 @@ var Languages = Class.create({
         this.resource.load(this.root+languages);
 
         this.Pages = miniLOL.utils.require(this.root+"/system/Pages.js");
-        this.Menus = miniLOL.utils.require(this.root+"/system/Pages.js");
+        this.Menus = miniLOL.utils.require(this.root+"/system/Menus.js");
+
+        this.pages = new this.Pages(this._languages);
+        this.menus = new this.Menus(this._languages);
+    },
+
+    set: function (lang) {
+        var language = this._languages.find(function (current) {
+            if (current.name == lang || current.code == lang) {
+                return true;
+            }
+        });
+
+        if (!language) {
+            throw new Error("`#{language}` isn't in the languages list.".interpolate({
+                language: lang
+            });
+        }
+
+        this._language = language;
+    },
+
+    toArray: function () {
+        return this._languages;
     }
 });
 

@@ -21,20 +21,39 @@ miniLOL.module.create("Language", {
 
     initialize: function () {
         this.Languages = miniLOL.utils.require(this.root+"/system/Languages.js");
-        this.languages = new this.Languages(this.root, "/resources/languages.xml");
+        this._languages = new this.Languages(this.root, "/resources/languages.xml");
 
-        this.languages.pages.load("/resources/pages");
-        this.languages.menus.load("/resources/menus");
+        this._languages.pages.load("/resources/pages");
+        this._languages.menus.load("/resources/menus");
+
+        this._languages.set(new CookieJar().get("language") || miniLOL.config["Language"].defaultLanguage);
+
+        this.Template = miniLOL.utils.require(this.root+"/system/Template.js");
+        this._template = new this.Template(this.root);
     },
 
     execute: function (args) {
         if (args["page"]) {
             if (args["external"]) {
-                miniLOL.content.set(this.pages.external(args["page"]));
+                miniLOL.content.set(this._languages.page(args["page"], true));
             }
             else {
-                miniLOL.content.set(this.pages.get(args["page"]));
+                miniLOL.content.set(this._languages.page(args["page"]));
             }
+        }
+        else if (args["choose"]) {
+            new CookieJar({ expires: 60 * 60 * 24 * 365 }).set("language", args["lang"]);
+
+            if (args["apply"]) {
+                this.execute();
+            }
+        }
+        else if (args["chooser"]) {
+            miniLOL.content.set(this._template.apply("global", this._languages.toArray());
+        }
+        else {
+            miniLOL.menu.change(miniLOL.menu.current);
+            miniLOL.go(location.href);
         }
 
         return true;

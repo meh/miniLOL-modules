@@ -65,7 +65,7 @@ var Blog = Class.create({
         miniLOL.resources.config.load(this.root+config);
 
         this.Template = miniLOL.utils.require(this.root+"/system/Template.js");
-        this.template = new this.Template(this.root, style, template, editors);
+        this.template = new this.Template(this.root);
 
         this.Feed = miniLOL.utils.require(this.root+"/system/Feed.js");
         this.feed = new this.Feed(this.root, {

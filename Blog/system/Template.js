@@ -13,13 +13,13 @@
 (function () {
 
 var Template = Class.create({
-    initialize: function (root, style, template, editors) {
+    initialize: function (root) {
         this.root = root;
 
-        this.load(style, template, editors);
+        this.load();
     },
 
-    load: function (style, template, editors) {
+    load: function () {
         this._names = {
             style:    style,
             template: template,
@@ -27,12 +27,12 @@ var Template = Class.create({
         };
 
         if (!miniLOL.theme.style.exists("Blog/style")) {
-            miniLOL.theme.style.load(style, this.root);
+            miniLOL.theme.style.load("/resources/style", this.root);
         }
 
         // load and parse blog's template
         var template = miniLOL.theme.template.load("Blog/template")
-                    || miniLOL.theme.template.load(template, this.root);
+                    || miniLOL.theme.template.load("/resources/template", this.root);
 
         if (!template) {
             if (!miniLOL.error()) {
@@ -88,7 +88,7 @@ var Template = Class.create({
 
         // load and parse blog's editors
         var editors = miniLOL.theme.template.load("Blog/editors")
-                   || miniLOL.theme.template.load(editors, this.root);
+                   || miniLOL.theme.template.load("/resources/editors", this.root);
 
         if (!editors) {
             if (!miniLOL.error()) {
