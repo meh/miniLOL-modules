@@ -45,7 +45,7 @@ var Blog = Class.create({
                     }
                 });
 
-                if (!res.data) {
+                if (!data.data) {
                     return false;
                 }
 
@@ -59,7 +59,7 @@ var Blog = Class.create({
                     cache: {},
                 };
             }
-        };
+        });
 
         this.resource.load(this.root+data);
         miniLOL.resources.config.load(this.root+config);

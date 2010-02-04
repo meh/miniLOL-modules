@@ -17,15 +17,9 @@ var Shell = Class.create({
         this.root = root;
 
         var This = this;
-        this.resource = {
-            name: "Shell Commands",
-
+        this.resource = new miniLOL.Resource("Menu Shell", {
             load: function (path) {
-                if (!this.res) {
-                    this.res = {};
-                }
-
-                This._commands = this.res;
+                This._commands = this._data;
 
                 new Ajax.Request(path, {
                     method: "get",
@@ -42,8 +36,8 @@ var Shell = Class.create({
                             var name = commands[i].getAttribute("name");
 
                             try {
-                                This._commands[name]  = new Function(commands[i].firstChild.nodeValue);
-                                This._commands.length = commands[i].getAttribute("length");
+                                This._commands[name]        = new Function(commands[i].firstChild.nodeValue);
+                                This._commands[name].length = commands[i].getAttribute("length");
                                 
                             }
                             catch (e) {
