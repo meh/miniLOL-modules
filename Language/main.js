@@ -20,8 +20,11 @@ miniLOL.module.create("Language", {
     aliases: ["lang"],
 
     initialize: function () {
-        this.Pages = miniLOL.utils.require(this.root+"/system/Pages.js");
-        this.pages = new this.Pages(this.root, "resources/languages.xml", "/resources/pages");
+        this.Languages = miniLOL.utils.require(this.root+"/system/Languages.js");
+        this.languages = new this.Languages(this.root, "/resources/languages.xml");
+
+        this.languages.pages.load("/resources/pages");
+        this.languages.menus.load("/resources/menus");
     },
 
     execute: function (args) {

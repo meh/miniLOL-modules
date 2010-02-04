@@ -17,21 +17,11 @@ var Blog = Class.create({
         this.root = root;
 
         var This = this;
-        this.resource = {
-            name: "Blog",
+        this.resource = new miniLOL.Resource("Blog", {
+            load: function (path) {
+                var data = this._data;
 
-            load: function (data) {
-                if (!this.res) {
-                    this.res = {
-                        data: null,
-                        cache: {},
-                    };
-
-                    delete This._data;
-                    delete This._cache;
-                } var res = this.res;
-
-                new Ajax.Request(This.root+data + "?failCache=" + Math.random(), {
+                new Ajax.Request(path + "?failCache=" + Math.random(), {
                     method: "get",
                     asynchronous: false,
 
@@ -41,16 +31,11 @@ var Blog = Class.create({
                     },
 
                     onSuccess: function (http) {
-                        var error = miniLOL.utils.checkXML(http.responseXML);
-                        if (error) {
-                            miniLOL.error("Error while parsing blog's data.xml<br/><br/>#{error}".interpolate({
-                                error: error.replace(/\n/g, "<br/>").replace(/ /g, "&nbsp;")
-                            }));
-
+                        if (miniLOL.utils.checkXML(http.responseXML, path)) {
                             return;
                         }
 
-                        res.data = miniLOL.utils.fixDOM(http.responseXML);
+                        data.data = miniLOL.utils.fixDOM(http.responseXML);
                     },
 
                     onFailure: function (http) {
@@ -64,13 +49,20 @@ var Blog = Class.create({
                     return false;
                 }
 
-                This._data  = res.data;
-                This._cache = res.cache;
+                This._data  = this._data.data;
+                This._cache = this._data.cache;
+            },
+
+            clear: function () {
+                this._data = {
+                    data: null,
+                    cache: {},
+                };
             }
         };
 
-        miniLOL.resource.load(this.resource, data);
-        miniLOL.resource.load(miniLOL.resources.config, This.root+config);
+        this.resource.load(this.root+data);
+        miniLOL.resources.config.load(this.root+config);
 
         this.Template = miniLOL.utils.require(this.root+"/system/Template.js");
         this.template = new this.Template(this.root, style, template, editors);
@@ -202,7 +194,7 @@ var Blog = Class.create({
     },
 
     rehash: function () {
-        miniLOL.resource.reload(this.resource);
+        this.resource.reload();
     },
 
     getPost: function (id) {
