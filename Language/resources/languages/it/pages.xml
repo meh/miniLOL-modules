@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE pages [
+    <!ELEMENT pages (page*)>
+
+    <!ELEMENT page ANY>
+    <!ATTLIST page
+        id        ID    #REQUIRED
+        type      CDATA #IMPLIED
+        arguments CDATA ""
+        menu      CDATA #IMPLIED
+        alias     CDATA #IMPLIED
+    >
+
+    <!ELEMENT list (link*, item*, nest*, list*)>
+    <!ATTLIST list
+        class  CDATA "links"
+        before CDATA #IMPLIED
+        after  CDATA #IMPLIED
+        type   CDATA #IMPLIED
+    >
+
+    <!ELEMENT link EMPTY>
+    <!ATTLIST link
+        class       CDATA "link"
+        id          CDATA ""
+        src         CDATA #IMPLIED
+        url         CDATA #IMPLIED
+        href        CDATA #IMPLIED
+        text        CDATA #REQUIRED
+        before      CDATA #IMPLIED
+        after       CDATA #IMPLIED
+        type        CDATA #IMPLIED
+        domain      CDATA #IMPLIED
+        menu        CDATA #IMPLIED
+    >
+
+    <!ELEMENT item EMPTY>
+    <!ATTLIST item
+        class   CDATA   "item"
+        id      CDATA   ""
+        text    CDATA   #REQUIRED
+        before  CDATA   #IMPLIED
+        after   CDATA   #IMPLIED
+    >
+
+    <!ELEMENT nest ANY>
+    <!ATTLIST nest
+        class   CDATA "nest"
+        style   CDATA "margin-left: 10px;"
+    >
+]>
+
+<!--
+This XML file can contain the whole website or it can contain just the main pages.
+
+Writing it is really simple, each page can contain CDATA sections or links collections
+
+Page tags also have type and arguments attributes these are defaults for the page,
+they can be overloaded by the query.
+
+CDATA sections are outputted as they are.
+Links collections are outputted like lists of links.
+
+The example below should be self explanatory.
+-->
+
+<pages>
+    <page id="home">
+        <![CDATA[
+            Questa e' un'homepage.
+        ]]>
+    </page>
+
+    <page id="links">
+        <![CDATA[
+            Questa e' una lista di link:<br/>
+        ]]>
+        <list before="- " style="margin-left: 10px">
+            <link href="#stuff"                     text="Roba"     after="&#160;&#160;&#160;&#160; ~ Link interno"/>
+            <link href="separated"                  text="Separato" after=" ~ Link interno ma in data/" type="raw"/>
+            <link href="#separated"                 text="Separato" after=" ~ Separato aliasato"/>
+            <link href="http://meh.doesntexist.org" text="meh."     after="&#160;&#160;&#160;&#160;&#160; ~ Link esterno"/>
+        </list>
+
+        <![CDATA[<br/>
+            Questa una semplice lista creata automaticamente:<br/>
+        ]]>
+        <list before="# " style="margin-left: 10px">
+            <item text="LOL"/>
+            <item text="WTF"/>
+            <item text="OMG"/>
+        </list>
+    </page>
+
+    <page id="separated" alias="#page=separated"/>
+
+    <page id="stuff" type="simple">
+        <![CDATA[
+            NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER
+            NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER
+            NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER
+        ]]>
+    </page>
+</pages>

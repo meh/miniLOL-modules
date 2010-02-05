@@ -31,8 +31,9 @@ var Languages = Class.create({
                         }
 
                         var languages = http.responseXML.getElementsByTagName("language");
-                        for (var i = 0; i < languages; i++) {
-                            res.push({
+
+                        for (var i = 0; i < languages.length; i++) {
+                            This._languages.push({
                                 code: languages[i].getAttribute("code"),
                                 name: languages[i].getAttribute("name")
                             });
@@ -50,18 +51,23 @@ var Languages = Class.create({
             clear: function () {
                 this._data = [];
             }
-        };
+        });
 
         this.resource.load(this.root+languages);
 
-        this.Pages = miniLOL.utils.require(this.root+"/system/Pages.js");
-        this.Menus = miniLOL.utils.require(this.root+"/system/Menus.js");
-
-        this.pages = new this.Pages(this._languages);
-        this.menus = new this.Menus(this._languages);
+        miniLOL.resources.menus.flush(["resources/menus.xml"]);
+        miniLOL.resources.pages.flush(["resources/pages.xml"]);
     },
 
-    set: function (lang) {
+    set: function (lang, apply) {
+        if (!Object.isString(lang)) {
+            lang = lang.name || lang.code;
+        }
+
+        if (!lang) {
+            throw new Error("No correct language was passed.");
+        }
+        
         var language = this._languages.find(function (current) {
             if (current.name == lang || current.code == lang) {
                 return true;
@@ -71,10 +77,36 @@ var Languages = Class.create({
         if (!language) {
             throw new Error("`#{language}` isn't in the languages list.".interpolate({
                 language: lang
-            });
+            }));
         }
 
+        this._old      = this._language;
         this._language = language;
+
+        new CookieJar({ expires: 60 * 60 * 24 * 365 }).set("language", this._language);
+
+        if (apply) {
+            this.apply();
+        }
+
+        Event.fire(document, ":module.Language.change", this._language);
+    },
+
+    apply: function () {
+        if (miniLOL.__language__ != this._language) {
+            miniLOL.resources.config.flush([this.root+"/resources/#{code}/config.xml".interpolate(this._old)]);
+            miniLOL.resources.menus.flush([this.root+"/resources/#{code}/menus.xml".interpolate(this._old)]);
+            miniLOL.resources.pages.flush([this.root+"/resources/#{code}/pages.xml".interpolate(this._old)]);
+
+            miniLOL.resources.config.load(this.root+"/resources/#{code}/config.xml".interpolate(this._language))
+            miniLOL.resources.menus.load(this.root+"/resources/#{code}/menus.xml".interpolate(this._language));
+            miniLOL.resources.pages.load(this.root+"/resources/#{code}/pages.xml".interpolate(this._language));
+
+            miniLOL.__language__ = this._language;
+        }
+
+        miniLOL.menu.change(miniLOL.menu.current);
+        miniLOL.go(location.href);
     },
 
     toArray: function () {

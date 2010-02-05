@@ -53,6 +53,10 @@ miniLOL.module.create("Theme Switcher", {
             this._theme = args["theme"];
 
             new CookieJar({ expires: 60 * 60 * 24 * 365 }).set("theme", args["theme"]);
+
+            if (args["apply"]) {
+                this.execute({ theme: args["theme"] });
+            }
         }
         else if (args["chooser"]) {
             miniLOL.content.set(this._template.apply("global", this._themes.toArray()));

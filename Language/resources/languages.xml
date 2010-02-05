@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE languages [
+    <!ELEMENT languages (language*)>
+
+    <!ELEMENT language EMPTY>
+    <!ATTLIST langauge
+        name    CDATA   #REQUIRED
+        code    CDATA   #REQUIRED
+    >
+]>
+
+<languages>
+    <language name="English"  code="en"/>
+    <language name="Italiano" code="it"/>
+</languages>

@@ -16,8 +16,14 @@ var Template = Class.create({
     initialize: function (root) {
         this.root = root;
 
-        this._template = miniLOL.theme.template.load("Language/template")
-                      || miniLOL.theme.template.load("/resources/template", this.root);
+        var This = this;
+        Event.observe(document, ":module.Language.change", function (event) {
+            This.set(event.memo);
+        });
+    },
+
+    set: function (language) {
+        this._template = miniLOL.theme.template.load("/resources/languages/#{code}/template".interpolate(language), this.root);
 
         if (!this._template) {
             throw new Error("Language template not found.");
@@ -30,21 +36,21 @@ var Template = Class.create({
 
     _callbacks: {
         "global": function (data) {
-            var themes = '';
+            var languages = '';
 
             for (var i = 0; i < data.length; i++) {
-                themes += this.apply("language", data[i]);
+                languages += this.apply("language", data[i]);
             }
            
             return this._template.getElementsByTagName("global")[0].firstChild.nodeValue.interpolate({
-                data: themes,
+                data: languages,
             });
         },
 
         "language": function (data) {
             return this._template.getElementsByTagName("language")[0].firstChild.nodeValue.interpolate({
-                name: data,
-                SELECTED: (data == miniLOL.theme.name) ? "SELECTED" : ''
+                name: data.name,
+                SELECTED: (data.name == miniLOL.module.get("Language")._languages._language.name) ? "SELECTED" : ''
             });
         }
     }
