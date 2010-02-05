@@ -21,7 +21,7 @@ miniLOL.module.create("Blog", {
 
     initialize: function () {
         this.Blog = miniLOL.utils.require(this.root+"/system/Blog.js");
-        this.blog = new this.Blog(this.root, "/resources/data.xml", "/resources/config.xml", "/resources/style", "/resources/template", "/resources/editors");
+        this.blog = new this.Blog(this.root, "/resources/data.xml", "/resources/config.xml");
 
         Event.observe(document, ":refresh", function () {
             miniLOL.module.get("Blog").blog.rehash();

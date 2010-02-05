@@ -20,12 +20,6 @@ var Template = Class.create({
     },
 
     load: function () {
-        this._names = {
-            style:    style,
-            template: template,
-            editors:  editors
-        };
-
         if (!miniLOL.theme.style.exists("Blog/style")) {
             miniLOL.theme.style.load("/resources/style", this.root);
         }
@@ -105,7 +99,7 @@ var Template = Class.create({
     },
 
     reload: function () {
-        this.load(this._names.style, this._names.template, this._names.editors);
+        this.load();
     },
 
     apply: function (type, data) {

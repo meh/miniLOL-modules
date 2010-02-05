@@ -13,7 +13,7 @@
 (function () {
 
 var Blog = Class.create({
-    initialize: function (root, data, config, style, template, editors) {
+    initialize: function (root, data, config) {
         this.root = root;
 
         var This = this;
