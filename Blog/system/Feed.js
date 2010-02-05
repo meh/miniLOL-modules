@@ -93,6 +93,9 @@ var Feed = Class.create({
             });
 
             var limit = posts.length - max;
+            if (limit <= 0) {
+                limit = posts.length;
+            }
 
             for (var i = posts.length-1; i >= limit; i--) {
                 var description;

@@ -14,7 +14,7 @@
     <editorType>simple</editorType>
 
     <feed>
-        <path>/feed.rss</path>
+        <path>/feed.xml</path>
         <type>rss</type>
         <version>2.0</version>
         <description>full</description>
