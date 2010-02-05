@@ -30,7 +30,7 @@ miniLOL.module.create("Language", {
         this._languages.set(new CookieJar().get("language") || miniLOL.config["Language"].defaultLanguage);
         
         Event.observe(document, ":theme.loaded", function () {
-            if (location.href.parseQuery().type != lang) {
+            if (location.href.parseQuery().type != "lang") {
                 miniLOL.module.execute("Language");
             }
         });
