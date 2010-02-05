@@ -98,9 +98,17 @@ var Languages = Class.create({
             miniLOL.resources.menus.flush([this.root+"/resources/languages/#{code}/menus.xml".interpolate(this._old)]);
             miniLOL.resources.pages.flush([this.root+"/resources/languages/#{code}/pages.xml".interpolate(this._old)]);
 
-            miniLOL.resources.config.load(this.root+"/resources/languages/#{code}/config.xml".interpolate(this._language))
-            miniLOL.resources.menus.load(this.root+"/resources/languages/#{code}/menus.xml".interpolate(this._language));
-            miniLOL.resources.pages.load(this.root+"/resources/languages/#{code}/pages.xml".interpolate(this._language));
+            if (!miniLOL.resources.config.load(this.root+"/resources/languages/#{code}/config.xml".interpolate(this._language))) {
+                return false;
+            }
+
+            if (!miniLOL.resources.menus.load(this.root+"/resources/languages/#{code}/menus.xml".interpolate(this._language))) {
+                return false;
+            }
+
+            if (!miniLOL.resources.pages.load(this.root+"/resources/languages/#{code}/pages.xml".interpolate(this._language))) {
+                return false;
+            }
 
             miniLOL.__language__ = this._language;
         }
