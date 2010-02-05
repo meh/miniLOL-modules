@@ -37,7 +37,7 @@ var Template = Class.create({
             }
            
             return this._template.getElementsByTagName("global")[0].firstChild.nodeValue.interpolate({
-                data: themes,
+                data: themes
             });
         },
 

@@ -56,7 +56,7 @@ var Blog = Class.create({
             clear: function () {
                 this._data = {
                     data: null,
-                    cache: {},
+                    cache: {}
                 };
             }
         });

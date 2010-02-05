@@ -19,6 +19,7 @@ miniLOL.module.create("Language", {
 
     initialize: function () {
         miniLOL.resources.config.load(this.root+"/resources/config.xml");
+        miniLOL.resources.functions.load(this.root+"/resources/functions.xml");
 
         this.Languages  = miniLOL.utils.require(this.root+"/system/Languages.js");
         this._languages = new this.Languages(this.root, "/resources/languages.xml");
@@ -29,7 +30,9 @@ miniLOL.module.create("Language", {
         this._languages.set(new CookieJar().get("language") || miniLOL.config["Language"].defaultLanguage);
         
         Event.observe(document, ":theme.loaded", function () {
-            miniLOL.module.execute("Language");
+            if (location.href.parseQuery().type != lang) {
+                miniLOL.module.execute("Language");
+            }
         });
     },
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE functions [
+    <!ELEMENT functions (function*)>
+
+    <!ELEMENT function (#PCDATA)>
+    <!ATTLIST function name CDATA #REQUIRED>
+]>
+
+<functions>
+    <function name="lang"><![CDATA[
+        miniLOL.module.execute("Language", { choose: args["lang"], apply: true });
+    ]]></function>
+</functions>

@@ -118,7 +118,8 @@ var Languages = Class.create({
     },
 
     page: function (page) {
-        miniLOL.page.load(this.root+"/resources/languages/#{code}/data/#{page}".interpolate({
+        miniLOL.go("#page=../#{root}/resources/languages/#{code}/data/#{page}".interpolate({
+            root: this.root,
             code: this._language.code,
             page: page
         }));

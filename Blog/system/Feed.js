@@ -89,7 +89,7 @@ var Feed = Class.create({
                 date: new Date().toUTCString(),
 
                 version: miniLOL.module.get("Blog").version,
-                author:  miniLOL.config["Blog"].author.post,
+                author:  miniLOL.config["Blog"].author.post
             });
 
             var limit = posts.length - max;

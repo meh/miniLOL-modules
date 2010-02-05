@@ -10,8 +10,6 @@
 *  0. You just DO WHAT THE FUCK YOU WANT TO.                         *
 *********************************************************************/
 
-(function () {
-
 miniLOL.module.create("Blog", {
     version: "0.3",
 
@@ -24,7 +22,7 @@ miniLOL.module.create("Blog", {
         this.blog = new this.Blog(this.root, "/resources/data.xml", "/resources/config.xml");
 
         Event.observe(document, ":refresh", function () {
-            miniLOL.module.get("Blog").blog.rehash();
+            miniLOL.module.execute("Blog", { rehash: true });
         });
     },
 
@@ -193,5 +191,3 @@ miniLOL.module.create("Blog", {
         return true;
     }
 });
-
-})();
