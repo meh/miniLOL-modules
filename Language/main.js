@@ -13,7 +13,9 @@
 miniLOL.module.create("Language", {
     version: "0.1",
 
-    type: "passive",
+    type: "active",
+
+    aliases: ["lang"],
 
     initialize: function () {
         miniLOL.resources.config.load(this.root+"/resources/config.xml");
@@ -25,10 +27,19 @@ miniLOL.module.create("Language", {
         this._template = new this.Template(this.root);
 
         this._languages.set(new CookieJar().get("language") || miniLOL.config["Language"].defaultLanguage);
+        
+        Event.observe(document, ":theme.loaded", function () {
+            miniLOL.module.execute("Language");
+        });
     },
 
     execute: function (args) {
-        if (args["choose"]) {
+        args = args || {};
+
+        if (args["page"]) {
+            this._languages.page(args["page"]);
+        }
+        else if (args["choose"]) {
             this._languages.set(args["lang"], Boolean(args["apply"]));
         }
         else if (args["chooser"]) {

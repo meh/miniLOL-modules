@@ -85,28 +85,35 @@ var Languages = Class.create({
 
         new CookieJar({ expires: 60 * 60 * 24 * 365 }).set("language", this._language);
 
+        Event.fire(document, ":module.Language.change", this._language);
+
         if (apply) {
             this.apply();
         }
-
-        Event.fire(document, ":module.Language.change", this._language);
     },
 
     apply: function () {
         if (miniLOL.__language__ != this._language) {
-            miniLOL.resources.config.flush([this.root+"/resources/#{code}/config.xml".interpolate(this._old)]);
-            miniLOL.resources.menus.flush([this.root+"/resources/#{code}/menus.xml".interpolate(this._old)]);
-            miniLOL.resources.pages.flush([this.root+"/resources/#{code}/pages.xml".interpolate(this._old)]);
+            miniLOL.resources.config.flush([this.root+"/resources/languages/#{code}/config.xml".interpolate(this._old)]);
+            miniLOL.resources.menus.flush([this.root+"/resources/languages/#{code}/menus.xml".interpolate(this._old)]);
+            miniLOL.resources.pages.flush([this.root+"/resources/languages/#{code}/pages.xml".interpolate(this._old)]);
 
-            miniLOL.resources.config.load(this.root+"/resources/#{code}/config.xml".interpolate(this._language))
-            miniLOL.resources.menus.load(this.root+"/resources/#{code}/menus.xml".interpolate(this._language));
-            miniLOL.resources.pages.load(this.root+"/resources/#{code}/pages.xml".interpolate(this._language));
+            miniLOL.resources.config.load(this.root+"/resources/languages/#{code}/config.xml".interpolate(this._language))
+            miniLOL.resources.menus.load(this.root+"/resources/languages/#{code}/menus.xml".interpolate(this._language));
+            miniLOL.resources.pages.load(this.root+"/resources/languages/#{code}/pages.xml".interpolate(this._language));
 
             miniLOL.__language__ = this._language;
         }
 
         miniLOL.menu.change(miniLOL.menu.current);
         miniLOL.go(location.href);
+    },
+
+    page: function (page) {
+        miniLOL.page.load(this.root+"/resources/languages/#{code}/data/#{page}".interpolate({
+            code: this._language.code,
+            page: page
+        }));
     },
 
     toArray: function () {
