@@ -83,17 +83,19 @@ var Languages = Class.create({
         this._old      = this._language;
         this._language = language;
 
+        if (this._old == this._language) {
+            return;
+        }
+
         new CookieJar({ expires: 60 * 60 * 24 * 365 }).set("language", this._language);
 
         Event.fire(document, ":module.Language.change", this._language);
 
-        if (apply) {
-            this.apply();
-        }
+        this.apply(apply);
     },
 
-    apply: function () {
-        if (miniLOL.__language__ != this._language) {
+    apply: function (reload) {
+        if (this._old != this._language) {
             miniLOL.resources.config.flush([this.root+"/resources/languages/#{code}/config.xml".interpolate(this._old)]);
             miniLOL.resources.menus.flush([this.root+"/resources/languages/#{code}/menus.xml".interpolate(this._old)]);
             miniLOL.resources.pages.flush([this.root+"/resources/languages/#{code}/pages.xml".interpolate(this._old)]);
@@ -109,12 +111,12 @@ var Languages = Class.create({
             if (!miniLOL.resources.pages.load(this.root+"/resources/languages/#{code}/pages.xml".interpolate(this._language))) {
                 return false;
             }
-
-            miniLOL.__language__ = this._language;
         }
 
-        miniLOL.menu.change(miniLOL.menu.current);
-        miniLOL.go(location.href);
+        if (reload) {
+            miniLOL.menu.change(miniLOL.menu.current);
+            return miniLOL.go(location.href);
+        }
     },
 
     page: function (page) {
