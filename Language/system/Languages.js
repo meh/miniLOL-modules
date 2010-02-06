@@ -119,10 +119,10 @@ var Languages = Class.create({
         }
     },
 
-    page: function (page) {
+    page: function (page, lang) {
         miniLOL.go("#page=../#{root}/resources/languages/#{code}/data/#{page}".interpolate({
             root: this.root,
-            code: this._language.code,
+            code: lang || this._language.code,
             page: page
         }));
     },

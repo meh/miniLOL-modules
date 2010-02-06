@@ -33,7 +33,7 @@ miniLOL.module.create("Language", {
         args = args || {};
 
         if (args["page"]) {
-            this._languages.page(args["page"]);
+            this._languages.page(args["page"], args["lang"]);
         }
         else if (args["choose"]) {
             this._languages.set(args["lang"], Boolean(args["apply"]));
