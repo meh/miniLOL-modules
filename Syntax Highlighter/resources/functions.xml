@@ -23,7 +23,7 @@
 
         delete args.brush;
 
-        text = '<code class="#{options}">#{source}</code>'.interpolate({
+        text = '<div class="source"><code class="#{options}">#{source}</code></div>'.interpolate({
             options: options,
             source:  text
         });
