@@ -21,10 +21,10 @@ miniLOL.module.create("Logger", {
 
     initialize: function () {
         miniLOL.resources.config.load(this.root+"/resources/config.xml");
-    },
 
-    onGo: function (event) {
-        this.execute("Logger", ["log", 50, "page", "view", event.memo]);
+        Event.observe(document, ":go", function (event) {
+            this.execute("Logger", ["log", 50, "page", "view", event.memo]);
+        });
     },
 
     execute: function (type) {
