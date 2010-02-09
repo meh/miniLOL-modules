@@ -48,7 +48,7 @@
         </stability>
     </version>
 
-    <license uri="http://sam.zoy.org/wtfpl/">WTFPL</license>
+    <license uri="http://www.fsf.org/licensing/licenses/agpl-3.0.html">Affero GNU General Public License</license>
 
     <description>Server side modules infrastructure.</description>
 
