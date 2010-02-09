@@ -66,9 +66,8 @@ class Module
 
         $this->_tree = array();
 
-        $length = strlen($this->_data);
-        $i      = 0;
-        while ($i < $length) {
+        $i = 0;
+        while (true) {
             $name = trim(substr($this->_data, $i, 100));
             $i += 100 + 8 + 8 + 8;
 
@@ -83,18 +82,18 @@ class Module
             $i += 1 + 100 + 255;
 
             if ($type == '5') {
-                $current = $this->_getElement($name);
+                $current = &$this->_getElement($name);
                 $current = array();
             }
             else if (!$type && $size) {
-                $current = $this->_getElement($name);
+                $current = &$this->_getElement($name);
                 $current = substr($this->_data, $i, $size);
                 $i += $size + (512 - ($size % 512));
             }
         }
     }
 
-    private function _getElement ($path) {
+    private function &_getElement ($path) {
         preg_match_all('#([^/]+)(/)?#', $path, $matches);
 
         $current = &$this->_tree;
