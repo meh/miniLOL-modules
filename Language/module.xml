@@ -63,6 +63,11 @@
     <contents>
         <file name="main.js" md5sum="4bf7b72023d32e6fcd727f8fd91e17be"/>
 
+        <directory name="system">
+            <file name="Languages.js" md5sum="6a8a2e27dc5668998fac5730ead253ea"/>
+            <file name="Template.js" md5sum="efa26bb576dd913513dc4bd7260c76f5"/>
+        </directory>
+
         <directory name="resources">
             <file name="config.xml" md5sum="dcc6c661ca534b245a3a260875bd00c5"/>
             <file name="languages.xml" md5sum="48c26e45d04b0beebb463d879a9b0596"/>
@@ -90,11 +95,6 @@
                     </directory>
                 </directory>
             </directory>
-        </directory>
-
-        <directory name="system">
-            <file name="Languages.js" md5sum="6a8a2e27dc5668998fac5730ead253ea"/>
-            <file name="Template.js" md5sum="efa26bb576dd913513dc4bd7260c76f5"/>
         </directory>
     </contents>
 </module>

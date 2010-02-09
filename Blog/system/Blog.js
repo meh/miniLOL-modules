@@ -46,7 +46,7 @@ var Blog = Class.create({
                     },
 
                     onFailure: function (http) {
-                        miniLOL.error("Error while loading config.xml (#{error})".interpolate({
+                        miniLOL.error("Error while loading Blog's data.xml (#{error})".interpolate({
                             error: http.status
                         }));
                     }
