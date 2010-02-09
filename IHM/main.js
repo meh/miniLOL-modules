@@ -22,7 +22,7 @@ miniLOL.module.create("IHM", {
         this.execute();
     },
 
-    execute: function (seconds) {
+    execute: function () {
         this.ihm.apply();
     }
 });

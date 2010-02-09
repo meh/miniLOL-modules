@@ -17,7 +17,7 @@ var IHM = Class.create({
         this.root = root;
 
         var This = this;
-        this._resource = new miniLOL.Resource({
+        this._resource = new miniLOL.Resource("IHM.browsers", {
             load: function (path) {
                 new Ajax.Request(path, {
                     method: "get",
@@ -27,7 +27,7 @@ var IHM = Class.create({
                         var hates = http.responseXML.getElementsByTagName("hate");
 
                         for (var i = 0; i < hates.length; i++) {
-                            this._data[hates[i].getAttribute("browser")] = {
+                            This._browsers[hates[i].getAttribute("browser")] = {
                                 wait:    parseFloat(hates[i].getAttribute("wait")) || 23,
                                 message: hates[i].firstChild.nodeValue
                             };
@@ -60,7 +60,7 @@ var IHM = Class.create({
             }
         }
 
-        if (!brower) {
+        if (!browser) {
             return false;
         }
 
