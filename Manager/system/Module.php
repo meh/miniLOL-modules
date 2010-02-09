@@ -26,7 +26,19 @@ class Module
         }
         else {
             $this->_compression = Module::parseCompression($data);
-            $this->_compressed  = file_get_contents($data); 
+            $this->_compressed  = @file_get_contents($data); 
+        }
+
+        if ($this->_compressed === false) {
+            if (preg_match('#^http://#', $data) && extension_loaded('curl')) {
+                $curl = curl_init(urlencode($data));
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                $this->_compressed = curl_exec($curl);
+            }
+        }
+
+        if (!$this->_compressed) {
+            throw new Exception('Could not get the data.');
         }
     }
 
@@ -35,18 +47,69 @@ class Module
         $this->_createTree();
     }
 
+    public function debug ()
+    {
+        print_r($this->_tree);
+    }
+
     private function _createTree ()
     {
-        $func = Module::decompressFunction($this->_compression);
+        if ($this->_data) {
+            return;
+        }
 
+        $func = Module::decompressFunction($this->_compression);
         $this->_data = $func($this->_compressed);
+
+        unset($this->_compression);
+        unset($this->_compressed);
+
+        $this->_tree = array();
+
+        $length = strlen($this->_data);
+        $i      = 0;
+        while ($i < $length) {
+            $name = trim(substr($this->_data, $i, 100));
+            $i += 100 + 8 + 8 + 8;
+
+            if (!$name) {
+                break;
+            }
+
+            $size = octdec(trim(substr($this->_data, $i, 12)));
+            $i += 12 + 12 + 8;
+
+            $type = substr($this->_data, $i, 1);
+            $i += 1 + 100 + 255;
+
+            if ($type == '5') {
+                $current = $this->_getElement($name);
+                $current = array();
+            }
+            else if (!$type && $size) {
+                $current = $this->_getElement($name);
+                $current = substr($this->_data, $i, $size);
+                $i += $size + (512 - ($size % 512));
+            }
+        }
+    }
+
+    private function _getElement ($path) {
+        preg_match_all('#([^/]+)(/)?#', $path, $matches);
+
+        $current = &$this->_tree;
+        foreach ($matches[1] as $element) {
+            $current = &$current[$element];
+        }
+
+        return $current;
     }
 
     public static function decompressFunction ($algorithm)
     {
         switch ($matches[1]) {
             case 'gz':
-            if (!function_exists('gzuncompress')) {
+            if (!extension_loaded('zlib')) {
                 throw new Exception('zlib module is missing.');
             }
             else {
@@ -55,7 +118,7 @@ class Module
             break;
 
             case 'bz2':
-             if (!function_exists('bzdecompress')) {
+             if (!extension_loaded('bzip2')) {
                 throw new Exception('bzip2 module is missing.');
             }
             else {
@@ -64,7 +127,7 @@ class Module
             break;
 
             default:
-            return create_function('data', 'return data');
+            return create_function('$data', 'return $data;');
             break;
         }
 
