@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE module [
+    <!ELEMENT module (informations, dependencies)>
+    <!ATTLIST module
+        name    CDATA   #REQUIRED
+        version CDATA   #REQUIRED
+    >
+
+    <!ELEMENT informations (description, author, homepage)>
+
+    <!ELEMENT dependencies (dependency*)>
+
+    <!ELEMENT dependency EMPTY>
+    <!ATTLIST dependency
+        name    CDATA   #REQUIRED
+        version CDATA   #REQUIRED
+    >
+]>
+
+<module name="Blog" version="0.3">
+    <informations>
+        <description>A simple blog module.</description>
+        <author>meh.</author>
+        <homepage>http://meh.doesntexist.org</homepage>
+    </informations>
+
+    <dependencies>
+        <dependency name="Security" version="0.2.3">
+    </dependencies>
+</module>

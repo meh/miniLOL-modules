@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE module [
+    <!ELEMENT module (name, version, license, description, author, dependencies, contents)>
+
+    <!ELEMENT name (PCDATA)>
+
+    <!ELEMENT version (release, api, stability)>
+
+    <!ELEMENT stability (release, api)>
+
+    <!ELEMENT release (PCDATA)>
+
+    <!ELEMENT api (PCDATA)>
+
+    <!ELEMENT dependencies (dependency*)>
+
+    <!ELEMENT dependency EMPTY>
+    <!ATTLIST dependency
+        name    CDATA   #REQUIRED
+        version CDATA   #REQUIRED
+    >
+
+    <!ELEMENT contents (directory*, file*)>
+    
+    <!ELEMENT directory (directory*, file*)>
+    <!ATTLIST directory
+        name    CDATA   #REQUIRED
+    >
+
+    <!ELEMENT file EMPTY>
+    <!ATTLIST file
+        name    CDATA   #REQUIRED
+        md5sum  CDATA   #REQUIRED
+    >
+]>
+
+<module>
+    <name>Security</name>
+
+    <version>
+        <release>0.2.3</release>
+        <api>0.2</api>
+
+        <stability>
+            <release>stable</release>
+            <api>stable</api>
+        </stability>
+    </version>
+
+    <license uri="http://sam.zoy.org/wtfpl/">WTFPL</license>
+
+    <description>Server side modules infrastructure.</description>
+
+    <author>
+        <name>meh.</name>
+        <email>meh.ffff@gmail.com</email>
+        <homepage>http://meh.doesntexist.org</homepage>
+    </author>
+
+    <dependencies></dependencies>
+
+    <contents>
+        <file name="main.js" md5sum="c286348e7330f5d919ab7b59e6b64966"/>
+        <file name="main.php" md5sum="5693288bc980f93e6ba5af673a563460"/>
+        <file name="utils.php" md5sum="f530de370ea6b22909814f8635833f78"/>
+
+        <directory name="resources">
+            <file name="config.php" md5sum="5b0efec8ae6b0d9c320d4b3b6f675f94"/>
+            <file name="style.css" md5sum="d41d8cd98f00b204e9800998ecf8427e"/>
+            <file name="template.php" md5sum="8440f67c8837983d5488e96f10417409"/>
+        </directory>
+    </contents>
+</module>

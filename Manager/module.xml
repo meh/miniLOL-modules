@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE module [
+    <!ELEMENT module (name, version, license, description, author, dependencies, contents)>
+
+    <!ELEMENT name (PCDATA)>
+
+    <!ELEMENT version (release, api, stability)>
+
+    <!ELEMENT stability (release, api)>
+
+    <!ELEMENT release (PCDATA)>
+
+    <!ELEMENT api (PCDATA)>
+
+    <!ELEMENT informations (description, author, homepage)>
+
+    <!ELEMENT dependencies (dependency*)>
+
+    <!ELEMENT dependency EMPTY>
+    <!ATTLIST dependency
+        name    CDATA   #REQUIRED
+        version CDATA   #REQUIRED
+    >
+
+    <!ELEMENT contents (directory*, file*)>
+    
+    <!ELEMENT directory (directory*, file*)>
+    <!ATTLIST directory
+        name    CDATA   #REQUIRED
+    >
+
+    <!ELEMENT file EMPTY>
+    <!ATTLIST file
+        name    CDATA   #REQUIRED
+        md5sum  CDATA   #REQUIRED
+    >
+]>
+
+<module>
+    <name>Manager</name>
+
+    <version>
+        <release>0.1</release>
+        <api>0.1</release>
+
+        <stability>
+            <release>beta</release>
+            <api>beta</api>
+        </stability>
+    </version>
+
+    <license uri="http://sam.zoy.org/wtfpl/">WTFPL</license>
+
+    <description>Content management module.</description>
+
+    <author>
+        <name>meh.</name>
+        <email>meh.ffff@gmail.com</email>
+        <homepage>http://meh.doesntexist.org</homepage>
+    </author>
+
+    <dependencies>
+        <dependency name="Security" version=">=0.2"/>
+    </dependencies>
+
+    <contents>
+    </contents>
+</module>
