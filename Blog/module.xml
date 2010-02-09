@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!DOCTYPE module [
-    <!ELEMENT module (informations, dependencies)>
-    <!ATTLIST module
-        name    CDATA   #REQUIRED
-        version CDATA   #REQUIRED
-    >
+    <!ELEMENT module (name, version, license, description, author, dependencies, contents)>
 
-    <!ELEMENT informations (description, author, homepage)>
+    <!ELEMENT name (PCDATA)>
+
+    <!ELEMENT version (release, api, stability)>
+
+    <!ELEMENT stability (release, api)>
+
+    <!ELEMENT release (PCDATA)>
+
+    <!ELEMENT api (PCDATA)>
 
     <!ELEMENT dependencies (dependency*)>
 
@@ -16,16 +20,49 @@
         name    CDATA   #REQUIRED
         version CDATA   #REQUIRED
     >
+
+    <!ELEMENT contents (directory*, file*)>
+    
+    <!ELEMENT directory (directory*, file*)>
+    <!ATTLIST directory
+        name    CDATA   #REQUIRED
+    >
+
+    <!ELEMENT file EMPTY>
+    <!ATTLIST file
+        name    CDATA   #REQUIRED
+        md5sum  CDATA   #REQUIRED
+    >
 ]>
 
-<module name="Blog" version="0.3">
-    <informations>
-        <description>A simple blog module.</description>
-        <author>meh.</author>
+<module>
+    <name>Blog</name>
+
+    <version>
+        <release>0.3</release>
+        <api>0.3</release>
+
+        <stability>
+            <release>stable</release>
+            <api>stable</api>
+        </stability>
+    </version>
+
+    <license uri="http://www.fsf.org/licensing/licenses/agpl-3.0.html">Affero GNU General Public License</license>
+
+    <description>A simple blog module.</description>
+
+    <author>
+        <name>meh.</name>
+        <email>meh.ffff@gmail.com</email>
         <homepage>http://meh.doesntexist.org</homepage>
-    </informations>
+    </author>
 
     <dependencies>
-        <dependency name="Security" version="0.2.3">
+        <dependency name="Security" version=">=0.2">
     </dependencies>
+
+    <contents>
+
+    </contents>
 </module>

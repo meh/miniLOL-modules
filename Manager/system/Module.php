@@ -1,15 +1,22 @@
 <?php
-/*********************************************************************
- *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE             *
- *                   Version 2, December 2004                        *
- *                                                                   *
- *  Copyleft meh.                                                    *
- *                                                                   *
- *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE             *
- *  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION  *
- *                                                                   *
- *  0. You just DO WHAT THE FUCK YOU WANT TO.                        *
- *********************************************************************/
+/****************************************************************************
+ * Copyleft meh. [http://meh.doesntexist.org | meh.ffff@gmail.com]          *
+ *                                                                          *
+ * This file is part of miniLOL. A content management module.               *
+ *                                                                          *
+ * miniLOL is free software: you can redistribute it and/or modify          *
+ * it under the terms of the GNU Affero General Public License as           *
+ * published by the Free Software Foundation, either version 3 of the       *
+ * License, or (at your option) any later version.                          *
+ *                                                                          *
+ * miniLOL is distributed in the hope that it will be useful,               *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            *
+ * GNU Affero General Public License for more details.                      *
+ *                                                                          *
+ * You should have received a copy of the GNU Affero General Public License *
+ * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
+ ****************************************************************************/
 
 class Module
 {
@@ -52,21 +59,17 @@ class Module
 
         $dom      = DOMDocument::loadXML($this->_tree['module.xml']);
         $contents = $dom->getElementsByTagName('contents')->item(0);
+        $this->checkMD5($contents);
 
-        foreach ($contents->childNodes as $element) {
-            if ($element->nodeType != XML_ELEMENT_NODE) {
-                continue;
-            }
-
-            $this->checkMD5($element, '');
-        }
+        $name = $dom->getElementsByTagName('name')->item(0)->nodeValue;
+        mkdir("../../$name");
     }
 
-    public function checkMD5 ($content, $path)
+    public function checkMD5 ($content, $path = NULL)
     {
         $path = ($path) ? "$path/{$content->getAttribute('name')}" : $content->getAttribute('name');
 
-        if ($content->nodeName == 'directory') {
+        if ($content->nodeName == 'directory' || $content->nodeName == 'contents') {
             foreach ($content->childNodes as $element) {
                 if ($element->nodeType != XML_ELEMENT_NODE) {
                     continue;

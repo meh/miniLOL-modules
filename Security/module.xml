@@ -62,7 +62,7 @@
 
     <contents>
         <file name="main.js" md5sum="c286348e7330f5d919ab7b59e6b64966"/>
-        <file name="main.php" md5sum="5693288bc980f93e6ba5af673a563460"/>
+        <file name="main.php" md5sum="8f422fcc38bcaaab4037c48a7565447f"/>
         <file name="utils.php" md5sum="f530de370ea6b22909814f8635833f78"/>
 
         <directory name="resources">
