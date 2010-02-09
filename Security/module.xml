@@ -61,9 +61,9 @@
     <dependencies></dependencies>
 
     <contents>
-        <file name="main.js" md5sum="c286348e7330f5d919ab7b59e6b64966"/>
-        <file name="main.php" md5sum="8f422fcc38bcaaab4037c48a7565447f"/>
-        <file name="utils.php" md5sum="f530de370ea6b22909814f8635833f78"/>
+        <file name="main.js" md5sum="575071e4f068df072cb5c7f4bc2870ed"/>
+        <file name="main.php" md5sum="357bfb5cca08fd708f3535ba8e996cf7"/>
+        <file name="utils.php" md5sum="275879edc8283234da5b1fb48ab918bd"/>
 
         <directory name="resources">
             <file name="config.php" md5sum="5b0efec8ae6b0d9c320d4b3b6f675f94"/>
