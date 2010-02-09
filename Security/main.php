@@ -11,7 +11,7 @@
  *  0. You just DO WHAT THE FUCK YOU WANT TO.                        *
  *********************************************************************/
 
-define('__VERSION__', '0.2.2');
+define('__VERSION__', '0.2.3');
 
 function simpleXMLToArray ($xml)
 {

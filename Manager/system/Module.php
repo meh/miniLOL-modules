@@ -45,11 +45,46 @@ class Module
     public function extract ()
     {
         $this->_createTree();
+
+        if (!$this->_tree['module.xml']) {
+            throw new Exception('Module description file is missing.');
+        }
+
+        $dom      = DOMDocument::loadXML($this->_tree['module.xml']);
+        $contents = $dom->getElementsByTagName('contents')->item(0);
+
+        foreach ($contents->childNodes as $element) {
+            if ($element->nodeType != XML_ELEMENT_NODE) {
+                continue;
+            }
+
+            $this->checkMD5($element, '');
+        }
     }
 
-    public function debug ()
+    public function checkMD5 ($content, $path)
     {
-        print_r($this->_tree);
+        $path = ($path) ? "$path/{$content->getAttribute('name')}" : $content->getAttribute('name');
+
+        if ($content->nodeName == 'directory') {
+            foreach ($content->childNodes as $element) {
+                if ($element->nodeType != XML_ELEMENT_NODE) {
+                    continue;
+                }
+
+                $this->checkMD5($element, $path);
+            }
+        }
+        else if ($content->nodeName == 'file') {
+            $file = &$this->_getElement($path);
+
+            $original = $content->getAttribute('md5sum');
+            $checked  = md5($file);
+            
+            if ($original != $checked) {
+                throw new Exception("The md5sum of `$path` doesn't match: original=$original; checked=$checked.");
+            }
+        }
     }
 
     private function _createTree ()
@@ -81,11 +116,7 @@ class Module
             $type = substr($this->_data, $i, 1);
             $i += 1 + 100 + 255;
 
-            if ($type == '5') {
-                $current = &$this->_getElement($name);
-                $current = array();
-            }
-            else if (!$type && $size) {
+            if (!$type && $size) {
                 $current = &$this->_getElement($name);
                 $current = substr($this->_data, $i, $size);
                 $i += $size + (512 - ($size % 512));
