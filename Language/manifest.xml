@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!DOCTYPE manifest [
     <!ELEMENT manifest (module, version, license, description, author+, dependencies?, contents)>
     <!ATTLIST manifest
@@ -15,6 +14,16 @@
     <!ELEMENT release (#PCDATA)>
 
     <!ELEMENT api (#PCDATA)>
+
+    <!ELEMENT description (#PCDATA)>
+
+    <!ELEMENT author (name, email?, homepage?)>
+
+    <!ELEMENT name (#PCDATA)>
+    
+    <!ELEMENT email (#PCDATA)>
+    
+    <!ELEMENT hompeage (#PCDATA)>
 
     <!ELEMENT dependencies (dependency*)>
 

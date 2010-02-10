@@ -16,6 +16,16 @@
 
     <!ELEMENT api (#PCDATA)>
 
+    <!ELEMENT description (#PCDATA)>
+
+    <!ELEMENT author (name, email?, homepage?)>
+
+    <!ELEMENT name (#PCDATA)>
+    
+    <!ELEMENT email (#PCDATA)>
+    
+    <!ELEMENT hompeage (#PCDATA)>
+
     <!ELEMENT dependencies (dependency*)>
 
     <!ELEMENT dependency EMPTY>
