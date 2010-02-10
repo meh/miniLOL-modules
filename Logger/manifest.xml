@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE manifest [
+    <!ELEMENT manifest (module, version, license, description, author+, dependencies?, contents)>
+    <!ATTLIST manifest
+        version CDATA   #REQUIRED
+    >
+
+    <!ELEMENT module (#PCDATA)>
+
+    <!ELEMENT version (release, api, stability)>
+
+    <!ELEMENT stability (release, api)>
+
+    <!ELEMENT release (#PCDATA)>
+
+    <!ELEMENT api (#PCDATA)>
+
+    <!ELEMENT dependencies (dependency*)>
+
+    <!ELEMENT dependency EMPTY>
+    <!ATTLIST dependency
+        module  CDATA   #REQUIRED
+        version CDATA   #REQUIRED
+    >
+
+    <!ELEMENT contents (directory*, file*)>
+    
+    <!ELEMENT directory (directory*, file*)>
+    <!ATTLIST directory
+        name    CDATA   #REQUIRED
+    >
+
+    <!ELEMENT file EMPTY>
+    <!ATTLIST file
+        name    CDATA   #REQUIRED
+        md5sum  CDATA   #REQUIRED
+    >
+]>
+
+<manifest version="1.0">
+    <module>Logger</module>
+
+    <version>
+        <release>0.2.2</release>
+        <api>0.2</api>
+
+        <stability>
+            <release>stable</release>
+            <api>stable</api>
+        </stability>
+    </version>
+
+    <license uri="http://sam.zoy.org/wtfpl/">Do What The Fuck You Want To Public License</license>
+
+    <description>Log everything!</description>
+
+    <author>
+        <name>meh.</name>
+        <email>meh.ffff@gmail.com</email>
+        <homepage>http://meh.doesntexist.org</homepage>
+    </author>
+
+    <dependencies>
+        <dependency module="Security" version=">=0.2"/>
+    </dependencies>
+
+    <contents>
+        <file name="main.js" md5sum="f9ac5bd411af97c589f6d17dc73c799c"/>
+        <file name="main.php" md5sum="22994f61c028b03a6665416a8c6e20ac"/>
+
+        <directory name="resources">
+            <file name="config.xml" md5sum="449acb0b7e023c3ea20811a2aaad8ed8"/>    
+        </directory>
+    </contents>
+</module>

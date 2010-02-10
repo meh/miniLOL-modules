@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE manifest [
+    <!ELEMENT manifest (module, version, license, description, author+, dependencies?, contents)>
+    <!ATTLIST manifest
+        version CDATA   #REQUIRED
+    >
+
+    <!ELEMENT module (#PCDATA)>
+
+    <!ELEMENT version (release, api, stability)>
+
+    <!ELEMENT stability (release, api)>
+
+    <!ELEMENT release (#PCDATA)>
+
+    <!ELEMENT api (#PCDATA)>
+
+    <!ELEMENT dependencies (dependency*)>
+
+    <!ELEMENT dependency EMPTY>
+    <!ATTLIST dependency
+        module  CDATA   #REQUIRED
+        version CDATA   #REQUIRED
+    >
+
+    <!ELEMENT contents (directory*, file*)>
+    
+    <!ELEMENT directory (directory*, file*)>
+    <!ATTLIST directory
+        name    CDATA   #REQUIRED
+    >
+
+    <!ELEMENT file EMPTY>
+    <!ATTLIST file
+        name    CDATA   #REQUIRED
+        md5sum  CDATA   #REQUIRED
+    >
+]>
+
+<manifest version="1.0">
+    <module>IHM</module>
+
+    <version>
+        <release>0.2</release>
+        <api>0.2</api>
+
+        <stability>
+            <release>stable</release>
+            <api>stable</api>
+        </stability>
+    </version>
+
+    <license uri="http://sam.zoy.org/wtfpl/">Do What The Fuck You Want To Public License</license>
+
+    <description>Server side modules infrastructure.</description>
+
+    <author>
+        <name>meh.</name>
+        <email>meh.ffff@gmail.com</email>
+        <homepage>http://meh.doesntexist.org</homepage>
+    </author>
+
+    <contents>
+        <file name="main.js" md5sum="f367ae0a7be3b7557fcb10bcd186d49c"/>
+
+        <directory name="system">
+            <file name="IHM.js" md5sum="8eea360d2a52c44c95f9ff6fe98c9adf"/>
+        </directory>
+
+        <directory name="resources">
+            <file name="hatred.xml" md5sum="16b15dfb0d9aa7abfd3a1e8f591c37e0"/>
+        </directory>
+    </contents>
+</manifest>

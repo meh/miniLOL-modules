@@ -1,5 +1,0 @@
-To install the module extract the directory to modules/.
-
-You can change the highlighting style by changing the value in config.xml.
-
-You can also write your own syntax CSS, put it in resources/css and set it's name in the config.xml

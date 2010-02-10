@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE manifest [
+    <!ELEMENT manifest (module, version, license, description, author+, dependencies?, contents)>
+    <!ATTLIST manifest
+        version CDATA   #REQUIRED
+    >
+
+    <!ELEMENT module (#PCDATA)>
+
+    <!ELEMENT version (release, api, stability)>
+
+    <!ELEMENT stability (release, api)>
+
+    <!ELEMENT release (#PCDATA)>
+
+    <!ELEMENT api (#PCDATA)>
+
+    <!ELEMENT dependencies (dependency*)>
+
+    <!ELEMENT dependency EMPTY>
+    <!ATTLIST dependency
+        module  CDATA   #REQUIRED
+        version CDATA   #REQUIRED
+    >
+
+    <!ELEMENT contents (directory*, file*)>
+    
+    <!ELEMENT directory (directory*, file*)>
+    <!ATTLIST directory
+        name    CDATA   #REQUIRED
+    >
+
+    <!ELEMENT file EMPTY>
+    <!ATTLIST file
+        name    CDATA   #REQUIRED
+        md5sum  CDATA   #REQUIRED
+    >
+]>
+
+<manifest version="1.0">
+    <module>Theme Switcher</module>
+
+    <version>
+        <release>0.2.3</release>
+        <api>0.2</api>
+
+        <stability>
+            <release>stable</release>
+            <api>stable</api>
+        </stability>
+    </version>
+
+    <license uri="http://sam.zoy.org/wtfpl/">Do What The Fuck You Want To Public License</license>
+
+    <description>Theme switcher module. Color your life.</description>
+
+    <author>
+        <name>meh.</name>
+        <email>meh.ffff@gmail.com</email>
+        <homepage>http://meh.doesntexist.org</homepage>
+    </author>
+
+    <contents> 
+        <file name="main.js" md5sum="69f461c54e8e6dc5a52776b67a57bfec"/>
+
+        <directory name="system">
+            <file name="Template.js" md5sum="b1b8af20ffaf0e04d9a5071821aa0a29"/>
+            <file name="Themes.js" md5sum="5e18ac4e43e1ac60e314941d3eb07b6c"/>    
+        </directory>
+
+        <directory name="resources">
+            <file name="config.xml" md5sum="f81ed589647e4def5064a349e5fd01c2"/>
+            <file name="themes.xml" md5sum="21aba509cab4a8ec43cf767b3f0c0fbf"/>
+            <file name="template.xml" md5sum="1f6af22cf01fbc4cdcedaf9c4aadd5ec"/>
+            <file name="functions.xml" md5sum="a20992d66a450f7cae45e5e42bf10881"/>
+        </directory>
+    </contents>
+</module>

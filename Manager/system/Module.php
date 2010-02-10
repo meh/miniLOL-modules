@@ -53,11 +53,11 @@ class Module
     {
         $this->_createTree();
 
-        if (!$this->_tree['module.xml']) {
+        if (!$this->_tree['manifest.xml']) {
             throw new Exception('Module description file is missing.');
         }
 
-        $dom      = DOMDocument::loadXML($this->_tree['module.xml']);
+        $dom      = DOMDocument::loadXML($this->_tree['manifest.xml']);
         $contents = $dom->getElementsByTagName('contents')->item(0);
         $this->checkMD5($contents);
 
