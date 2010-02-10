@@ -13,8 +13,6 @@
 
     <!ELEMENT api (PCDATA)>
 
-    <!ELEMENT informations (description, author, homepage)>
-
     <!ELEMENT dependencies (dependency*)>
 
     <!ELEMENT dependency EMPTY>
@@ -38,21 +36,21 @@
 ]>
 
 <module>
-    <name>Manager</name>
+    <name>Security</name>
 
     <version>
-        <release>0.1</release>
-        <api>0.1</release>
+        <release>0.2.3</release>
+        <api>0.2</api>
 
         <stability>
-            <release>beta</release>
-            <api>beta</api>
+            <release>stable</release>
+            <api>stable</api>
         </stability>
     </version>
 
     <license uri="http://www.fsf.org/licensing/licenses/agpl-3.0.html">Affero GNU General Public License</license>
 
-    <description>Content management module.</description>
+    <description>Server side modules infrastructure.</description>
 
     <author>
         <name>meh.</name>
@@ -65,5 +63,11 @@
     </dependencies>
 
     <contents>
+        <file name="main.js" md5sum="f9ac5bd411af97c589f6d17dc73c799c"/>
+        <file name="main.php" md5sum="511b9963208c90662687190ae9bb8c8d"/>
+
+        <directory name="resources">
+            <file name="config.xml" md5sum="449acb0b7e023c3ea20811a2aaad8ed8"/>
+        </directory>
     </contents>
 </module>

@@ -17,7 +17,7 @@
 
     <!ELEMENT dependency EMPTY>
     <!ATTLIST dependency
-        name    CDATA   #REQUIRED
+        module  CDATA   #REQUIRED
         version CDATA   #REQUIRED
     >
 
@@ -59,7 +59,7 @@
     </author>
 
     <dependencies>
-        <dependency name="Security" version=">=0.2">
+        <dependency module="Security" version=">=0.2">
     </dependencies>
 
     <contents>

@@ -17,7 +17,7 @@
 
     <!ELEMENT dependency EMPTY>
     <!ATTLIST dependency
-        name    CDATA   #REQUIRED
+        module  CDATA   #REQUIRED
         version CDATA   #REQUIRED
     >
 
