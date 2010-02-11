@@ -20,10 +20,10 @@
 
 define('__VERSION__', '0.3');
 
-require_once('../Security/utils.php');
-
 session_set_cookie_params(60*60*24*365, '/');
 session_start();
+
+require_once("{$_SESSION['miniLOL']['path']['modules']}/Security/utils.php");
 
 if (@!$_SESSION['miniLOL']['admin']) {
     echo "You're doing it wrong.";
@@ -34,7 +34,10 @@ security_waitUnlock();
 security_lock();
 
 if (isset($_REQUEST['feed'])) {
-    file_put_contents('../../'.security_getRequest('feed'), security_getRequest('content'));
+    $feed = security_getRequest('feed');
+
+    file_put_contents("{$_SESSION['miniLOL']['path']['root']}/{$feed}", security_getRequest('content'));
+
     security_unlock();
     exit;
 }

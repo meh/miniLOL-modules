@@ -18,7 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-define('__VERSION__', '0.2.3');
+define('__VERSION__', '0.2.4');
 
 function simpleXMLToArray ($xml)
 {
@@ -52,6 +52,10 @@ if (isset($_REQUEST['connected'])) {
 }
 else if (isset($_REQUEST['build'])) {
     $_SESSION['miniLOL']['config'] = simpleXMLToArray(simplexml_load_string(security_loadConfig('resources/config.php')));
+
+    $_SESSION['miniLOL']['path']['root']    = realpath(dirname(__FILE__).'/../..');
+    $_SESSION['miniLOL']['path']['modules'] = realpath(dirname(__FILE__).'/../..');
+
     exit;
 }
 

@@ -52,7 +52,7 @@
     <module>Security</module>
 
     <version>
-        <release>0.2.3</release>
+        <release>0.2.4</release>
         <api>0.2</api>
 
         <stability>
@@ -72,8 +72,8 @@
     </author>
 
     <contents>
-        <file name="main.js" md5sum="575071e4f068df072cb5c7f4bc2870ed"/>
-        <file name="main.php" md5sum="357bfb5cca08fd708f3535ba8e996cf7"/>
+        <file name="main.js" md5sum="322f2153e0a73559f7cfbb33cb2a7340"/>
+        <file name="main.php" md5sum="bd8bcce470c0064429af0282ba361be9"/>
         <file name="utils.php" md5sum="275879edc8283234da5b1fb48ab918bd"/>
 
         <directory name="resources">

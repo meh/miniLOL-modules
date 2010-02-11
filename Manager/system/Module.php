@@ -62,7 +62,8 @@ class Module
         $this->checkMD5($contents);
 
         $name = $dom->getElementsByTagName('name')->item(0)->nodeValue;
-        mkdir("../../$name");
+
+        Module::extract($this->_tree, "{$_SESSION['miniLOL']['path']}/modules/{$name}");
     }
 
     public function checkMD5 ($content, $path = NULL)
@@ -173,6 +174,20 @@ class Module
         }
 
         return NULL;
+    }
+
+    public static function extract ($data, $path)
+    {
+        if (is_array($data)) {
+            mkdir($path);
+
+            foreach ($data as $name => $content) {
+                Module::extract($content, "$path/$name");
+            }
+        }
+        else {
+            file_put_contents($path, $data);
+        }
     }
 }
 ?>

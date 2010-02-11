@@ -1,3 +1,4 @@
+<?php
 /****************************************************************************
  * Copyleft meh. [http://meh.doesntexist.org | meh.ffff@gmail.com]          *
  *                                                                          *
@@ -17,8 +18,20 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-miniLOL.module.create("Manager", {
-    initialize: function () {
+define('__VERSION__', '0.1');
 
-    }
-});
+session_set_cookie_params(60*60*24*365, '/');
+session_start();
+
+require_once("{$_SESSION['miniLOL']['path']['modules']}/Security/utils.php");
+require_once('system/Module.php');
+
+security_waitUnlock();
+security_lock();
+
+if (isset($_REQUEST['install'])) {
+    $module = new Module(security_getRequest('path'));
+    $module->extract();
+}
+
+?>
