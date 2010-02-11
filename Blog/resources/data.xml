@@ -32,6 +32,8 @@
 
 <!--
 
+Remember to increment the total everytime you add a post.
+
 Example:
 
     <post date="Mon Mar 30 2009 20:35:46 GMT+0200 (CET)" id="1" title="LOL I STOLE YOUR BLOG" author="Dix"><![CDATA[

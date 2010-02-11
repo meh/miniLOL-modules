@@ -5,6 +5,8 @@
 ]>
 
 <configuration domain="Blog">
+    <title>#{siteTitle} - #{title}</title>
+
     <author>
         <post>Owner</post>
         <comment>Anonymous</comment>

@@ -208,6 +208,24 @@ var Blog = Class.create({
         return this._data.getElementById(id);
     },
 
+    getPostInfo: function (id) {
+        var post;
+
+        if (Object.isString(id)) {
+            post = this.getPost(id);
+        }
+        else {
+            post = id;
+        }
+
+        return {
+            date:   post.getAttribute("date"),
+            id:     post.getAttribute("id"),
+            title:  post.getAttribute("title"),
+            author: post.getAttribute("author")
+        };
+    },
+
     getPosts: function () {
         return $A(this._data.getElementsByTagName("post"));
     }
