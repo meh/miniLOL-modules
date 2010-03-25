@@ -20,7 +20,12 @@ miniLOL.module.create("Word Filter", {
         Event.observe(document, ":go", this.execute);
 
         Event.observe(document, ":refresh", function () {
+            try {
             miniLOL.module.get("Word Filter").filters.reload();
+            }
+            catch (e) {
+                console.log(e)
+            }
         });
     },
 
