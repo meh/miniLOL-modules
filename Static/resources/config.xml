@@ -8,5 +8,5 @@
 ]>
 
 <configuration domain="Static">
-    <root>site.html</root>
+    <root>index.html</root>
 </configuration>
