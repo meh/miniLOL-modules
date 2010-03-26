@@ -23,7 +23,7 @@ miniLOL.module.create("Logger", {
         miniLOL.resources.config.load(this.root+"/resources/config.xml");
 
         Event.observe(document, ":go", function (event) {
-            this.execute("Logger", ["log", 50, "page", "view", event.memo]);
+            miniLOL.module.execute("Logger", ["log", 50, "page", "view", event.memo]);
         });
     },
 
