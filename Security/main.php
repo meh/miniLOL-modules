@@ -54,7 +54,7 @@ else if (isset($_REQUEST['build'])) {
     $_SESSION['miniLOL']['config'] = simpleXMLToArray(simplexml_load_string(security_loadConfig('resources/config.php')));
 
     $_SESSION['miniLOL']['path']['root']    = realpath(dirname(__FILE__).'/../..');
-    $_SESSION['miniLOL']['path']['modules'] = realpath(dirname(__FILE__).'/../..');
+    $_SESSION['miniLOL']['path']['modules'] = realpath(dirname(__FILE__).'/..');
 
     exit;
 }

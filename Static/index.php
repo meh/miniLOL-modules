@@ -22,7 +22,15 @@ else {
     $root = 'index.html';
 }
 
+if ($config && $config->keywords) {
+    $keywords = "<meta name='keywords' content='{$config->keywords}'/>";
+}
+else {
+    $keywords = '';
+}
+
 $config = simplexml_load_file('resources/config.xml');
+$title  = $config->siteTitle;
 
 $query = $_SERVER['QUERY_STRING'];
 
@@ -79,6 +87,10 @@ else {
         $content = '404 - File not found';
     }
     else {
+        if ($page->getAttribute('title')) {
+            $title = preg_replace('/#{siteTitle}/', $config->siteTitle, $page->getAttribute('title'));
+        }
+
         $content = parse($page);
     }
 }
@@ -111,7 +123,10 @@ echo <<<HTML
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{$config->siteTitle}</title>
+    <title>{$title}</title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    {$keywords}
     
     <script>
         location.href = "{$root}";
@@ -120,10 +135,6 @@ echo <<<HTML
 
 <body>
     <noscript>
-        <div style="position: absolute; top: 10px; left: 10px; border: 2px solid black; background: white;">If you have Javascript disabled, enable it please, or the website will be shown in the text only version.</div>
-
-        <br/><br/>
-
         <div class="menu">
             {$menu}
         </div>
@@ -133,6 +144,8 @@ echo <<<HTML
         <div class="body">
             {$content}
         </div>
+
+        <div style="position: absolute; top: 10px; left: 10px; border: 2px solid black; background: white;">If you have Javascript disabled, enable it please, or the website will be shown in the text only version.</div>
     </noscript>
 </body>
 </html>
