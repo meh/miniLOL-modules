@@ -92,7 +92,7 @@ else if (isset($_REQUEST['logout'])) {
 }
 else if (isset($_REQUEST['change']) && isset($_REQUEST['password']) && isset($_REQUEST['type'])) {
     if (@!$_SESSION['miniLOL']['admin']) {
-        echo 'You fail at auditing.';
+        echo 'You are not admin.';
         exit;
     }
 

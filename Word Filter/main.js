@@ -21,7 +21,7 @@ miniLOL.module.create("Word Filter", {
 
         Event.observe(document, ":refresh", function () {
             try {
-            miniLOL.module.get("Word Filter").filters.reload();
+                miniLOL.module.get("Word Filter").filters.reload();
             }
             catch (e) {
                 console.log(e)
@@ -30,6 +30,12 @@ miniLOL.module.create("Word Filter", {
     },
 
     execute: function () {
-        miniLOL.content.set(this.filters.apply(miniLOL.content.get()));
+        var filters = this.filters
+        
+        $(document.body).getTextDescendants().each(function (text) {
+            text.nodeValue = filters.apply(text.nodeValue).replace(/</g, '\x01<\x01').replace(/>/g, '\x01>\x01')
+        });
+
+        document.body.innerHTML = document.body.innerHTML.replace(/\x01&lt;\x01/g, '<').replace(/\x01&gt;\x01/g, '>')
     }
 });
