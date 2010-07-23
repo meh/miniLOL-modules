@@ -32,10 +32,10 @@ miniLOL.module.create("Word Filter", {
     execute: function () {
         var filters = this.filters
         
-        $(document.body).getTextDescendants().each(function (text) {
-            text.nodeValue = filters.apply(text.nodeValue).replace(/</g, '\x01<\x01').replace(/>/g, '\x01>\x01')
+        miniLOL.theme.content().getTextDescendants().each(function (text) {
+            text.nodeValue = filters.apply(text.nodeValue).replace(/</g, '\x01<\x01').replace(/>/g, '\x01>\x01').replace(/&/g, '\x01&\x01');
         });
 
-        document.body.innerHTML = document.body.innerHTML.replace(/\x01&lt;\x01/g, '<').replace(/\x01&gt;\x01/g, '>')
+        miniLOL.theme.content().innerHTML = miniLOL.theme.content().innerHTML.replace(/\x01&lt;\x01/g, '<').replace(/\x01&gt;\x01/g, '>').replace(/\x01&amp;\x01/g, '&');
     }
 });
