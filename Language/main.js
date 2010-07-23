@@ -28,28 +28,28 @@ miniLOL.module.create("Language", {
         miniLOL.resources.config.load(this.root+"/resources/config.xml");
 
         this.Languages  = miniLOL.utils.require(this.root+"/system/Languages.js");
-        this._languages = new this.Languages(this.root, "/resources/languages.xml");
+        this.languages = new this.Languages(this.root, "/resources/languages.xml");
 
         this.Template = miniLOL.utils.require(this.root+"/system/Template.js");
-        this._template = new this.Template(this.root);
+        this.template = new this.Template(this.root);
 
-        this._languages.set(location.href.parseQuery().lang || new CookieJar().get("language") || miniLOL.config["Language"].defaultLanguage);
+        this.languages.set(location.href.parseQuery().lang || new CookieJar().get("language") || miniLOL.config["Language"].defaultLanguage);
     },
 
     execute: function (args) {
         args = args || {};
 
         if (args["page"]) {
-            this._languages.page(args["page"], args["lang"]);
+            this.languages.page(args["page"], args["lang"]);
         }
         else if (args["choose"]) {
-            this._languages.set(args["lang"], Boolean(args["apply"]));
+            this.languages.set(args["lang"], Boolean(args["apply"]));
         }
         else if (args["chooser"]) {
-            miniLOL.content.set(this._template.apply("global", this._languages.toArray()));
+            miniLOL.content.set(this.template.apply("global", this.languages.toArray()));
         }
         else {
-            this._languages.apply(true);
+            this.languages.apply(true);
         }
 
         return true;

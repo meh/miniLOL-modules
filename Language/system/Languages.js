@@ -121,7 +121,7 @@ var Languages = Class.create({
         }
 
         if (reload) {
-            miniLOL.menu.change(miniLOL.menu.current);
+            miniLOL.menu.change(miniLOL.menu.current, true);
             return miniLOL.go(location.href);
         }
     },
