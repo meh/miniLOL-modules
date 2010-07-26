@@ -20,7 +20,6 @@ var Themes = Class.create({
     load: function (path) {
         var result = false;
     
-        var This = this;
         new Ajax.Request(path, {
             method: "get",
             asynchronous: false,
@@ -29,11 +28,11 @@ var Themes = Class.create({
                 var dom = miniLOL.utils.fixDOM(http.responseXML);
     
                 $A(dom.getElementsByTagName("theme")).each(function (theme) {
-                    This.themes.push(theme.getAttribute("name"));
-                });
+                    this.themes.push(theme.getAttribute("name"));
+                }, this);
     
                 result = true;
-            }
+            }.bind(this)
         });
     
         return result;

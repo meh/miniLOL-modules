@@ -23,10 +23,9 @@ var Template = Class.create({
     initialize: function (root) {
         this.root = root;
 
-        var This = this;
         Event.observe(document, ":module.Language.change", function (event) {
-            This.set(event.memo);
-        });
+            this.set(event.memo);
+        }.bind(this));
     },
 
     set: function (language) {

@@ -11,17 +11,21 @@
 *********************************************************************/
 
 miniLOL.module.create("Syntax Highlighter", {
-    version: "0.2.5",
+    version: "0.3",
 
     type: "passive",
 
     aliases: ["SyntaxHighlighter"],
 
     initialize: function () {
+        if (Object.isUndefined(window.XRegExp)) {
+            miniLOL.utils.require(this.root+"/system/xregexp-min.js");
+        }
+
         miniLOL.utils.require(this.root+"/system/shCore.js");
 
-        miniLOL.resources.functions.load(this.root+"/resources/functions.xml");
-        miniLOL.resources.config.load(this.root+"/resources/config.xml");
+        miniLOL.resource.get("miniLOL.functions").load(this.root+"/resources/functions.xml");
+        miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/config.xml");
 
         SyntaxHighlighter.config["tagName"] = miniLOL.config["Syntax Highlighter"].tagName;
 
@@ -35,26 +39,25 @@ miniLOL.module.create("Syntax Highlighter", {
         this.languages = {}
         this.aliases   = {};
 
-        var This = this;
-        new Ajax.Request(this.root+"/resources/langs.xml", {
+        new Ajax.Request(this.root+"/resources/languages.xml", {
             method: "get",
             asynchronous: false,
 
             onSuccess: function (http) {
                 $A(http.responseXML.getElementsByTagName("language")).each(function (language) {
                     var file             = language.getAttribute("file");
-                    This.languages[file] = language.getAttribute("aliases");
-            
-                    if (This.languages[file]) {
-                        This.languages[file].split(/ /).each(function (split) {
-                            This.aliases[split] = file;
-                        });
+                    this.languages[file] = language.getAttribute("aliases");
+
+                    if (this.languages[file]) {
+                        this.languages[file].split(/ /).each(function (split) {
+                            this.aliases[split] = file;
+                        }, this);
                     }
-                });
-            },
+                }, this);
+            }.bind(this),
 
             onFailure: function () {
-                miniLOL.content.set("Something went wrong while loading langs.xml.");
+                miniLOL.content.set("Something went wrong while loading languages.xml.");
             }
         });
 
@@ -72,10 +75,11 @@ miniLOL.module.create("Syntax Highlighter", {
 
     loadFile: function (name) {
         if (name && !this.loaded[name]) {
-            if (miniLOL.utils.include(this.root+"/resources/langs/shBrush"+name+".js")) {
+            if (miniLOL.utils.include(this.root+"/resources/languages/shBrush"+name+".js")) {
                 this.loaded[name] = true;
 
                 SyntaxHighlighter.vars.discoveredBrushes = {};
+
                 for (var brush in SyntaxHighlighter.brushes) {
                     var aliases = SyntaxHighlighter.brushes[brush].aliases;
                     
@@ -93,10 +97,10 @@ miniLOL.module.create("Syntax Highlighter", {
 
     loadTagFiles: function () {
         $$(SyntaxHighlighter.config["tagName"]).each(function (tag) {
-            var alias = tag.getAttribute("class");
+            var alias = ((tag.getAttribute("class") || "").match(/brush:\s*(.*?)(;|$)/) || [])[1];
 
-            if (alias && (alias = alias.match(/brush:\s*(.*?)(;|$)/))) {
-                this.loadFile(this.aliases[alias[1]]);
+            if (alias) {
+                this.loadFile(this.aliases[alias]);
             }
         }, this);
     },

@@ -23,7 +23,8 @@ var Blog = Class.create({
     initialize: function (root, data, config) {
         this.root = root;
 
-        var This = this;
+        var Blog = this;
+
         this.resource = new miniLOL.Resource("Blog", {
             load: function (path) {
                 var data = this.data;
@@ -56,8 +57,8 @@ var Blog = Class.create({
                     return false;
                 }
 
-                This.data  = this.data.data;
-                This.cache = this.data.cache;
+                Blog.data  = this.data.data;
+                Blog.cache = this.data.cache;
             },
 
             clear: function () {
@@ -69,7 +70,7 @@ var Blog = Class.create({
         });
 
         this.resource.load(this.root+data);
-        miniLOL.resources.config.load(this.root+config);
+        miniLOL.resource.get("miniLOL.config").load(this.root+config);
 
         this.Template = miniLOL.utils.require(this.root+"/system/Template.js");
         this.template = new this.Template(this.root);

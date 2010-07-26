@@ -23,10 +23,11 @@ var Languages = Class.create({
     initialize: function (root, languages) {
         this.root = root;
 
-        var This = this;
+        var Languages = this;
+
         this.resource = new miniLOL.Resource("Languages.resource", {
             load: function (path) {
-                This.languages = this.data;
+                Languages.languages = this.data;
 
                 new Ajax.Request(path, {
                     method: "get",
@@ -38,7 +39,7 @@ var Languages = Class.create({
                         }
 
                         $A(http.responseXML.getElementsByTagName("language")).each(function (language) {
-                            This.languages.push({
+                            Languages.languages.push({
                                 code: language.getAttribute("code"),
                                 name: language.getAttribute("name")
                             });
@@ -60,8 +61,8 @@ var Languages = Class.create({
 
         this.resource.load(this.root+languages);
 
-        miniLOL.resources.menus.flush(["resources/menus.xml"]);
-        miniLOL.resources.pages.flush(["resources/pages.xml"]);
+        miniLOL.resource.get("miniLOL.menus").flush(["resources/menus.xml"]);
+        miniLOL.resource.get("miniLOL.pages").flush(["resources/pages.xml"]);
     },
 
     set: function (lang, apply, save) {
@@ -103,19 +104,19 @@ var Languages = Class.create({
 
     apply: function (reload) {
         if (this.old != this.language) {
-            miniLOL.resources.config.flush([this.root+"/resources/languages/#{code}/config.xml".interpolate(this.old)]);
-            miniLOL.resources.menus.flush([this.root+"/resources/languages/#{code}/menus.xml".interpolate(this.old)]);
-            miniLOL.resources.pages.flush([this.root+"/resources/languages/#{code}/pages.xml".interpolate(this.old)]);
+            miniLOL.resource.get("miniLOL.config").flush([this.root+"/resources/languages/#{code}/config.xml".interpolate(this.old)]);
+            miniLOL.resource.get("miniLOL.menus").flush([this.root+"/resources/languages/#{code}/menus.xml".interpolate(this.old)]);
+            miniLOL.resource.get("miniLOL.pages").flush([this.root+"/resources/languages/#{code}/pages.xml".interpolate(this.old)]);
 
-            if (!miniLOL.resources.config.load(this.root+"/resources/languages/#{code}/config.xml".interpolate(this.language))) {
+            if (!miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/languages/#{code}/config.xml".interpolate(this.language))) {
                 return false;
             }
 
-            if (!miniLOL.resources.menus.load(this.root+"/resources/languages/#{code}/menus.xml".interpolate(this.language))) {
+            if (!miniLOL.resource.get("miniLOL.menus").load(this.root+"/resources/languages/#{code}/menus.xml".interpolate(this.language))) {
                 return false;
             }
 
-            if (!miniLOL.resources.pages.load(this.root+"/resources/languages/#{code}/pages.xml".interpolate(this.language))) {
+            if (!miniLOL.resource.get("miniLOL.pages").load(this.root+"/resources/languages/#{code}/pages.xml".interpolate(this.language))) {
                 return false;
             }
         }

@@ -18,8 +18,8 @@ miniLOL.module.create("Theme Switcher", {
     aliases: ["ThemeSwitcher"],
 
     initialize: function () {
-        miniLOL.resources.config.load(this.root+"/resources/config.xml");
-        miniLOL.resources.functions.load(this.root+"/resources/functions.xml");
+        miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/config.xml");
+        miniLOL.resource.get("miniLOL.functions").load(this.root+"/resources/functions.xml");
 
         this.Themes = miniLOL.utils.require(this.root+"/system/Themes.js");
         this.themes = new this.Themes;

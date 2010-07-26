@@ -25,7 +25,7 @@ miniLOL.module.create("Language", {
     aliases: ["lang"],
 
     initialize: function () {
-        miniLOL.resources.config.load(this.root+"/resources/config.xml");
+        miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/config.xml");
 
         this.Languages  = miniLOL.utils.require(this.root+"/system/Languages.js");
         this.languages = new this.Languages(this.root, "/resources/languages.xml");

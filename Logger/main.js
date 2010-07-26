@@ -20,7 +20,7 @@ miniLOL.module.create("Logger", {
     dependencies: ["Security"],
 
     initialize: function () {
-        miniLOL.resources.config.load(this.root+"/resources/config.xml");
+        miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/config.xml");
 
         Event.observe(document, ":go", function (event) {
             miniLOL.module.execute("Logger", ["log", 50, "page", "view", event.memo]);
