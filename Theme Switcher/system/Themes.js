@@ -14,7 +14,7 @@
 
 var Themes = Class.create({
     initialize: function () {
-        this._themes = [];
+        this.themes = [];
     },
 
     load: function (path) {
@@ -28,10 +28,9 @@ var Themes = Class.create({
             onSuccess: function (http) {
                 var dom = miniLOL.utils.fixDOM(http.responseXML);
     
-                var themes = dom.getElementsByTagName("theme");
-                for (var i = 0; i < themes.length; i++) {
-                    This._themes.push(themes[i].getAttribute("name"));
-                }
+                $A(dom.getElementsByTagName("theme")).each(function (theme) {
+                    This.themes.push(theme.getAttribute("name"));
+                });
     
                 result = true;
             }
@@ -41,11 +40,11 @@ var Themes = Class.create({
     },
 
     exists: function (theme) {
-        return this._themes.indexOf(theme) >= 0;
+        return this.themes.indexOf(theme) >= 0;
     },
 
     toArray: function () {
-        return this._themes;
+        return this.themes;
     }
 });
 

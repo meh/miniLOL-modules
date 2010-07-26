@@ -17,21 +17,19 @@ var IHM = Class.create({
         this.root = root;
 
         var This = this;
-        this._resource = new miniLOL.Resource("IHM.browsers", {
+        this.resource = new miniLOL.Resource("IHM.browsers", {
             load: function (path) {
                 new Ajax.Request(path, {
                     method: "get",
                     asynchronous: false,
 
                     onSuccess: function (http) {
-                        var hates = http.responseXML.getElementsByTagName("hate");
-
-                        for (var i = 0; i < hates.length; i++) {
-                            This._browsers[hates[i].getAttribute("browser")] = {
-                                wait:    parseFloat(hates[i].getAttribute("wait")) || 23,
-                                message: hates[i].firstChild.nodeValue
+                        $A(http.responseXML.getElementsByTagName("hate")).each(function (hate) {
+                            This.browsers[hate.getAttribute("browser")] = {
+                                wait:    parseFloat(hate.getAttribute("wait")) || 23,
+                                message: hate.firstChild.nodeValue
                             };
-                        }
+                        });
                     },
 
                     onFailure: function (http) {
@@ -43,11 +41,11 @@ var IHM = Class.create({
             },
 
             clear: function () {
-                This._browsers = this._data = {};
+                This.browsers = this.data = {};
             }
         });
 
-        this._resource.load(this.root+"/resources/hatred.xml");
+        this.resource.load(this.root+"/resources/hatred.xml");
     },
 
     apply: function () {
@@ -55,7 +53,7 @@ var IHM = Class.create({
 
         for (var check in Prototype.Browser) {
             if (Prototype.Browser[check]) {
-                browser = this._browsers[check];
+                browser = this.browsers[check];
                 break;
             }
         }

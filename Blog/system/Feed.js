@@ -23,33 +23,33 @@ var Feed = Class.create({
     initialize: function (root, data) {
         this.root = root;
 
-        this._path = data.path || "/feed.xml";
-        this._type    = data.type;
-        this._version = data.version;
+        this.path    = data.path || "/feed.xml";
+        this.type    = data.type;
+        this.version = data.version;
         
-        if (!this._type || !this._version) {
-            this._type    = this._type || "rss";
-            this._version = "2.0";
+        if (!this.type || !this.version) {
+            this.type    = this.type || "rss";
+            this.version = "2.0";
         } 
 
-        this._max = data.max;
+        this.max = data.max;
 
-        this._title       = data.title || miniLOL.config["core"].siteTitle;
-        this._description = data.description || "#{title} feed.".interpolate({ title: this._title });
-        this._language    = data.language || "en-us";
+        this.title       = data.title || miniLOL.config["core"].siteTitle;
+        this.description = data.description || "#{title} feed.".interpolate({ title: this.title });
+        this.language    = data.language || "en-us";
 
         $$("head")[0].insert(new Element("link", {
             rel:   "alternate",
-            type:  "application/#{type}+xml".interpolate({ type: this._type }),
-            href:  miniLOL.path + this._path,
-            title: this._title
+            type:  "application/#{type}+xml".interpolate({ type: this.type }),
+            href:  miniLOL.path + this.path,
+            title: this.title
         }));
     },
 
     update: function (data) {
         new Ajax.Request(this.root+"/main.php", {
             parameters: {
-                feed:    this._path,
+                feed:    this.path,
                 content: this.build(data)
             },
 
@@ -60,7 +60,7 @@ var Feed = Class.create({
     },
 
     build: function (data) {
-        var callback = this._callbacks["#{type}-#{version}".interpolate({ type: this._type, version: this._version })];
+        var callback = this.callbacks["#{type}-#{version}".interpolate({ type: this.type, version: this.version })];
 
         if (!callback) {
             return false;
@@ -69,12 +69,12 @@ var Feed = Class.create({
         return callback.call(this, data);
     },
 
-    _callbacks: {
+    callbacks: {
         "rss-2.0": function (data) {
             var result = '';
 
             var posts  = data.getElementsByTagName("post");
-            var max    = this._max || posts.length;
+            var max    = this.max || posts.length;
             
             result += ("<?xml version='1.0' encoding='utf-8'?>\n"
                 + "<rss version='2.0'>\n"
@@ -88,10 +88,10 @@ var Feed = Class.create({
                 + "        <generator><![CDATA[miniLOL-Blog-#{version}]]></generator>\n"
                 + "        <webMaster><![CDATA[#{author}]]></webMaster>\n"
             ).interpolate({
-                title:       this._title,
-                description: this._description,
+                title:       this.title,
+                description: this.description,
                 link:        "#{path}/#module=blog".interpolate(miniLOL),
-                language:    this._language,
+                language:    this.language,
 
                 date: new Date().toUTCString(),
 
@@ -100,17 +100,18 @@ var Feed = Class.create({
             });
 
             var limit = posts.length - max;
+
             if (limit <= 0) {
                 limit = posts.length;
             }
 
-            for (var i = posts.length-1; i >= limit; i--) {
+            posts.each(function (post) {
                 var description;
                 if (miniLOL.config["Blog"].feed.description == "full") {
-                    description = posts[i].firstChild.nodeValue;
+                    description = post.firstChild.nodeValue;
                 }
                 else {
-                    description = posts[i].firstChild.nodeValue.match(/^(.*?)(<br|\n)/)[1];
+                    description = post.firstChild.nodeValue.match(/^(.*?)(<br|\n)/)[1];
                 }
 
                 result += ("<item>\n"
@@ -120,12 +121,12 @@ var Feed = Class.create({
                     + "    <description><![CDATA[#{description}]]></description>\n"
                     + "    <pubDate><![CDATA[#{date}]]></pubDate>\n"
                 + "</item>\n").interpolate({
-                    title:       posts[i].getAttribute("title"),
-                    link:        "#{path}/#module=blog&id=#{id}".interpolate({ path: miniLOL.path, id: posts[i].getAttribute("id") }),
+                    title:       post.getAttribute("title"),
+                    link:        "#{path}/#module=blog&id=#{id}".interpolate({ path: miniLOL.path, id: post.getAttribute("id") }),
                     description: description,
-                    date:        new Date(posts[i].getAttribute("date")).toUTCString()
+                    date:        new Date(post.getAttribute("date")).toUTCString()
                 });
-            }
+            });
 
             result += "</channel>\n"
                     + "</rss>";

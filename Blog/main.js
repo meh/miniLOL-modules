@@ -139,7 +139,7 @@ miniLOL.module.create("Blog", {
         }
         else if (args["feed"]) {
             if (args["build"]) {
-                this.blog.feed.update(this.blog._data);
+                this.blog.feed.update(this.blog.data);
             }
         }
         else if (args["dashboard"]) {

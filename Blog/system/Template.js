@@ -43,49 +43,49 @@ var Template = Class.create({
             return false;
         }
 
-        this._template = {};
-        this._editors  = {};
+        this.template = {};
+        this.editors  = {};
 
-        this._template.blog = template.getElementsByTagName("blog")[0].firstChild.nodeValue;
+        this.template.blog = template.getElementsByTagName("blog")[0].firstChild.nodeValue;
 
         var posts   = template.getElementsByTagName("posts")[0];
         var pager   = posts.getElementsByTagName("pager")[0];
         var numbers = pager.getElementsByTagName("numbers")[0];
 
-        this._template.posts                       = {};
-        this._template.posts.overall               = posts.firstChild.nodeValue;
-        this._template.posts.pager_overall         = pager.firstChild.nodeValue;
-        this._template.posts.pager_previous        = posts.getElementsByTagName("previous")[0].firstChild.nodeValue;
-        this._template.posts.pager_numbers         = numbers.firstChild.nodeValue;
-        this._template.posts.pager_numbers_length  = parseInt(numbers.getAttribute("length"));
-        this._template.posts.pager_numbers_first   = numbers.getElementsByTagName("first")[0].firstChild.nodeValue;
-        this._template.posts.pager_numbers_inner   = numbers.getElementsByTagName("inner")[0].firstChild.nodeValue;
-        this._template.posts.pager_numbers_current = numbers.getElementsByTagName("current")[0].firstChild.nodeValue;
-        this._template.posts.pager_numbers_last    = numbers.getElementsByTagName("last")[0].firstChild.nodeValue;
-        this._template.posts.pager_next            = pager.getElementsByTagName("next")[0].firstChild.nodeValue;
+        this.template.posts                       = {};
+        this.template.posts.overall               = posts.firstChild.nodeValue;
+        this.template.posts.pager_overall         = pager.firstChild.nodeValue;
+        this.template.posts.pager_previous        = posts.getElementsByTagName("previous")[0].firstChild.nodeValue;
+        this.template.posts.pager_numbers         = numbers.firstChild.nodeValue;
+        this.template.posts.pager_numbers_length  = parseInt(numbers.getAttribute("length"));
+        this.template.posts.pager_numbers_first   = numbers.getElementsByTagName("first")[0].firstChild.nodeValue;
+        this.template.posts.pager_numbers_inner   = numbers.getElementsByTagName("inner")[0].firstChild.nodeValue;
+        this.template.posts.pager_numbers_current = numbers.getElementsByTagName("current")[0].firstChild.nodeValue;
+        this.template.posts.pager_numbers_last    = numbers.getElementsByTagName("last")[0].firstChild.nodeValue;
+        this.template.posts.pager_next            = pager.getElementsByTagName("next")[0].firstChild.nodeValue;
         
         var post    = template.getElementsByTagName("post")[0];
         var pager   = post.getElementsByTagName("pager")[0];
         var numbers = pager.getElementsByTagName("numbers")[0];
 
-        this._template.post                       = {};
-        this._template.post.overall               = post.firstChild.nodeValue;
-        this._template.post.pager_overall         = pager.firstChild.nodeValue;
-        this._template.post.pager_previous        = post.getElementsByTagName("previous")[0].firstChild.nodeValue;
-        this._template.post.pager_numbers         = numbers.firstChild.nodeValue;
-        this._template.post.pager_numbers_length  = parseInt(numbers.getAttribute("length"));
-        this._template.post.pager_numbers_first   = numbers.getElementsByTagName("first")[0].firstChild.nodeValue;
-        this._template.post.pager_numbers_inner   = numbers.getElementsByTagName("inner")[0].firstChild.nodeValue;
-        this._template.post.pager_numbers_current = numbers.getElementsByTagName("current")[0].firstChild.nodeValue;
-        this._template.post.pager_numbers_last    = numbers.getElementsByTagName("last")[0].firstChild.nodeValue;
-        this._template.post.pager_next            = pager.getElementsByTagName("next")[0].firstChild.nodeValue;
+        this.template.post                       = {};
+        this.template.post.overall               = post.firstChild.nodeValue;
+        this.template.post.pager_overall         = pager.firstChild.nodeValue;
+        this.template.post.pager_previous        = post.getElementsByTagName("previous")[0].firstChild.nodeValue;
+        this.template.post.pager_numbers         = numbers.firstChild.nodeValue;
+        this.template.post.pager_numbers_length  = parseInt(numbers.getAttribute("length"));
+        this.template.post.pager_numbers_first   = numbers.getElementsByTagName("first")[0].firstChild.nodeValue;
+        this.template.post.pager_numbers_inner   = numbers.getElementsByTagName("inner")[0].firstChild.nodeValue;
+        this.template.post.pager_numbers_current = numbers.getElementsByTagName("current")[0].firstChild.nodeValue;
+        this.template.post.pager_numbers_last    = numbers.getElementsByTagName("last")[0].firstChild.nodeValue;
+        this.template.post.pager_next            = pager.getElementsByTagName("next")[0].firstChild.nodeValue;
 
         var manage = template.getElementsByTagName("manage")[0];
 
-        this._template.manage = {};
-        this._template.manage.admin = manage.getElementsByTagName("admin")[0].firstChild.nodeValue;
-        this._template.manage.post  = manage.getElementsByTagName("post")[0].firstChild.nodeValue;
-        this._template.manage.edit  = manage.getElementsByTagName("edit")[0].firstChild.nodeValue;
+        this.template.manage = {};
+        this.template.manage.admin = manage.getElementsByTagName("admin")[0].firstChild.nodeValue;
+        this.template.manage.post  = manage.getElementsByTagName("post")[0].firstChild.nodeValue;
+        this.template.manage.edit  = manage.getElementsByTagName("edit")[0].firstChild.nodeValue;
 
         // load and parse blog's editors
         var editors = miniLOL.theme.template.load("Blog/editors")
@@ -99,10 +99,9 @@ var Template = Class.create({
             return false;
         }
 
-        editors = editors.getElementsByTagName("editor");
-        for (var i = 0; i < editors.length; i++) {
-            this._editors[editors[i].getAttribute("type")] = editors[i].firstChild.nodeValue;
-        }
+        $A(editors.getElementsByTagName("editor")).each(function (editor) {
+            this.editors[editor.getAttribute("type")] = editor.firstChild.nodeValue;
+        }, this);
     },
 
     reload: function () {
@@ -110,17 +109,17 @@ var Template = Class.create({
     },
 
     apply: function (type, data) {
-        return this._callbacks[type].call(this, data);
+        return this.callbacks[type].call(this, data);
     },
 
-    _callbacks: {
+    callbacks: {
         "post": function (data) {
             var pager = '';
             if (data["number"]) {
                 pager = this.apply("pager_overall", { type: "number", position: data["number"], total: data["total"] }); 
             }
 
-            var content = this._template.post.overall.interpolate({
+            var content = this.template.post.overall.interpolate({
                 id:      data["post"].getAttribute("id"),
                 content: data["post"].firstChild.nodeValue,
                 title:   data["post"].getAttribute("title"),
@@ -137,18 +136,19 @@ var Template = Class.create({
                 return content;
             }
             else {
-                return this._template.blog.interpolate({ content: content });
+                return this.template.blog.interpolate({ content: content });
             }
         },
 
         "posts": function (data) {
             var posts = '';
-            for (var i = 0; i < data["posts"].length; i++) {
-                posts += this.apply("post", { post: data["posts"][i] });
-            }
 
-            return this._template.blog.interpolate({ content:
-                this._template.posts.overall.interpolate({
+            data["posts"].each(function (post) {
+                posts += this.apply("post", { post: post });
+            }, this);
+
+            return this.template.blog.interpolate({ content:
+                this.template.posts.overall.interpolate({
                     posts: posts,
                     pager: this.apply("pager_overall", { type: "page", position: data["page"], total: data["total"] })
                 })
@@ -158,10 +158,10 @@ var Template = Class.create({
         "pager_overall": function (data) {
             var template;
             if (data["type"] == "number") {
-                template = this._template.post.pager_overall;
+                template = this.template.post.pager_overall;
             }
             else if (data["type"] == "page") {
-                template = this._template.posts.pager_overall;
+                template = this.template.posts.pager_overall;
             }
 
             return template.interpolate({
@@ -174,10 +174,10 @@ var Template = Class.create({
         "pager_previous": function (data) {
             var template;
             if (data["type"] == "number") {
-                template = this._template.post.pager_previous;
+                template = this.template.post.pager_previous;
             }
             else if (data["type"] == "page") {
-                template = this._template.posts.pager_previous;
+                template = this.template.posts.pager_previous;
             }
 
             var num = (data["position"] <= 1) ? data["position"] : data["position"] - 1;
@@ -191,10 +191,10 @@ var Template = Class.create({
         "pager_numbers": function (data) {
             var template;
             if (data["type"] == "number") {
-                template = this._template.post;
+                template = this.template.post;
             }
             else if (data["type"] == "page") {
-                template = this._template.posts;
+                template = this.template.posts;
             }
 
             var end   = Math.floor(template.pager_numbers_length / 2) + data["position"];
@@ -242,10 +242,10 @@ var Template = Class.create({
         "pager_next": function (data) {
             var template;
             if (data["type"] == "number") {
-                template = this._template.post.pager_next;
+                template = this.template.post.pager_next;
             }
             else if (data["type"] == "page") {
-                template = this._template.posts.pager_next;
+                template = this.template.posts.pager_next;
             }
 
             var num = (data["position"] >= data["total"]) ? data["position"] : parseInt(data["position"]) + 1;
@@ -257,28 +257,28 @@ var Template = Class.create({
         },
 
         "new_post": function (data) {
-            return this._template.blog.interpolate({
-                content: this._template.manage.post.interpolate({
+            return this.template.blog.interpolate({
+                content: this.template.manage.post.interpolate({
                     author: data["author"],
-                    editor: this._editors[miniLOL.config["Blog"].editorType || "simple"]
+                    editor: this.editors[miniLOL.config["Blog"].editorType || "simple"]
                 })
             });
         },
 
         "edit_post": function (data) {
-            return this._template.blog.interpolate({
-                content: this._template.manage.edit.interpolate({
+            return this.template.blog.interpolate({
+                content: this.template.manage.edit.interpolate({
                     title:  data["title"],
                     author: data["author"],
                     date:   data["date"],
                     id:     data["id"],
-                    editor: this._editors[miniLOL.config["Blog"].editorType || "simple"]
+                    editor: this.editors[miniLOL.config["Blog"].editorType || "simple"]
                 })
             });
         },
 
         "admin": function (data) {
-            return this._template.manage.admin.interpolate({
+            return this.template.manage.admin.interpolate({
                 id: data["id"]
             });
         }

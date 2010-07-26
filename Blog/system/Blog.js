@@ -26,7 +26,7 @@ var Blog = Class.create({
         var This = this;
         this.resource = new miniLOL.Resource("Blog", {
             load: function (path) {
-                var data = this._data;
+                var data = this.data;
 
                 new Ajax.Request(path + "?failCache=" + Math.random(), {
                     method: "get",
@@ -56,12 +56,12 @@ var Blog = Class.create({
                     return false;
                 }
 
-                This._data  = this._data.data;
-                This._cache = this._data.cache;
+                This.data  = this.data.data;
+                This.cache = this.data.cache;
             },
 
             clear: function () {
-                this._data = {
+                this.data = {
                     data: null,
                     cache: {}
                 };
@@ -205,7 +205,7 @@ var Blog = Class.create({
     },
 
     getPost: function (id) {
-        return this._data.getElementById(id);
+        return this.data.getElementById(id);
     },
 
     getPostInfo: function (id) {
@@ -227,7 +227,7 @@ var Blog = Class.create({
     },
 
     getPosts: function () {
-        return $A(this._data.getElementsByTagName("post"));
+        return $A(this.data.getElementsByTagName("post"));
     }
 });
 

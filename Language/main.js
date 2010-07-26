@@ -43,7 +43,7 @@ miniLOL.module.create("Language", {
             this.languages.page(args["page"], args["lang"]);
         }
         else if (args["choose"]) {
-            this.languages.set(args["lang"], Boolean(args["apply"]));
+            this.languages.set(args["lang"], Boolean(args["apply"]), true);
         }
         else if (args["chooser"]) {
             miniLOL.content.set(this.template.apply("global", this.languages.toArray()));

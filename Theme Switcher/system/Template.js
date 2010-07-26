@@ -16,33 +16,33 @@ var Template = Class.create({
     initialize: function (root) {
         this.root = root;
 
-        this._template = miniLOL.theme.template.load("Theme Switcher/template")
+        this.template = miniLOL.theme.template.load("Theme Switcher/template")
                       || miniLOL.theme.template.load("/resources/template", this.root);
 
-        if (!this._template) {
+        if (!this.template) {
             throw new Error("Theme Switcher template not found.");
         }
     },
 
     apply: function (type, data) {
-        return this._callbacks[type].call(this, data);
+        return this.callbacks[type].call(this, data);
     },
 
-    _callbacks: {
+    callbacks: {
         "global": function (data) {
             var themes = '';
 
-            for (var i = 0; i < data.length; i++) {
-                themes += this.apply("theme", data[i]);
-            }
+            data.each(function (theme) {
+                themes += this.apply("theme", theme);
+            }, this);
            
-            return this._template.getElementsByTagName("global")[0].firstChild.nodeValue.interpolate({
+            return this.template.getElementsByTagName("global")[0].firstChild.nodeValue.interpolate({
                 data: themes
             });
         },
 
         "theme": function (data) {
-            return this._template.getElementsByTagName("theme")[0].firstChild.nodeValue.interpolate({
+            return this.template.getElementsByTagName("theme")[0].firstChild.nodeValue.interpolate({
                 name: data,
                 SELECTED: (data == miniLOL.theme.name) ? "SELECTED" : ''
             });

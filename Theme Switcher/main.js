@@ -22,21 +22,21 @@ miniLOL.module.create("Theme Switcher", {
         miniLOL.resources.functions.load(this.root+"/resources/functions.xml");
 
         this.Themes = miniLOL.utils.require(this.root+"/system/Themes.js");
-        this._themes = new this.Themes;
+        this.themes = new this.Themes;
 
         this.Template = miniLOL.utils.require(this.root+"/system/Template.js");
-        this._template = new this.Template(this.root);
+        this.template = new this.Template(this.root);
 
-        if (!this._themes.load(this.root+"/resources/themes.xml")) {
+        if (!this.themes.load(this.root+"/resources/themes.xml")) {
             return false;
         }
 
         var theme = new CookieJar().get("theme");
-        if (!this._themes.exists(theme)) {
-            this._theme = miniLOL.config["Theme Switcher"].defaultTheme;
+        if (!this.themes.exists(theme)) {
+            this.theme = miniLOL.config["Theme Switcher"].defaultTheme;
         }
         else {
-            this._theme = theme;
+            this.theme = theme;
         }
 
         Event.observe(document, ":module.loaded", function (event) {
@@ -47,10 +47,10 @@ miniLOL.module.create("Theme Switcher", {
     },
 
     execute: function (args) {
-        args["theme"] = args["theme"] || this._theme;
+        args["theme"] = args["theme"] || this.theme;
 
         if (args["choose"]) {
-            this._theme = args["theme"];
+            this.theme = args["theme"];
 
             new CookieJar({ expires: 60 * 60 * 24 * 365 }).set("theme", args["theme"]);
 
@@ -59,7 +59,7 @@ miniLOL.module.create("Theme Switcher", {
             }
         }
         else if (args["chooser"]) {
-            miniLOL.content.set(this._template.apply("global", this._themes.toArray()));
+            miniLOL.content.set(this.template.apply("global", this.themes.toArray()));
         }
         else {
             miniLOL.theme.load(args["theme"], true);

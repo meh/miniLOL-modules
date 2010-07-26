@@ -26,7 +26,7 @@ var Languages = Class.create({
         var This = this;
         this.resource = new miniLOL.Resource("Languages.resource", {
             load: function (path) {
-                This._languages = this._data;
+                This.languages = this.data;
 
                 new Ajax.Request(path, {
                     method: "get",
@@ -37,14 +37,12 @@ var Languages = Class.create({
                             return;
                         }
 
-                        var languages = http.responseXML.getElementsByTagName("language");
-
-                        for (var i = 0; i < languages.length; i++) {
-                            This._languages.push({
-                                code: languages[i].getAttribute("code"),
-                                name: languages[i].getAttribute("name")
+                        $A(http.responseXML.getElementsByTagName("language")).each(function (language) {
+                            This.languages.push({
+                                code: language.getAttribute("code"),
+                                name: language.getAttribute("name")
                             });
-                        }
+                        });
                     },
 
                     onFailure: function (http) {
@@ -56,7 +54,7 @@ var Languages = Class.create({
             },
 
             clear: function () {
-                this._data = [];
+                this.data = [];
             }
         });
 
@@ -66,7 +64,7 @@ var Languages = Class.create({
         miniLOL.resources.pages.flush(["resources/pages.xml"]);
     },
 
-    set: function (lang, apply) {
+    set: function (lang, apply, save) {
         if (!Object.isString(lang)) {
             lang = lang.name || lang.code;
         }
@@ -75,7 +73,7 @@ var Languages = Class.create({
             throw new Error("No correct language was passed.");
         }
         
-        var language = this._languages.find(function (current) {
+        var language = this.languages.find(function (current) {
             if (current.name == lang || current.code == lang) {
                 return true;
             }
@@ -87,35 +85,37 @@ var Languages = Class.create({
             }));
         }
 
-        this._old      = this._language;
-        this._language = language;
+        this.old      = this.language;
+        this.language = language;
 
-        if (this._old == this._language) {
+        if (this.old == this.language) {
             return;
         }
 
-        new CookieJar({ expires: 60 * 60 * 24 * 365 }).set("language", this._language);
+        if (save) {
+            new CookieJar({ expires: 60 * 60 * 24 * 365 }).set("language", this.language);
+        }
 
-        Event.fire(document, ":module.Language.change", this._language);
+        Event.fire(document, ":module.Language.change", this.language);
 
         this.apply(apply);
     },
 
     apply: function (reload) {
-        if (this._old != this._language) {
-            miniLOL.resources.config.flush([this.root+"/resources/languages/#{code}/config.xml".interpolate(this._old)]);
-            miniLOL.resources.menus.flush([this.root+"/resources/languages/#{code}/menus.xml".interpolate(this._old)]);
-            miniLOL.resources.pages.flush([this.root+"/resources/languages/#{code}/pages.xml".interpolate(this._old)]);
+        if (this.old != this.language) {
+            miniLOL.resources.config.flush([this.root+"/resources/languages/#{code}/config.xml".interpolate(this.old)]);
+            miniLOL.resources.menus.flush([this.root+"/resources/languages/#{code}/menus.xml".interpolate(this.old)]);
+            miniLOL.resources.pages.flush([this.root+"/resources/languages/#{code}/pages.xml".interpolate(this.old)]);
 
-            if (!miniLOL.resources.config.load(this.root+"/resources/languages/#{code}/config.xml".interpolate(this._language))) {
+            if (!miniLOL.resources.config.load(this.root+"/resources/languages/#{code}/config.xml".interpolate(this.language))) {
                 return false;
             }
 
-            if (!miniLOL.resources.menus.load(this.root+"/resources/languages/#{code}/menus.xml".interpolate(this._language))) {
+            if (!miniLOL.resources.menus.load(this.root+"/resources/languages/#{code}/menus.xml".interpolate(this.language))) {
                 return false;
             }
 
-            if (!miniLOL.resources.pages.load(this.root+"/resources/languages/#{code}/pages.xml".interpolate(this._language))) {
+            if (!miniLOL.resources.pages.load(this.root+"/resources/languages/#{code}/pages.xml".interpolate(this.language))) {
                 return false;
             }
         }
@@ -129,13 +129,13 @@ var Languages = Class.create({
     page: function (page, lang) {
         miniLOL.go("#page=../#{root}/resources/languages/#{code}/data/#{page}".interpolate({
             root: this.root,
-            code: lang || this._language.code,
+            code: lang || this.language.code,
             page: page
         }));
     },
 
     toArray: function () {
-        return this._languages;
+        return this.languages;
     }
 });
 

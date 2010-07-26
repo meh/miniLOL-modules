@@ -31,9 +31,9 @@ miniLOL.module.create("Syntax Highlighter", {
                 : miniLOL.config["Syntax Highlighter"][conf];
         }
 
-        this.loaded  = {};
-        this.langs   = {}
-        this.aliases = {};
+        this.loaded    = {};
+        this.languages = {}
+        this.aliases   = {};
 
         var This = this;
         new Ajax.Request(this.root+"/resources/langs.xml", {
@@ -41,20 +41,16 @@ miniLOL.module.create("Syntax Highlighter", {
             asynchronous: false,
 
             onSuccess: function (http) {
-                var langs = http.responseXML.getElementsByTagName("language");
-
-                for (var i = 0; i < langs.length; i++) {
-                    var file         = langs[i].getAttribute("file");
-                    This.langs[file] = langs[i].getAttribute("aliases");
+                $A(http.responseXML.getElementsByTagName("language")).each(function (language) {
+                    var file             = language.getAttribute("file");
+                    This.languages[file] = language.getAttribute("aliases");
             
-                    if (This.langs[file]) {
-                        var split = This.langs[file].split(/ /);
-
-                        for (var h = 0; h < split.length; h++) {
-                            This.aliases[split[h]] = file;
-                        }
+                    if (This.languages[file]) {
+                        This.languages[file].split(/ /).each(function (split) {
+                            This.aliases[split] = file;
+                        });
                     }
-                }
+                });
             },
 
             onFailure: function () {
@@ -87,25 +83,22 @@ miniLOL.module.create("Syntax Highlighter", {
                         continue;
                     }
                     
-                    for (var i = 0; i < aliases.length; i++) {
-                        SyntaxHighlighter.vars.discoveredBrushes[aliases[i]] = brush;
-                    }
+                    aliases.each(function (alias) {
+                        SyntaxHighlighter.vars.discoveredBrushes[alias] = brush;
+                    });
                 }
             }
         }
     },
 
     loadTagFiles: function () {
-       var tags = $$(SyntaxHighlighter.config["tagName"]);
-        for (var i = 0; i < tags.length; i++) {
-            var alias = tags[i].getAttribute("class");
+        $$(SyntaxHighlighter.config["tagName"]).each(function (tag) {
+            var alias = tag.getAttribute("class");
 
-            if (alias) {
-                if (alias = alias.match(/brush:\s*(.*?)(;|$)/)) {
-                    this.loadFile(this.aliases[alias[1]]);
-                }
+            if (alias && (alias = alias.match(/brush:\s*(.*?)(;|$)/))) {
+                this.loadFile(this.aliases[alias[1]]);
             }
-        }
+        }, this);
     },
 
     execute: function (args) {
@@ -113,7 +106,8 @@ miniLOL.module.create("Syntax Highlighter", {
             return;
         }
  
-        args         = args || {};
+        args = args || {};
+
         var defaults = Object.extend({}, SyntaxHighlighter.defaults);
 
         for (var arg in args) {
