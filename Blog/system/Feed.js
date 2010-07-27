@@ -73,7 +73,7 @@ var Feed = Class.create({
         "rss-2.0": function (data) {
             var result = '';
 
-            var posts  = data.getElementsByTagName("post");
+            var posts  = $A(data.getElementsByTagName("post"));
             var max    = this.max || posts.length;
             
             result += ("<?xml version='1.0' encoding='utf-8'?>\n"

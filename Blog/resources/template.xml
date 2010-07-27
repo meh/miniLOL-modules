@@ -68,7 +68,7 @@
             </div>
             ]]>
             <previous><![CDATA[
-                <div class="previous"><a href="#{link}">previous</a></div>
+                <div class="previous"><a href="#{link}">&lt;</a></div>
             ]]></previous>
             <numbers length="5"><![CDATA[
                     <div class="numbers">#{content}</div>
@@ -87,7 +87,7 @@
                 ]]></last>
             </numbers>
             <next><![CDATA[
-                <div class="next"><a href="#{link}">next</a></div>
+                <div class="next"><a href="#{link}">&gt;</a></div>
             ]]></next>
         </pager>       
     </post>

@@ -122,7 +122,7 @@ var Blog = Class.create({
             },
 
             onFailure: function () {
-                miniLOL.error("Something went deeply wrong.", miniLOL.theme.content(), true);
+                miniLOL.error("Something went deeply wrong.", true);
             }
         });
     },
@@ -159,7 +159,7 @@ var Blog = Class.create({
             },
 
             onFailure: function () {
-                miniLOL.error("Something went deeply wrong.", miniLOL.theme.content(), true);
+                miniLOL.error("Something went deeply wrong.", true);
             }
         });
     },
@@ -196,7 +196,7 @@ var Blog = Class.create({
             },
 
             onFailure: function () {
-                miniLOL.error("Something went deeply wrong.", miniLOL.theme.content(), true);
+                miniLOL.error("Something went deeply wrong.", true);
             }
         });
     },
