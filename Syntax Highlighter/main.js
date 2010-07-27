@@ -28,6 +28,7 @@ miniLOL.module.create("Syntax Highlighter", {
         miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/config.xml");
 
         SyntaxHighlighter.config["tagName"] = miniLOL.config["Syntax Highlighter"].tagName;
+        SyntaxHighlighter.config["toolbar"] = false;
 
         for (var conf in miniLOL.config["Syntax Highlighter"]) {
             SyntaxHighlighter.defaults[conf] = (miniLOL.config["Syntax Highlighter"][conf][0] == '[' && confs[conf][confs[conf].length-1] == ']')
@@ -48,11 +49,9 @@ miniLOL.module.create("Syntax Highlighter", {
                     var file             = language.getAttribute("file");
                     this.languages[file] = language.getAttribute("aliases");
 
-                    if (this.languages[file]) {
-                        this.languages[file].split(/ /).each(function (split) {
-                            this.aliases[split] = file;
-                        }, this);
-                    }
+                    this.languages[file].split(/ /).each(function (split) {
+                        this.aliases[split] = file;
+                    }, this);
                 }, this);
             }.bind(this),
 
@@ -91,6 +90,17 @@ miniLOL.module.create("Syntax Highlighter", {
                         SyntaxHighlighter.vars.discoveredBrushes[alias] = brush;
                     });
                 }
+            }
+            else {
+                $$(SyntaxHighlighter.config["tagName"]).each(function (tag) {
+                    var alias = ((tag.getAttribute("class") || "").match(/brush:\s*(.*?)(;|$)/) || [])[1];
+
+                    if (alias && this.aliases[alias] == name) {
+                        tag.setAttribute("class", tag.getAttribute("class").replace(/brush:.*(;|$)/, ''));
+
+                        tag.update("Could not load the brush.");
+                    }
+                }, this);
             }
         }
     },

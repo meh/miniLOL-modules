@@ -25,7 +25,7 @@ miniLOL.module.create("Blog", {
     aliases: ["blog"],
 
     initialize: function () {
-        this.Blog = miniLOL.utils.require(this.root+"/system/Blog.js");
+        this.Blog = miniLOL.utils.execute(this.root+"/system/Blog.js");
         this.blog = new this.Blog(this.root, "/resources/data.xml", "/resources/config.xml");
 
         Event.observe(document, ":refresh", function () {

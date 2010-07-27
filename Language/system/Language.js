@@ -19,15 +19,15 @@
 
 (function () {
 
-var Languages = Class.create({
+var Language = Class.create({
     initialize: function (root, languages) {
         this.root = root;
 
-        var Languages = this;
+        var Language = this;
 
-        this.resource = new miniLOL.Resource("Languages.resource", {
+        this.resource = new miniLOL.Resource("Language.resource", {
             load: function (path) {
-                Languages.languages = this.data;
+                Language.languages = this.data;
 
                 new Ajax.Request(path, {
                     method: "get",
@@ -39,7 +39,7 @@ var Languages = Class.create({
                         }
 
                         $A(http.responseXML.getElementsByTagName("language")).each(function (language) {
-                            Languages.languages.push({
+                            Language.languages.push({
                                 code: language.getAttribute("code"),
                                 name: language.getAttribute("name")
                             });
@@ -140,6 +140,6 @@ var Languages = Class.create({
     }
 });
 
-return Languages;
+return Language;
 
 })();

@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <languages>
-    <language file="AS3"        aliases="actionscript3 as3"/>
-    <language file="Bash"       aliases="bash shell"/>
-    <language file="Cpp"        aliases="cpp c"/>
-    <language file="CSharp"     aliases="c# c-sharp csharp"/>
-    <language file="Css"        aliases="css"/>
-    <language file="Delphi"     aliases="delphi pascal"/>
-    <language file="Diff"       aliases="diff patch"/>
-    <language file="Groovy"     aliases="groovy"/>
-    <language file="JavaFX"     aliases="jfx javafx"/>
-    <language file="Java"       aliases="java"/>
-    <language file="JScript"    aliases="js jscript javascript"/>
-    <language file="Perl"       aliases="perl pl"/>
-    <language file="Php"        aliases="php"/>
-    <language file="Plain"      aliases="text plain"/>
-    <language file="PowerShell" aliases="powershell ps"/>
-    <language file="Python"     aliases="py python"/>
-    <language file="Ruby"       aliases="ruby rb"/>
-    <language file="Scala"      aliases="scala"/>
-    <language file="Sql"        aliases="sql"/>
-    <language file="Vb"         aliases="vb vbnet"/>
-    <language file="Xml"        aliases="xml xhtml xslt html xhtml"/>
+    <language file="AppleScript" aliases="applescript"/>
+    <language file="AS3"         aliases="actionscript3 as3"/>
+    <language file="Bash"        aliases="bash shell"/>
+    <language file="ColdFusion"  aliases="coldfusion cf"/>
+    <language file="Cpp"         aliases="cpp c"/>
+    <language file="CSharp"      aliases="c# c-sharp csharp"/>
+    <language file="Css"         aliases="css"/>
+    <language file="Delphi"      aliases="delphi pascal"/>
+    <language file="Diff"        aliases="diff patch"/>
+    <language file="Erlang"      aliases="erlang erl"/>
+    <language file="Groovy"      aliases="groovy"/>
+    <language file="JavaFX"      aliases="jfx javafx"/>
+    <language file="Java"        aliases="java"/>
+    <language file="JScript"     aliases="js jscript javascript"/>
+    <language file="Perl"        aliases="perl pl"/>
+    <language file="Php"         aliases="php"/>
+    <language file="Plain"       aliases="text plain"/>
+    <language file="PowerShell"  aliases="powershell ps"/>
+    <language file="Python"      aliases="py python"/>
+    <language file="Ruby"        aliases="ruby rb"/>
+    <language file="Sass"        aliases="sass scss"/>
+    <language file="Scala"       aliases="scala"/>
+    <language file="Sql"         aliases="sql"/>
+    <language file="Vb"          aliases="vb vbnet"/>
+    <language file="Xml"         aliases="xml xhtml xslt html xhtml"/>
 </languages>
