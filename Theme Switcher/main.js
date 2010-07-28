@@ -40,8 +40,15 @@ miniLOL.module.create("Theme Switcher", {
         }
 
         Event.observe(document, ":module.loaded", function (event) {
-            if (event.memo == "Theme Switcher" && location.href.parseQuery().type != "theme") {
-                miniLOL.module.execute("Theme Switcher", { theme: miniLOL.module.get("Theme Switcher").theme });
+            if (event.memo == "Theme Switcher") {
+                var query = location.href.parseQuery();
+
+                if (query.type != "theme") {
+                    miniLOL.module.execute("Theme Switcher", { theme: miniLOL.module.get("Theme Switcher").theme });
+                }
+                else {
+                    miniLOL.module.execute("Theme Switcher", { theme: query.theme });
+                }
             }
         })
     },
