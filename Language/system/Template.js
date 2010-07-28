@@ -56,7 +56,7 @@ var Template = Class.create({
         "language": function (data) {
             return this.template.getElementsByTagName("language")[0].firstChild.nodeValue.interpolate({
                 name: data.name,
-                SELECTED: (data.name == miniLOL.module.get("Language").languages.language.name) ? "SELECTED" : ''
+                SELECTED: (data.name == miniLOL.module.get("Language").language.current.name) ? "SELECTED" : ''
             });
         }
     }

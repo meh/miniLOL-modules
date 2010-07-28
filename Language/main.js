@@ -27,7 +27,7 @@ miniLOL.module.create("Language", {
     initialize: function () {
         miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/config.xml");
 
-        this.Language = miniLOL.utils.execute(this.root+"/system/Languages.js");
+        this.Language = miniLOL.utils.execute(this.root+"/system/Language.js");
         this.language = new this.Language(this.root, "/resources/languages.xml");
 
         this.Template = miniLOL.utils.execute(this.root+"/system/Template.js");
