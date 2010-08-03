@@ -40,7 +40,7 @@ if (isset($_REQUEST['feed'])) {
     $path = realpath("{$_SESSION['miniLOL']['path']['root']}/{$feed}");
 
     if (strpos($path, $_SESSION['miniLOL']['path']['root']) !== 0) {
-        echo 'You are doing it wrong.';
+        echo 'You tried to write the feed somewhere you could not.';
     }
     else {
         file_put_contents($path, security_getRequest('content'));
@@ -72,7 +72,7 @@ if (isset($_REQUEST['comment'])) {
     }
 
     if (!isset($_REQUEST['id'])) {
-        echo 'You are doing it wrong.';
+        echo 'No id was given, what post are you commenting on?';
         security_unlock();
         exit;
     }
@@ -107,7 +107,7 @@ else {
     }
 
     if (!isset($_REQUEST['id'])) {
-        echo 'You are doing it wrong.';
+        echo 'No id was given, I do not know what to do.';
         security_unlock();
         exit;
     }
