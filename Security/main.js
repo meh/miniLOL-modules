@@ -25,6 +25,8 @@ miniLOL.module.create("Security", {
     aliases: ["security"],
     
     initialize: function () {
+        miniLOL.utils.require(this.root+"/system/extensions.js");
+
         if (!miniLOL.theme.style.exists("Security/style")) {
             miniLOL.theme.style.load("style", this.root+"/resources");
         }
@@ -57,6 +59,7 @@ miniLOL.module.create("Security", {
 
                 new Ajax.Request(this.root+"/main.php?login&password=#{0}".interpolate([encodeURIComponent(args["password"])]), {
                     method: "get",
+                    tokenized: true,
 
                     onSuccess: function (http) {
                         miniLOL.content.set(http.responseText);
@@ -90,6 +93,7 @@ miniLOL.module.create("Security", {
 
             new Ajax.Request(this.root+"/main.php?logout", {
                 method: "get",
+                tokenized: true,
 
                 onSuccess: function (http) {
                     miniLOL.content.set(http.responseText);
@@ -101,8 +105,6 @@ miniLOL.module.create("Security", {
                     miniLOL.error("Something went deeply wrong :(", miniLOL.theme.content());
                 }
             });
-
-            
         }
         else if (args["change"]) {
             if (args["do"]) {
@@ -115,6 +117,7 @@ miniLOL.module.create("Security", {
 
                 new Ajax.Request(this.root+"/main.php?change&password=#{0}&type=#{1}".interpolate([encodeURIComponent(args["password"]), encodeURIComponent(args["type"])]), {
                     method: "get",
+                    tokenized: true,
 
                     onSuccess: function (http) {
                         miniLOL.content.set(http.responseText);
@@ -159,8 +162,22 @@ miniLOL.module.create("Security", {
 
             return this.connected = (result == "true");
         }
+        else if (args["token"]) {
+            var result;
+
+            new Ajax.Request(this.root+"/main.php?token", {
+                method: "get",
+                asynchronous: false,
+
+                onSuccess: function (http) {
+                    result = http.responseText;
+                }
+            });
+
+            return result;
+        }
         else if (args["get"]) {
-            var result = '';
+            var result = "";
 
             miniLOL.module.execute("Logger", ["log", 30, "Security", "get", args["get"]]);
             

@@ -35,7 +35,7 @@ function simpleXMLToArray ($xml)
     return $result;
 }
 
-include_once('utils.php');
+require('system/utils.php');
 
 session_set_cookie_params(60*60*24*365, '/');
 session_start();
@@ -58,8 +58,17 @@ else if (isset($_REQUEST['build'])) {
 
     exit;
 }
+else if (isset($_REQUEST['token'])) {
+    echo $_SESSION['miniLOL']['__token'] = md5(rand());
+    exit;
+}
 
 if (isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
+    if (!security_checkToken()) {
+        echo 'CSRF detected, someone is trying to hack you, kind sir.';
+        exit;
+    }
+
     $_SESSION['miniLOL']['config'] = simpleXMLToArray(simplexml_load_string(security_loadConfig('resources/config.php')));
 
     $password = security_getRequest('password');
@@ -68,7 +77,7 @@ if (isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
         $password = @hash(strtolower($_SESSION['miniLOL']['config']['admin']['password']['type']), $password);
 
         if (!$password) {
-            echo "The hashing algorithm isn't present.";
+            echo 'The hashing algorithm is not present.';
             exit;
         }
     }
@@ -85,6 +94,11 @@ if (isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
     exit;
 }
 else if (isset($_REQUEST['logout'])) {
+    if (!security_checkToken()) {
+        echo 'CSRF detected, someone is trying to hack you, kind sir.';
+        exit;
+    }
+
     unset($_SESSION['miniLOL']);
 
     echo 'Logged out.';
@@ -96,6 +110,11 @@ else if (isset($_REQUEST['change']) && isset($_REQUEST['password']) && isset($_R
         exit;
     }
 
+    if (!security_checkToken()) {
+        echo 'CSRF detected, someone is trying to hack you, kind sir.';
+        exit;
+    }
+
     $type = security_getRequest('type');
 
     $config = simplexml_load_string(security_loadConfig('resources/config.php'));
@@ -103,7 +122,7 @@ else if (isset($_REQUEST['change']) && isset($_REQUEST['password']) && isset($_R
     $config->admin->password->data = ($type == 'text') ? security_getRequest('password') : @hash(strtolower($type), security_getRequest('password'));
 
     if (!$config->admin->password->data) {
-        echo "The hashing algorithm isn't present.";
+        echo 'The hashing algorithm is not present.';
         exit;
     }
 
@@ -120,19 +139,18 @@ if (@!$_SESSION['miniLOL']['admin'] || !isset($_REQUEST['get']) || !strlen($_REQ
     exit;
 }
 
-$lastNode = $_SESSION['miniLOL']['config'];
-$nodeTree = explode('.', $_REQUEST['get']);
+$last = $_SESSION['miniLOL']['config'];
 
-foreach ($nodeTree as $node) {
-    if (!isset($lastNode[$node])) {
+foreach (explode('.', security_getRequest('get')) as $node) {
+    if (!isset($last[$node])) {
         exit;
     }
 
-    $lastNode = $lastNode[$node];
+    $last = $last[$node];
 }
 
-if (is_string($lastNode)) {
-    echo $lastNode;
+if (is_string($last)) {
+    echo $last;
 }
 
 ?>

@@ -56,6 +56,11 @@ function security_getRequest ($name)
     return (get_magic_quotes_gpc() ? stripslashes($_REQUEST[$name]) : $_REQUEST[$name]);
 }
 
+function security_checkToken ($token=null)
+{
+    return ($token ? $token : security_getRequest('__token')) == $_SESSION['miniLOL']['__token'];
+}
+
 function security_loadConfig ($file)
 {
     // Secure config file

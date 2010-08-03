@@ -13,10 +13,10 @@
 
 define('__VERSION__', '0.2.2');
 
-require_once('../Security/utils.php');
-
 session_set_cookie_params(60*60*24*365, '/');
 session_start();
+
+require("{$_SESSION['miniLOL']['path']['modules']}/Security/system/utils.php");
 
 $config    = simplexml_load_file('resources/config.xml');
 $protected = $config->protected == 'true';

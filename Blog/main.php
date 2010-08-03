@@ -23,10 +23,10 @@ define('__VERSION__', '0.3');
 session_set_cookie_params(60*60*24*365, '/');
 session_start();
 
-require_once("{$_SESSION['miniLOL']['path']['modules']}/Security/utils.php");
+require("{$_SESSION['miniLOL']['path']['modules']}/Security/system/utils.php");
 
 if (@!$_SESSION['miniLOL']['admin']) {
-    echo "You're doing it wrong.";
+    echo 'You are not admin.';
     exit;
 }
 
@@ -53,7 +53,7 @@ if (isset($_REQUEST['comment'])) {
     $post = $data->getElementById($_REQUEST['parent']);
 
     if (!$post) {
-        echo "The post doesn't exist.";
+        echo 'The post does not exist.';
         security_unlock();
         exit;
     }
@@ -64,12 +64,17 @@ if (isset($_REQUEST['comment'])) {
     }
 
     if (!isset($_REQUEST['id'])) {
-        echo "You're doing it wrong.";
+        echo 'You are doing it wrong.';
         security_unlock();
         exit;
     }
 }
 else {
+    if (!security_checkToken()) {
+        echo 'CSRF detected, someone is trying to hack you, kind sir.';
+        exit;
+    }
+
     if (isset($_REQUEST['post'])) {
         $id = $data->documentElement->getAttribute('total') + 1;
     
@@ -94,7 +99,7 @@ else {
     }
 
     if (!isset($_REQUEST['id'])) {
-        echo "You're doing it wrong.";
+        echo 'You are doing it wrong.';
         security_unlock();
         exit;
     }
@@ -102,7 +107,7 @@ else {
     $post = $data->getElementById($_REQUEST['id']);
 
     if (!$post) {
-        echo "The post doesn't exist.";
+        echo 'The post does not exist.';
         security_unlock();
         exit;
     }

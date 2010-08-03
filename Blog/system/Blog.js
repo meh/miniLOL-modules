@@ -112,6 +112,7 @@ var Blog = Class.create({
 
         new Ajax.Request(this.root+"/main.php?post&"+type, {
             method: "post",
+            tokenized: true,
 
             parameters: data,
 
@@ -149,6 +150,7 @@ var Blog = Class.create({
 
         new Ajax.Request(this.root+"/main.php?edit&"+type, {
             method: 'post',
+            tokenized: true,
 
             parameters: data,    
 
@@ -186,6 +188,7 @@ var Blog = Class.create({
 
         new Ajax.Request(this.root+"/main.php?remove&"+type, {
             method: 'post',
+            tokenized: true,
 
             parameters: data,    
 
