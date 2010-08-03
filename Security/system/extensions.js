@@ -1,3 +1,16 @@
+/*  Prototype JavaScript framework, version 1.7_rc2
+ *  (c) 2005-2010 Sam Stephenson
+ *
+ *  Prototype is freely distributable under the terms of an MIT-style license.
+ *  For details, see the Prototype web site: http://www.prototypejs.org/
+ *
+ *--------------------------------------------------------------------------*/
+
+/*
+ * Little modifications by meh. [http://meh.doesntexist.org | meh.ffff@gmail.com]
+ * to adapt the code to the Security module.
+ */
+
 Ajax.Request.addMethods({
     request: function (url) {
         this.url    = url;
