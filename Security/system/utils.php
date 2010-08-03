@@ -18,6 +18,8 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
+// Don't be a faggot, if you pass user input to these lock functions it would become insecure.
+
 function security_lock ($lock = '.lock')
 {
     touch($lock);
@@ -40,7 +42,7 @@ function security_waitUnlock ($lock = '.lock', $maxCycles = 1337, $unlock = fals
                 unlink($lock);
             }
             else {
-                echo "The request couldn't be fulfilled.";
+                echo 'The request could not be fulfilled.';
                 exit;
             }
         }

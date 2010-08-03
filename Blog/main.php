@@ -33,10 +33,18 @@ if (@!$_SESSION['miniLOL']['admin']) {
 security_waitUnlock();
 security_lock();
 
+// Still not so secure, but I want the admin to chose the name of the feed file.
+// If he's so faggoty that he gets his password stolen it's not my fault.
 if (isset($_REQUEST['feed'])) {
     $feed = security_getRequest('feed');
+    $path = realpath("{$_SESSION['miniLOL']['path']['root']}/{$feed}");
 
-    file_put_contents("{$_SESSION['miniLOL']['path']['root']}/{$feed}", security_getRequest('content'));
+    if (strpos($path, $_SESSION['miniLOL']['path']['root']) !== 0) {
+        echo 'You are doing it wrong.';
+    }
+    else {
+        file_put_contents($path, security_getRequest('content'));
+    }
 
     security_unlock();
     exit;
