@@ -37,7 +37,7 @@ miniLOL.module.create("Blog", {
         if (args["post"] || args["edit"] || args["remove"]) {
             // if there's no id and it's not posting a post (lol) go batshit.
             if (!args["id"] && !(args["post"] && !args["comment"])) {
-                miniLOL.content.set("You're doing it wrong.");
+                miniLOL.error("No id or content was passed.", true);
                 return false;
             }
 
@@ -114,13 +114,13 @@ miniLOL.module.create("Blog", {
                         }
                     }
                     else {
-                        miniLOL.content.set("You're doing it wrong.");
+                        miniLOL.error("No id was passed, what post should I edit?", true);
                         return false;
                     }
                 }
                 else if (args["remove"]) {
                     if (!args["id"]) {
-                        miniLOL.content("You're doing it wrong.", miniLOL.theme.content(), true);
+                        miniLOL.error("No id was passed, what post should I remove?", true);
                         return false;
                     }
         
@@ -160,7 +160,7 @@ miniLOL.module.create("Blog", {
                     }
                 }
                 else {
-                    miniLOL.error("Post not found.", miniLOL.theme.content(), true);
+                    miniLOL.error("Post not found.");
                     return false;
                 }
             }
@@ -176,7 +176,7 @@ miniLOL.module.create("Blog", {
                     }
                 }
                 else {
-                    miniLOL.content.set("Post not found.");
+                    miniLOL.error("Post not found.");
                     return false;
                 }
             }
@@ -184,12 +184,12 @@ miniLOL.module.create("Blog", {
                 var allPosts = this.blog.getPosts();
 
                 if (allPosts.length == 0) {
-                    miniLOL.content.set("The blog is empty :(");
+                    miniLOL.error("The blog is empty :(");
                     return false;
                 }
     
                 if (args["page"] > Math.ceil(allPosts.length/miniLOL.config["Blog"].postsPerPage) || args["page"] < 1) {
-                    miniLOL.content.set("Page not found.");
+                    miniLOL.error("Page not found.");
                     return false;
                 }
     
