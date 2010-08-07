@@ -22,6 +22,8 @@
 
 function security_lock ($lock = '.lock')
 {
+    security_waitUnlock($lock);
+
     touch($lock);
 }
 

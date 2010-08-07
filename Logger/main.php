@@ -20,7 +20,14 @@ require("{$_SESSION['miniLOL']['path']['modules']}/Security/system/utils.php");
 
 $config    = simplexml_load_file('resources/config.xml');
 $protected = $config->protected == 'true';
-$file      = 'resources/'.$config->fileName;
+$file      = realpath("{$_SESSION['miniLOL']['path']['modules']}/Logger/resources/{$config->fileName}");
+
+if (strpos($path, "{$_SESSION['miniLOL']['path']['modules']}/Logger/resources/") !== 0) {
+    echo 'The log file cannot be there.';
+    exit;
+}
+
+security_lock();
 
 if (!file_exists($file)) {
     $xml = new XMLWriter();
@@ -50,7 +57,7 @@ if (!isset($_REQUEST['data']) || !isset($_REQUEST['date'])) {
         }
     }
     else {
-        echo "You're doing it deeply wrong.";
+        echo 'You are doing it deeply wrong.';
     }
 
     exit;
@@ -60,9 +67,6 @@ $priority = $config->priority || 0;
 if ($priority < security_getRequest('priority')) {
     exit;
 }
-
-security_waitUnlock();
-security_lock();
 
 $fp = fopen($file, 'r+');
 

@@ -30,7 +30,6 @@ if (@!$_SESSION['miniLOL']['admin']) {
     exit;
 }
 
-security_waitUnlock();
 security_lock();
 
 // Still not so secure, but I want the admin to chose the name of the feed file.
