@@ -1,0 +1,111 @@
+<?php
+/****************************************************************************
+ * Copyleft meh. [http://meh.doesntexist.org | meh.ffff@gmail.com]          *
+ *                                                                          *
+ * This file is part of miniLOL. A PHP implementation.                      *
+ *                                                                          *
+ * miniLOL is free software: you can redistribute it and/or modify          *
+ * it under the terms of the GNU Affero General Public License as           *
+ * published by the Free Software Foundation, either version 3 of the       *
+ * License, or (at your option) any later version.                          *
+ *                                                                          *
+ * miniLOL is distributed in the hope that it will be useful,               *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            *
+ * GNU Affero General Public License for more details.                      *
+ *                                                                          *
+ * You should have received a copy of the GNU Affero General Public License *
+ * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
+ ****************************************************************************/
+
+ob_start();
+
+define('ROOT',    realpath(dirname(__FILE__)));
+define('MODULES', ROOT.'/modules');
+define('SYSTEM',  MODULES.'/Static/system');
+
+require(SYSTEM.'/miniLOL.php');
+
+session_start();
+
+$miniLOL = miniLOL::instance();
+
+$miniLOL->resources->get('miniLOL.config')->load('resources/config.xml');
+
+$miniLOL->theme->load($miniLOL->resources->get('miniLOL.config')->get('core')['theme']);
+
+$miniLOL->resources->get('miniLOL.menus')->load('resources/menus.xml')->normalize($miniLOL->theme->menu);
+$miniLOL->resources->get('miniLOL.pages')->load('resources/pages.xml')->normalize($miniLOL->theme->pages);
+
+$miniLOL->resources->get('miniLOL.modules')->load('resources/modules.xml')->each(function ($module) {
+    $miniLOL->modules->load($module);
+});
+
+ob_clean();
+
+if ($miniLOL->error()) {
+    echo $miniLOL->error();
+    ob_end_flush();
+    exit;
+}
+
+$config = $miniLOL->resource('miniLOL.config')->get();
+
+$output = array();
+
+$output['title']    = (empty($config['core']['siteTitle']) ? 'miniLOL 1.2' : $config['core']['siteTitle']);
+$output['keywords'] = $config['Static']['keywords'];
+$output['styles']   = $miniLOL->theme->styles();
+$output['content']  = $miniLOL->go($_REQUEST);
+
+echo <<<HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$output['title']}</title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="keywords" content="{$output['keywords']}"/>
+
+    {$output['styles']}
+
+    <!--
+    If you don't phear the Google empire and want more speed, you can use the Google lib APIs.
+    But the client needs external access to make it work and it's not good in an intranet.
+
+    For using Google lib APIs comment the internal libraries block and uncomment the Google libraries block.
+    To use the internal libraries just leave it as it is.
+    -->
+    
+    <!-- internal libraries -->
+    <script type="text/javascript" src="system/prototype.min.js"></script>
+    <!-- Uncomment this if you need scriptaculous support, it's really doubling the files to get loaded
+    <script type="text/javascript" src="system/scriptaculous/scriptaculous.js"></script>
+    -->
+    
+    <!-- Google libraries
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">// <![CDATA[
+
+    google.load("prototype", "1.6"); // this is needed by the core
+
+    // Uncomment this if you need scriptaculous support, it's really doubling the files to get loaded
+    // google.load("scriptaculous", "1.8.3");
+
+    // ]]></script>
+    -->
+
+    <script type="text/javascript" src="system/unFocus-History.js"></script>
+    <script type="text/javascript" src="system/cookiejar.min.js"></script>
+
+    <script type="text/javascript" src="system/miniLOL.min.js"></script>
+</head>
+<body onload="miniLOL.initialize">
+    {$output['content']}
+</body>
+</html>
+HTML;
+
+ob_end_flush();
+
+?>
