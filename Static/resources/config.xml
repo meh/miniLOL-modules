@@ -8,5 +8,8 @@
 ]>
 
 <configuration domain="Static">
-    <root>index.html</root>
+    <meta>
+        <keywords>javascript ajax js cms</keywords>
+        <description>miniLOL is an awesome Javascript/XML modular CMS.</description>
+    </meta>
 </configuration>

@@ -26,6 +26,7 @@ class Theme
     private $_path;
     private $_info;
     private $_styles;
+    private $_template;
     
     public function __construct ($miniLOL)
     {
@@ -51,6 +52,8 @@ class Theme
             $attributes = $style->attributes();
             array_push($this->_styles, (string) $attributes['name']);
         }
+
+        $this->_template = file_get_contents("{$this->_path}/template.html");
     }
 
     public function name ()
@@ -71,6 +74,25 @@ class Theme
     public function styles ()
     {
         return $this->_styles;
+    }
+
+    public function template ()
+    {
+        return $this->_template;
+    }
+
+    public function menus ($menu)
+    {
+
+    }
+
+    public function pages ($page)
+    {
+    }
+
+    public function output ($content, $menu)
+    {
+
     }
 }
 

@@ -42,8 +42,28 @@ class Events
         array_push($this->_events[$name], $callback);
     }
 
+    public function stopObserving ($name, $callback=null)
+    {
+        if ($callback) {
+            foreach ($this->_events[$name] as $key => $value) {
+                if ($value == $callback) {
+                    unset($this->_events[$name][$key]);
+                    break;
+                }
+            }
+        }
+        else {
+            unset($this->_events[$name]);
+        }
+    }
+
     public function fire ($name, $memo)
     {
+        $event = new Event($name, $memo);
+
+        foreach ($this->_events[$name] as $callback) {
+            $callback($event);
+        }
     }
 }
 

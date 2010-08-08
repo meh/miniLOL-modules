@@ -37,6 +37,11 @@ abstract class Resource
     {
         $args = func_get_args();
 
+        $this->miniLOL->events->fire(':resource.load', array(
+            'resource'  => $this,
+            'arguments' => $args
+        ));
+
         try {
             call_user_method_array('_load', $this, $args);
 
@@ -46,16 +51,29 @@ abstract class Resource
             throw $e;
         }
 
+        $this->miniLOL->events->fire(':resource.loaded', array(
+            'resource'  => $this,
+            'arguments' => $args
+        ));
+
         return $this;
     }
 
     public function clear ()
     {
+        $this->miniLOL->events->fire(':resource.clear', array(
+            'resource' => $this
+        ));
+
         $this->_data = array();
     }
 
     public function flush ()
     {
+        $this->miniLOL->events->fire(':resource.flush', array(
+            'resource' => $this
+        ));
+
         $result       = $this->_calls;
         $this->_calls = array();
 
@@ -64,11 +82,19 @@ abstract class Resource
 
     public function reload ()
     {
+        $this->miniLOL->events->fire(':resource.reload', array(
+            'resource' => $this
+        ));
+
         $this->clear();
 
         foreach ($this->flush() as $call) {
             call_user_func($this->load, $call);
         }
+
+        $this->miniLOL->events->fire(':resource.reloaded', array(
+            'resource' => $this
+        ));
     }
 
     abstract public function name ();

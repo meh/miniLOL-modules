@@ -20,7 +20,24 @@
 
 class Event
 {
+    private $_name;
+    private $_memo;
 
+    public function __construct ($name, $memo)
+    {
+        $this->_name = $name;
+        $this->_memo = $memo;
+    }
+
+    public function name ()
+    {
+        return $this->_name;
+    }
+
+    public function memo ()
+    {
+        return $this->_memo;
+    }
 }
 
 ?>

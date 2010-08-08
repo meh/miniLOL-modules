@@ -36,8 +36,8 @@ $config = $miniLOL->resources->get('miniLOL.config')->get();
 
 $miniLOL->theme->load($config['core']['theme']);
 
-#$miniLOL->resources->get('miniLOL.menus')->load('resources/menus.xml')->normalize($miniLOL->theme->menu);
-#$miniLOL->resources->get('miniLOL.pages')->load('resources/pages.xml')->normalize($miniLOL->theme->pages);
+$miniLOL->resources->get('miniLOL.menus')->load('resources/menus.xml')->normalize($miniLOL->theme->menus);
+$miniLOL->resources->get('miniLOL.pages')->load('resources/pages.xml')->normalize($miniLOL->theme->pages);
 
 foreach ($miniLOL->resources->get('miniLOL.modules')->load('resources/modules.xml') as $module) {
     $miniLOL->modules->load($module);
@@ -53,10 +53,16 @@ if ($miniLOL->error()) {
 
 $output = array();
 
-$output['title']    = (empty($config['core']['siteTitle']) ? 'miniLOL 1.2' : $config['core']['siteTitle']);
-$output['keywords'] = $config['Static']['keywords'];
-$output['styles']   = '';
-$output['content']  = $miniLOL->go($_REQUEST);
+$output['title']       = (empty($config['core']['siteTitle']) ? 'miniLOL 1.2' : $config['core']['siteTitle']);
+$output['meta']        = '';
+$output['styles']      = '';
+$output['content']     = $miniLOL->go($_ENV['REQUEST_URI'], $_REQUEST);
+
+if (is_array($config['Static']['meta'])) {
+    foreach ($config['Static']['meta'] as $name => $content) {
+        $output['meta'] .= "<meta name='{$name}' content='{$content}'/>\n";
+    }
+}
 
 foreach ($miniLOL->theme->styles() as $style) {
     $output['styles'] .= "<link rel='stylesheet' type='text/css' href='{$miniLOL->theme->path(true)}/{$style}.css'/>\n";
@@ -69,7 +75,8 @@ echo <<<HTML
     <title>{$output['title']}</title>
 
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <meta name="keywords" content="{$output['keywords']}"/>
+
+    {$output['meta']}
 
     {$output['styles']}
 
@@ -104,7 +111,8 @@ echo <<<HTML
 
     <script type="text/javascript" src="system/miniLOL.min.js"></script>
 </head>
-<body onload="miniLOL.initialize">
+
+<body onload="miniLOL.initialize()">
     {$output['content']}
 </body>
 </html>

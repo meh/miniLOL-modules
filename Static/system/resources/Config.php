@@ -25,7 +25,19 @@ class ConfigResource extends Resource
         return 'miniLOL.config';
     }
 
-    public function _load ($path)
+    public function __construct ($miniLOL)
+    {
+        parent::__construct($miniLOL);
+
+        $this->miniLOL->events->observe(':resource.loaded', $this->_fix);
+    }
+
+    private function _fix ($event)
+    {
+
+    }
+
+    private function _load ($path)
     {
         $xml    = simplexml_load_file($path);
         $attrs  = $xml->attributes();

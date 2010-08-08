@@ -18,9 +18,9 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
+require(SYSTEM.'/Events.php');
 require(SYSTEM.'/Resources.php');
 require(SYSTEM.'/Modules.php');
-require(SYSTEM.'/Events.php');
 require(SYSTEM.'/Theme.php');
 
 class miniLOL
@@ -35,6 +35,7 @@ class miniLOL
             $_SESSION['miniLOL'] = array();
         }
 
+        // XXX: This is only for development purposes.
         return new miniLOL;
         
         if (!isset($_SESSION['miniLOL']['Static'])) {
@@ -45,21 +46,23 @@ class miniLOL
         }
     }
 
+    public $events;
+
     public $resources;
     public $modules;
 
     public $theme;
 
-    public $events;
-
     private function __construct ()
     {
+        $this->events = new Events($this);
+
         $this->resources = new Resources($this);
         $this->modules   = new Modules($this);
 
         $this->theme = new Theme($this);
 
-        $this->events = new Events($this);
+        $this->resources->get('miniLOL.config')->load(MODULES.'/Static/resources/config.xml');
     }
 
     public function error ($what=null)
@@ -70,7 +73,7 @@ class miniLOL
 
         if (is_bool($what)) {
             if ($what) {
-                $this->_error = 'An error happened.';
+                $this->_error = 'Something went wrong.';
             }
             else {
                 $this->_error = false;
@@ -81,9 +84,47 @@ class miniLOL
         }
     }
 
-    public function go ($requests)
+    public function load ($page, $arguments)
     {
+        if (ini_get('allow_url_fopen')) {
+            $root = dirname($_ENV['SCRIPT_NAME']);
 
+            return file_get_contents("http://{$_SERVER['HTTP_HOST']}{$root}/data/{$page}?{$arguments}");
+        }
+        else {
+            return file_get_contents(ROOT."/data/{$page}");
+        }
+    }
+
+    public function go ($url, $arguments, $query=null, $again=false)
+    {
+        if (!$query) {
+            $query = $_SERVER['QUERY_STRING'];
+        }
+
+        preg_match('/[?#](([^=&]*)&|([^=&]*)$)/', $url, $matches);
+
+        $internal = (isset($matches[2])) ? $matches[2] : $matches[3];
+
+        if ($internal) {
+            $content = $this->resources->get('miniLOL.pages')->get($internal);
+        }
+        else if ($arguments['module']) {
+            $content = $this->modules->execute($arguments['module'], $arguments);
+        }
+        else if ($arguments['page']) {
+            $page = $arguments['page']; unset($arguments['page']);
+            $content = $this->load($page, $query);
+        }
+        else {
+            if (!$again) {
+                $config = $this->resources->get('miniLOL.config')->get('core');
+
+                return $this->go($config['homePage'], $arguments, null, true);
+            }
+        }
+
+        return $this->theme->output($content, $menu);
     }
 }
 
