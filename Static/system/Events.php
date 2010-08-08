@@ -59,10 +59,17 @@ class Events
 
     public function fire ($name, $memo)
     {
-        $event = new Event($name, $memo);
+        if (is_array($this->_events[$name])) {
+            $event = new Event($name, $memo);
 
-        foreach ($this->_events[$name] as $callback) {
-            $callback($event);
+            foreach ($this->_events[$name] as $callback) {
+                if (is_array($callback)) {
+                    $callback[0]->{$callback[1]}($event);
+                }
+                else {
+                    $callback($event);
+                }
+            }
         }
     }
 }

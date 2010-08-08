@@ -26,7 +26,7 @@ foreach (glob(SYSTEM.'/resources/*.php') as $resource) {
 
 class Resources
 {
-    private $miniLOL;
+    public $miniLOL;
 
     private $_resources;
 
@@ -47,7 +47,7 @@ class Resources
 
     }
 
-    public function get ($name)
+    public function &get ($name)
     {
         return $this->_resources[$name];
     }

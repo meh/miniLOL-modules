@@ -30,7 +30,7 @@ class PagesResource extends Resource
         foreach (simplexml_load_file($path)->xpath('/pages/page') as $page) {
             $attributes = $page->attributes();
 
-            $this->_data[$attributes['id']] = $page;
+            $this->_data[(string) $attributes['id']] = $page;
         }
     }
 
@@ -42,7 +42,12 @@ class PagesResource extends Resource
     public function normalize ($callback)
     {
         foreach ($this->_data as $name => $page) {
-            $this->_data[$name] = $callback($page);
+            if (is_array($callback)) {
+                $this->_data[$name] = $callback[0]->{$callback[1]}($page);
+            }
+            else {
+                $this->_data[$name] = $callback($page);
+            }
         }
     }
 }

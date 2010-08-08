@@ -62,7 +62,7 @@ class miniLOL
 
         $this->theme = new Theme($this);
 
-        $this->resources->get('miniLOL.config')->load(MODULES.'/Static/resources/config.xml');
+        $this->resources->get('miniLOL.config')->load('modules/Static/resources/config.xml');
     }
 
     public function error ($what=null)

@@ -30,7 +30,7 @@ class MenusResource extends Resource
         foreach (simplexml_load_file($path)->xpath('/menus/menu') as $menu) {
             $attributes = $menu->attributes();
 
-            $this->_data[$attributes['id']] = $menu;
+            $this->_data[(string) $attributes['id']] = $menu;
         }
     }
 
@@ -42,7 +42,12 @@ class MenusResource extends Resource
     public function normalize ($callback)
     {
         foreach ($this->_data as $name => $menu) {
-            $this->_data[$menu] = $callback($menu);
+            if (is_array($callback)) {
+                $this->_data[$name] = $callback[0]->{$callback[1]}($menu);
+            }
+            else {
+                $this->_data[$name] = $callback($menu);
+            }
         }
     }
 }

@@ -29,15 +29,35 @@ class ConfigResource extends Resource
     {
         parent::__construct($miniLOL);
 
-        $this->miniLOL->events->observe(':resource.loaded', $this->_fix);
+        $this->miniLOL->events->observe(':resource.loaded', array($this, '_fix'));
     }
 
-    private function _fix ($event)
+
+    public function _fix ($event)
     {
+        $memo = $event->memo();
+    
+        if ($memo['resource']->name() != 'miniLOL.config' || $memo['arguments'][0] != 'resources/config.xml') {
+            return;
+        }
 
+        $config =& $memo['resource']->get('core');
+
+        if (!$config['siteTitle']) {
+            $config['siteTitle'] = 'miniLOL ' . MINILOL_VERSION;
+        }
+    
+        if (!$config['homePage']) {
+            $config['homePage'] = '#home';
+        }
+        else {
+            if ($config['homePage'][0] != '#') {
+                $config['homePage'] = '#' . $config['homePage'];
+            }
+        }
     }
 
-    private function _load ($path)
+    public function _load ($path)
     {
         $xml    = simplexml_load_file($path);
         $attrs  = $xml->attributes();
@@ -54,7 +74,7 @@ class ConfigResource extends Resource
         $this->_data[$domain] = array_merge($this->_data[$domain], ConfigResource::toArray($xml));
     }
 
-    public function get ($domain=null)
+    public function &get ($domain=null)
     {
         if ($domain) {
             return $this->_data[$domain];

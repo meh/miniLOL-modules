@@ -20,7 +20,7 @@
 
 abstract class Module
 {
-    private $miniLOL;
+    public $miniLOL;
 
     public function __construct ($miniLOL)
     {

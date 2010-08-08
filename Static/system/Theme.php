@@ -61,7 +61,7 @@ class Theme
         return $this->_name;
     }
 
-    public function path ($relative)
+    public function path ($relative=false)
     {
         return ($relative) ? "themes/{$this->name()}" : $this->_path;
     }

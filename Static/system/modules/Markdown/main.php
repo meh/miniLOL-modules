@@ -31,7 +31,7 @@ class MarkdownModule extends Module
     {
         parent::__construct($miniLOL);
 
-        $this->miniLOL->resources->get('miniLOL.config')->load(MODULES.'/Markdown/resources/config.xml');
+        $this->miniLOL->resources->get('miniLOL.config')->load('modules/Markdown/resources/config.xml');
     }
 
     public function execute ($what)

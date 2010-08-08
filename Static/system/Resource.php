@@ -20,10 +20,10 @@
 
 abstract class Resource
 {
-    private $_calls;
-    private $_data;
+    public $miniLOL;
 
-    private $miniLOL;
+    protected $_calls;
+    protected $_data;
 
     public function __construct ($miniLOL)
     {

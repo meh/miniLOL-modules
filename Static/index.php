@@ -18,6 +18,9 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
+define('MINILOL_VERSION', '1.2');
+define('__VERSION__', '0.1');
+
 ob_start();
 
 define('ROOT',    realpath(dirname(__FILE__)));
@@ -32,15 +35,20 @@ $miniLOL = miniLOL::instance();
 
 $miniLOL->resources->get('miniLOL.config')->load('resources/config.xml');
 
-$config = $miniLOL->resources->get('miniLOL.config')->get();
+$config =& $miniLOL->resources->get('miniLOL.config')->get();
 
 $miniLOL->theme->load($config['core']['theme']);
 
-$miniLOL->resources->get('miniLOL.menus')->load('resources/menus.xml')->normalize($miniLOL->theme->menus);
-$miniLOL->resources->get('miniLOL.pages')->load('resources/pages.xml')->normalize($miniLOL->theme->pages);
+$miniLOL->resources->get('miniLOL.menus')->load('resources/menus.xml')->normalize(array($miniLOL->theme, 'menus'));
+$miniLOL->resources->get('miniLOL.pages')->load('resources/pages.xml')->normalize(array($miniLOL->theme, 'pages'));
 
 foreach ($miniLOL->resources->get('miniLOL.modules')->load('resources/modules.xml') as $module) {
     $miniLOL->modules->load($module);
+}
+
+if (ob_get_length() > 0) {
+    ob_flush();
+    exit;
 }
 
 ob_clean();
@@ -53,10 +61,10 @@ if ($miniLOL->error()) {
 
 $output = array();
 
-$output['title']       = (empty($config['core']['siteTitle']) ? 'miniLOL 1.2' : $config['core']['siteTitle']);
-$output['meta']        = '';
-$output['styles']      = '';
-$output['content']     = $miniLOL->go($_ENV['REQUEST_URI'], $_REQUEST);
+$output['title']   = $config['core']['siteTitle'];
+$output['meta']    = '';
+$output['styles']  = '';
+$output['content'] = $miniLOL->go($_ENV['REQUEST_URI'], $_REQUEST);
 
 if (is_array($config['Static']['meta'])) {
     foreach ($config['Static']['meta'] as $name => $content) {
