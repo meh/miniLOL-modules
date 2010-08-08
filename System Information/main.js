@@ -39,9 +39,9 @@ miniLOL.module.create("System Information", {
 
             onFailure: function () {
                 miniLOL.error("Something went deeply wrong :(", miniLOL.theme.content(), true);
-            },
+            }
         });
 
         return result;
-    },
+    }
 });

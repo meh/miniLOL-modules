@@ -25,7 +25,7 @@ miniLOL.module.create("Security", {
     aliases: ["security"],
     
     initialize: function () {
-        miniLOL.utils.require(this.root+"/system/extensions.js");
+        miniLOL.utils.require(this.root+"/system/extensions.min.js");
 
         if (!miniLOL.theme.style.exists("Security/style")) {
             miniLOL.theme.style.load("style", this.root+"/resources");

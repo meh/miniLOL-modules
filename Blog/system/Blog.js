@@ -72,10 +72,10 @@ var Blog = Class.create({
         this.resource.load(this.root+data);
         miniLOL.resource.get("miniLOL.config").load(this.root+config);
 
-        this.Template = miniLOL.utils.execute(this.root+"/system/Template.js");
+        this.Template = miniLOL.utils.execute(this.root+"/system/Template.min.js");
         this.template = new this.Template(this.root);
 
-        this.Feed = miniLOL.utils.execute(this.root+"/system/Feed.js");
+        this.Feed = miniLOL.utils.execute(this.root+"/system/Feed.min.js");
         this.feed = new this.Feed(this.root, {
             path:    miniLOL.config["Blog"].feed.path,
             type:    miniLOL.config["Blog"].feed.type,

@@ -19,10 +19,10 @@ miniLOL.module.create("Syntax Highlighter", {
 
     initialize: function () {
         if (Object.isUndefined(window.XRegExp)) {
-            miniLOL.utils.require(this.root+"/system/xregexp-min.js");
+            miniLOL.utils.require(this.root+"/system/xregexp.min.js");
         }
 
-        miniLOL.utils.require(this.root+"/system/shCore.js");
+        miniLOL.utils.require(this.root+"/system/shCore.min.js");
 
         miniLOL.resource.get("miniLOL.functions").load(this.root+"/resources/functions.xml");
         miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/config.xml");
@@ -74,7 +74,7 @@ miniLOL.module.create("Syntax Highlighter", {
 
     loadFile: function (name) {
         if (name && !this.loaded[name]) {
-            if (miniLOL.utils.include(this.root+"/resources/languages/shBrush"+name+".js")) {
+            if (miniLOL.utils.include(this.root+"/resources/languages/shBrush"+name+".min.js")) {
                 this.loaded[name] = true;
 
                 SyntaxHighlighter.vars.discoveredBrushes = {};

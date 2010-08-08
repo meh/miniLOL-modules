@@ -27,10 +27,10 @@ miniLOL.module.create("Language", {
     initialize: function () {
         miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/config.xml");
 
-        this.Language = miniLOL.utils.execute(this.root+"/system/Language.js");
+        this.Language = miniLOL.utils.execute(this.root+"/system/Language.min.js");
         this.language = new this.Language(this.root, "/resources/languages.xml");
 
-        this.Template = miniLOL.utils.execute(this.root+"/system/Template.js");
+        this.Template = miniLOL.utils.execute(this.root+"/system/Template.min.js");
         this.template = new this.Template(this.root);
 
         this.language.set(location.href.parseQuery().lang || new CookieJar().get("language") || miniLOL.config["Language"].defaultLanguage);

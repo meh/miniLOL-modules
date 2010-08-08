@@ -21,10 +21,10 @@ miniLOL.module.create("Theme Switcher", {
         miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/config.xml");
         miniLOL.resource.get("miniLOL.functions").load(this.root+"/resources/functions.xml");
 
-        this.Themes = miniLOL.utils.execute(this.root+"/system/Themes.js");
+        this.Themes = miniLOL.utils.execute(this.root+"/system/Themes.min.js");
         this.themes = new this.Themes;
 
-        this.Template = miniLOL.utils.execute(this.root+"/system/Template.js");
+        this.Template = miniLOL.utils.execute(this.root+"/system/Template.min.js");
         this.template = new this.Template(this.root);
 
         if (!this.themes.load(this.root+"/resources/themes.xml")) {

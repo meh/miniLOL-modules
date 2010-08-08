@@ -16,7 +16,7 @@ miniLOL.module.create("IHM", {
     type: "passive",
 
     initialize: function () {
-        this.IHM = miniLOL.utils.execute(this.root+"/system/IHM.js");
+        this.IHM = miniLOL.utils.execute(this.root+"/system/IHM.min.js");
         this.ihm = new this.IHM(this.root);
 
         this.execute();
