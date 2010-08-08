@@ -84,7 +84,7 @@ class ConfigResource extends Resource
         }
     }
 
-    public static function toArray ($xml)
+    public static function &toArray ($xml)
     {
         if (count($xml->children()) == 0) {
             return (string) $xml;
@@ -93,7 +93,7 @@ class ConfigResource extends Resource
         $result = array();
     
         foreach ($xml as $name => $value) {
-            $result[$name] = ConfigResource::toArray($value);
+            $result[$name] =& ConfigResource::toArray($value);
         }
     
         return $result;

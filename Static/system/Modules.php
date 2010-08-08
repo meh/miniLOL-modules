@@ -50,7 +50,7 @@ class Modules
         $this->_modules[$name] = new $class($this->miniLOL);
     }
 
-    public function get ($name)
+    public function &get ($name)
     {
         return $this->_modules[$name];
     }
