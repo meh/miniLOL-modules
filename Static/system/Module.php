@@ -22,12 +22,12 @@ abstract class Module
 {
     private $miniLOL;
 
-    abstract public function name ();
-    
     public function __construct ($miniLOL)
     {
         $this->miniLOL = $miniLOL;
     }
+
+    abstract public function name ();    
 }
 
 ?>

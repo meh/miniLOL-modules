@@ -18,60 +18,9 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-class Theme
+class Event
 {
-    public $miniLOL;
 
-    private $_name;
-    private $_path;
-    private $_info;
-    private $_styles;
-    
-    public function __construct ($miniLOL)
-    {
-        $this->miniLOL = $miniLOL;
-    }
-
-    public function load ($name)
-    {
-        $path = ROOT."/themes/{$name}";
-
-        $this->_name   = $name;
-        $this->_path   = realpath($path);
-        $this->_info   = array();
-        $this->_styles = array();
-
-        $xml = simplexml_load_file($this->path().'/theme.xml');
-
-        foreach ($xml->attributes() as $name => $value) {
-            $this->_info[(string) $name] = (string) $value;
-        }
-
-        foreach ($xml->xpath('/theme/styles/style') as $style) {
-            $attributes = $style->attributes();
-            array_push($this->_styles, (string) $attributes['name']);
-        }
-    }
-
-    public function name ()
-    {
-        return $this->_name;
-    }
-
-    public function path ($relative)
-    {
-        return ($relative) ? "themes/{$this->name()}" : $this->_path;
-    }
-
-    public function info ()
-    {
-        return $this->_info;
-    }
-
-    public function styles ()
-    {
-        return $this->_styles;
-    }
 }
 
 ?>

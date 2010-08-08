@@ -32,14 +32,16 @@ $miniLOL = miniLOL::instance();
 
 $miniLOL->resources->get('miniLOL.config')->load('resources/config.xml');
 
-$miniLOL->theme->load($miniLOL->resources->get('miniLOL.config')->get('core')['theme']);
+$config = $miniLOL->resources->get('miniLOL.config')->get();
 
-$miniLOL->resources->get('miniLOL.menus')->load('resources/menus.xml')->normalize($miniLOL->theme->menu);
-$miniLOL->resources->get('miniLOL.pages')->load('resources/pages.xml')->normalize($miniLOL->theme->pages);
+$miniLOL->theme->load($config['core']['theme']);
 
-$miniLOL->resources->get('miniLOL.modules')->load('resources/modules.xml')->each(function ($module) {
+#$miniLOL->resources->get('miniLOL.menus')->load('resources/menus.xml')->normalize($miniLOL->theme->menu);
+#$miniLOL->resources->get('miniLOL.pages')->load('resources/pages.xml')->normalize($miniLOL->theme->pages);
+
+foreach ($miniLOL->resources->get('miniLOL.modules')->load('resources/modules.xml') as $module) {
     $miniLOL->modules->load($module);
-});
+}
 
 ob_clean();
 
@@ -49,14 +51,16 @@ if ($miniLOL->error()) {
     exit;
 }
 
-$config = $miniLOL->resource('miniLOL.config')->get();
-
 $output = array();
 
 $output['title']    = (empty($config['core']['siteTitle']) ? 'miniLOL 1.2' : $config['core']['siteTitle']);
 $output['keywords'] = $config['Static']['keywords'];
-$output['styles']   = $miniLOL->theme->styles();
+$output['styles']   = '';
 $output['content']  = $miniLOL->go($_REQUEST);
+
+foreach ($miniLOL->theme->styles() as $style) {
+    $output['styles'] .= "<link rel='stylesheet' type='text/css' href='{$miniLOL->theme->path(true)}/{$style}.css'/>\n";
+}
 
 echo <<<HTML
 <!DOCTYPE html>

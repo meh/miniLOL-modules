@@ -18,7 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-class Pages extends Resource
+class PagesResource extends Resource
 {
     public function name ()
     {

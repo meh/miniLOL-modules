@@ -18,7 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-class Menus extends Resource
+class MenusResource extends Resource
 {
     public function name ()
     {

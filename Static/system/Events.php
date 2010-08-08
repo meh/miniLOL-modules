@@ -18,59 +18,32 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-class Theme
+require(SYSTEM.'/Event.php');
+
+class Events
 {
     public $miniLOL;
 
-    private $_name;
-    private $_path;
-    private $_info;
-    private $_styles;
-    
+    private $_events;
+
     public function __construct ($miniLOL)
     {
         $this->miniLOL = $miniLOL;
+
+        $this->_events = array();
     }
 
-    public function load ($name)
+    public function observe ($name, $callback)
     {
-        $path = ROOT."/themes/{$name}";
-
-        $this->_name   = $name;
-        $this->_path   = realpath($path);
-        $this->_info   = array();
-        $this->_styles = array();
-
-        $xml = simplexml_load_file($this->path().'/theme.xml');
-
-        foreach ($xml->attributes() as $name => $value) {
-            $this->_info[(string) $name] = (string) $value;
+        if (!is_array($this->_events[$name])) {
+            $this->_events[$name] = array();
         }
 
-        foreach ($xml->xpath('/theme/styles/style') as $style) {
-            $attributes = $style->attributes();
-            array_push($this->_styles, (string) $attributes['name']);
-        }
+        array_push($this->_events[$name], $callback);
     }
 
-    public function name ()
+    public function fire ($name, $memo)
     {
-        return $this->_name;
-    }
-
-    public function path ($relative)
-    {
-        return ($relative) ? "themes/{$this->name()}" : $this->_path;
-    }
-
-    public function info ()
-    {
-        return $this->_info;
-    }
-
-    public function styles ()
-    {
-        return $this->_styles;
     }
 }
 

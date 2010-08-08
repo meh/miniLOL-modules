@@ -18,7 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-class Modules extends Resource
+class ModulesResource extends Resource implements Iterator
 {
     public function name ()
     {
@@ -27,19 +27,43 @@ class Modules extends Resource
 
     public function _load ($path)
     {
-        foreach (DOMDocument::loadXML($path)->getElementsByTagName('module') as $module) {
+        foreach (DOMDocument::load($path)->getElementsByTagName('module') as $module) {
             array_push($this->_data, $module->getAttribute('name'));
         }
     }
 
-    public function each ($callback)
-    {
-        array_walk($this->_data, $callback)
-    }
-
     public function exists ($name)
     {
-        return array_search($this->_data, $name) !== FALSE;
+        return in_array($name, $this->_data);
+    }
+
+    // Iterator implementation
+
+    private $_position = 0;
+
+    function rewind ()
+    {
+        $this->_position = 0;
+    }
+
+    function current ()
+    {
+        return $this->_data[$this->_position];
+    }
+
+    function key ()
+    {
+        return $this->_position;
+    }
+
+    function next ()
+    {
+        $this->_position++;
+    }
+
+    function valid ()
+    {
+        return isset($this->_data[$this->_position]);
     }
 }
 

@@ -26,10 +26,14 @@ foreach (glob(SYSTEM.'/modules/*/main.php') as $module) {
 
 class Modules
 {
+    public $miniLOL;
+
     private $_modules;
 
-    public function __construct ()
+    public function __construct ($miniLOL)
     {
+        $this->miniLOL = $miniLOL;
+
         $this->_modules = array();
     }
 
@@ -41,7 +45,9 @@ class Modules
             return;
         }
 
-        $this->_modules[$name] = new str_replace(' ', '', $name);
+        $class = str_replace(' ', '', $name) . 'Module';
+
+        $this->_modules[$name] = new $class($this->miniLOL);
     }
 
     public function get ($name)

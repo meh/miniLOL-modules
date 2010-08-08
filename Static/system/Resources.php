@@ -38,8 +38,9 @@ class Resources
 
         foreach (glob(SYSTEM.'/resources/*.php') as $resource) {
             preg_match('#([^/]*)\.php$#', $resource, $matches);
+            $class = "{$matches[1]}Resource";
 
-            $resource = new $matches[1];
+            $resource = new $class($this->miniLOL);
 
             $this->_resources[$resource->name()] = $resource;
         }

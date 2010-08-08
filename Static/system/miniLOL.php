@@ -20,6 +20,7 @@
 
 require(SYSTEM.'/Resources.php');
 require(SYSTEM.'/Modules.php');
+require(SYSTEM.'/Events.php');
 require(SYSTEM.'/Theme.php');
 
 class miniLOL
@@ -47,10 +48,18 @@ class miniLOL
     public $resources;
     public $modules;
 
+    public $theme;
+
+    public $events;
+
     private function __construct ()
     {
         $this->resources = new Resources($this);
         $this->modules   = new Modules($this);
+
+        $this->theme = new Theme($this);
+
+        $this->events = new Events($this);
     }
 
     public function error ($what=null)
@@ -70,6 +79,11 @@ class miniLOL
         else {
             $this->_error = (string) $what;
         }
+    }
+
+    public function go ($requests)
+    {
+
     }
 }
 

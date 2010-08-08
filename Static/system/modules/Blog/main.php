@@ -21,7 +21,7 @@
 require(SYSTEM.'/modules/Blog/Post.php');
 require(SYSTEM.'/modules/Blog/Resource.php');
 
-class Blog extends Module
+class BlogModule extends Module
 {
     private $_resource;
 
@@ -32,7 +32,7 @@ class Blog extends Module
 
     public function __construct ($miniLOL)
     {
-        super($miniLOL);
+        parent::__construct($miniLOL);
 
         $this->_resource = new BlogResource;
         $this->_resource->load(MODULES.'/Blog/resources/data.xml');

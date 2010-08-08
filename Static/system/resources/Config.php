@@ -18,7 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-class Config extends Resource
+class ConfigResource extends Resource
 {
     public function name ()
     {
@@ -29,13 +29,17 @@ class Config extends Resource
     {
         $xml    = simplexml_load_file($path);
         $attrs  = $xml->attributes();
-        $domain = (string) $attrs['domain'] || 'core';
+        $domain = (string) $attrs['domain'];
+        
+        if (empty($domain)) {
+            $domain = 'core';
+        }
 
         if (!is_array($this->_data[$domain])) {
             $this->_data[$domain] = array();
         }
         
-        $this->_data[$domain] = array_merge($this->_data[$domain], Config::toArray($xml));
+        $this->_data[$domain] = array_merge($this->_data[$domain], ConfigResource::toArray($xml));
     }
 
     public function get ($domain=null)
@@ -57,7 +61,7 @@ class Config extends Resource
         $result = array();
     
         foreach ($xml as $name => $value) {
-            $result[$name] = Config::toArray($value);
+            $result[$name] = ConfigResource::toArray($value);
         }
     
         return $result;
