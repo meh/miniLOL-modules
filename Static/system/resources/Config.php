@@ -51,7 +51,7 @@ class ConfigResource extends Resource
             $config['homePage'] = '#home';
         }
         else {
-            if ($config['homePage'][0] != '#') {
+            if ($config['homePage'][0] != '#' && !isURL($config['homePage'])) {
                 $config['homePage'] = '#' . $config['homePage'];
             }
         }

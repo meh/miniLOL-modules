@@ -98,16 +98,17 @@ class miniLOL
 
     public function go ($url, $arguments, $query=null, $again=false)
     {
+        if (isURL($url)) {
+            header("Location: {$url}");
+            return;
+        }
+
         if (!$query) {
             $query = $_SERVER['QUERY_STRING'];
         }
 
-        preg_match('/[?#](([^=&]*)&|([^=&]*)$)/', $url, $matches);
-
-        $internal = (!empty($matches[2])) ? $matches[2] : $matches[3];
-
-        if ($internal) {
-            $content = $this->resources->get('miniLOL.pages')->get($internal);
+        if (preg_match('/[?#](([^=&]*)&|([^=&]*)$)/', $url, $matches)) {
+            $content = $this->resources->get('miniLOL.pages')->get((!empty($matches[2])) ? $matches[2] : $matches[3]);
         }
         else if ($arguments['module']) {
             $content = $this->modules->execute($arguments['module'], $arguments);
@@ -122,6 +123,10 @@ class miniLOL
 
                 return $this->go($config['homePage'], $arguments, null, true);
             }
+        }
+
+        if ($content === null && !isset($arguments['module'])) {
+            $content = '404 - Not Found';
         }
 
         return $this->theme->output($content, $menu);

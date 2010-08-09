@@ -25,13 +25,27 @@ class MenusResource extends Resource
         return 'miniLOL.menus';
     }
 
+    private $_enabled;
+
     public function _load ($path)
     {
-        foreach (DOMDocument::load($path)->documentElement->childNodes as $node) {
-            if ($node->nodeName == 'menu') {
-                $this->_data[$node->getAttribute('id')] = $node;
+        $this->_enabled = true;
+
+        try {
+            foreach (DOMDocument::load($path)->documentElement->childNodes as $node) {
+                if ($node->nodeName == 'menu') {
+                    $this->_data[$node->getAttribute('id')] = $node;
+                }
             }
         }
+        catch (Exception $e) {
+            $this->_enabled = false;
+        }
+    }
+
+    public function enabled ()
+    {
+        return $this->_enabled;
     }
 
     public function get ($id)

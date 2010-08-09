@@ -27,6 +27,7 @@ define('ROOT',    realpath(dirname(__FILE__)));
 define('MODULES', ROOT.'/modules');
 define('SYSTEM',  MODULES.'/Static/system');
 
+require(SYSTEM.'/utils.php');
 require(SYSTEM.'/miniLOL.php');
 
 session_start();

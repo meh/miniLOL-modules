@@ -42,18 +42,51 @@ class Theme
         $this->_info   = array();
         $this->_styles = array();
 
-        $xml = simplexml_load_file($this->path().'/theme.xml');
+        $xml   = DOMDocument::load($this->path().'/theme.xml');
+        $xpath = new DOMXpath($xml);
 
-        foreach ($xml->attributes() as $name => $value) {
-            $this->_info[(string) $name] = (string) $value;
+        foreach ($xml->attributes as $name => $value) {
+            $this->_info[$name] = $value;
         }
 
-        foreach ($xml->xpath('/theme/styles/style') as $style) {
-            $attributes = $style->attributes();
-            array_push($this->_styles, (string) $attributes['name']);
+        foreach ($xpath->query('/theme/styles/style') as $style) {
+            array_push($this->_styles, $style->attributes->getNamedItem('name'));
         }
 
-        $this->_template = file_get_contents("{$this->_path}/template.html");
+        $this->_html = file_get_contents("{$this->_path}/template.html");
+
+        $this->_template = array(
+            'list' => array(
+                'default' => array(
+                    'global' => '<div #{attributes}>#{data}</div>',
+
+                    'before' => '#{data}',
+                    'after'  => '#{data}',
+
+                    'link' => '<div class="#{class}" id="#{id}">#{before}<a href="#{href}" target="#{target}" #{attributes}>#{text}</a>#{after}</div>',
+                    'item' => '<div class="#{class}" id="#{id}">#{before}<span #{attributes}>#{text}</span>#{after}</div>',
+                    'nest' => '<div class="#{class}" style="#{style}">#{data}</div>',
+                    'data' => '<div class="data">#{before}#{data}#{after}</div>'
+                ),
+
+                'table' => array(
+                    'global' => '<table #{attributes}>#{data}</table>',
+
+                    'before' => '#{data}',
+                    'after'  => '#{data}',
+
+                    'link' => '<tr><td>#{before}</td><td><a href="#{href}" target="#{target}" #{attributes}>#{text}</a></td><td>#{after}</td></tr>',
+                    'item' => '<tr><td>#{before}</td><td>#{text}</td><td>#{after}</td></tr>',
+                    'nest' => '<div class="#{class}" style="#{style}">#{data}</div>',
+                    'data' => '<div class="data">#{before}#{data}#{after}</div>'
+                )
+            )
+        );
+
+        // Reading and parsing additional list templates
+        foreach ($xpath->query('/theme/templates/*') as $template) {
+
+        }
     }
 
     public function name ()
@@ -76,9 +109,9 @@ class Theme
         return $this->_styles;
     }
 
-    public function template ()
+    public function html ()
     {
-        return $this->_template;
+        return $this->_html;
     }
 
     public function menus ($menu, $layer=0)
@@ -86,7 +119,7 @@ class Theme
         
     }
 
-    public function pages ($page, $data=array())
+    public function pages ($page, $data=null)
     {
         $output = '';
         
@@ -108,19 +141,223 @@ class Theme
 
     private function _pages_list ($element, $data)
     {
-        return '';
+        $list = $element->cloneNode(false);
+        $data = (is_array($data)) ? $data : array($element);
+
+        if (!($listBefore = $list->getAttribute('before'))) {
+            if (!($listBefore = $data[0]->getAttribute('before'))) {
+                $listBefore = '';
+            }
+        } $list->removeAttribute('before');
+
+        if (!($listAfter = $list->getAttribute('after'))) {
+            if (!($listAfter = $data[0]->getAttribute('after'))) {
+                $listAfter = '';
+            }
+        } $list->removeAttribute('after');
+
+        if (!($listArgs = $list->getAttribute('arguments'))) {
+            if (!($listArgs = $data[0]->getAttribute('arguments'))) {
+                $listArgs = '';
+            }
+        } $list->removeAttribute('arguments');
+
+        if (!($listType = $list->getAttribute('type'))) {
+            if (!($listType = $data[0]->getAttribute('type'))) {
+                $listType = '';
+            }
+        } $list->removeAttribute('type');
+
+        if (!($listMenu = $list->getAttribute('menu'))) {
+            if (!($listMenu = $data[0]->getAttribute('menu'))) {
+                $listMenu = '';
+            }
+        } $list->removeAttribute('menu');
+
+        if (!($listTemplate = $list->getAttribute('template'))) {
+            if (!($listTemplate = $data[0]->getAttribute('template'))) {
+                $listTemplate = '';
+            }
+        } $list->removeAttribute('template');
+
+        if (!$this->template($listTemplate)) {
+            $listTemplate = 'default';
+        }
+
+        $output = '';
+
+        foreach ($element->childNodes as $node) {
+            if ($node->nodeType == XML_ELEMENT_NODE) {
+                if ($node->nodeName == 'link') {
+                    $link = $node->cloneNode(true);
+
+                    if (!($href = $link->getAttribute('href'))) {
+                        $href = '';
+                    } $link->removeAttribute('href');
+
+                    if (!($target = $link->getAttribute('target'))) {
+                        $target = '';
+                    } $link->removeAttribute('target');
+
+                    if (!($text = $link->firstChild->nodeValue)) {
+                        $text = $href;
+                    }
+
+                    if (!($before = $link->getAttribute('before'))) {
+                        $before = '';
+                    } $link->removeAttribute('before');
+
+                    if (!($after = $link->getAttribute('after'))) {
+                        $after = '';
+                    } $link->removeAttribute('after');
+
+                    if (!($domain = $link->getAttribute('domain'))) {
+                        $domain = '';
+                    } $link->removeAttribute('domain');
+
+                    if (!($args = $link->getAttribute('arguments'))) {
+                        $args = '';
+                    } $link->removeAttribute('arguments');
+
+                    if (!($menu = $link->getAttribute('menu'))) {
+                        $menu = '';
+                    } $link->removeAttribute('menu');
+
+                    if (!($title = $link->getAttribute('title'))) {
+                        $title = '';
+                    } $link->removeAttribute('title');
+
+                    $out = isURL($href);
+
+                    if (!($linkClass = $link->getAttribute('class'))) {
+                        $linkClass = '';
+                    } $link->removeAttribute('class');
+
+                    if (!($linkId = $link->getAttribute('id'))) {
+                        $linkId = '';
+                    } $link->removeAttribute('id');
+
+                    if ($target || $out) {
+                        $href = (!$out) ? "data/{$href}" : $href;
+
+                        if (!$target) {
+                            $target = '_blank';
+                        }
+                    }
+                    else {
+                        if (!($ltype = $link->getAttribute('type'))) {
+                            if (!($ltype = $listType)) {
+                                $ltype = '';
+                            }
+                        } $link->removeAttribute('type');
+
+                        if ($domain == 'in' || $href[0] == '#') {
+                            if ($href[0] != '#') {
+                                $href = "#{$href}";
+                            }
+                        }
+                        else {
+                            $href = "#page={$href}";
+                        }
+
+                        if (!empty($args)) {
+                            $args = preg_replace('/[ ,]+/g', '&amp;', $args);
+                        }
+
+                        if ($ltype) {
+                            $ltype = "&type={$ltype}";
+                        }
+
+                        if ($this->miniLOL->resources->get('miniLOL.menus')->enabled() && $menu) {
+                            $menu = "&amp;menu={$menu}";
+                        }
+
+                        $target = '';
+
+                        if ($title) {
+                            $title = interpolate($title, array(
+                                'text' => $text,
+                                'href' => $href
+                            ));
+
+                            $title = "&title={urlencode($title)}";
+                        }
+
+                        $href = "{$href}{$args}{$ltype}{$menu}{$title}";
+                    }
+
+                    $output .= interpolate($this->_template['list']['listTemplate']['link'], array_merge(ObjectFromAttributes($link->attributes), array(
+                        'class'      => $linkClass,
+                        'id'         => $linkId,
+                        'attributes' => StringFromAttributes($link->attributes),
+                        'before'     => interpolate($this->_template['list']['listTemplate']['before'], array('data' => $before)),
+                        'after'      => interpolate($this->_template['list']['listTemplate']['after'], array('data' => $after)),
+                        'href'       => $href,
+                        'target'     => $target,
+                        'text'       => $text,
+                        'title'      => $title
+                    )));
+                }
+                else if ($node->nodeName == 'item') {
+                    $item = $node->cloneNode(true);
+
+                    if (!($text = $item->firstChild->nodeValue)) {
+                        $text = '';
+                    }
+
+                    if (!($before = $item->getAttribute('before'))) {
+                        if (!($before = $listBefore)) {
+                            $before = '';
+                        }
+                    } $item->removeAttribute('before');
+
+                    if (!($after = $item->getAttribute('after'))) {
+                        if (!($after = $listAfter)) {
+                            $after = '';
+                        }
+                    } $item->removeAttribute('after');
+
+                    if (!($itemClass = $item->getAttribute('class'))) {
+                        $itemClass = '';
+                    } $item->removeAttribute('class');
+
+                    if (!($itemId = $item->getAttribute('id'))) {
+                        $itemId = '';
+                    } $item->removeAttribute('id');
+
+                    $output .= interpolate($this->_template['list']['listTemplate']['item'], array_merge(ObjectFromAttributes($item->attributes), array(
+                        'class'      => $itemClass,
+                        'id'         => $itemId,
+                        'attributes' => StringFromAttributes($item->attributes),
+                        'before'     => interpolate($this->_template['list']['listTemplate']['before'], array('data' => $before)),
+                        'after'      => interpolate($this->_template['list']['listTemplate']['after'], array('data' => $after)),
+                        'text'       => $text
+                    )));
+                }
+                else if ($node->nodeName == 'list') {
+                    $output .= _pages_list($node, array($element));
+                }
+                else if ($node->nodeName == 'nest') {
+
+                }
+            }
+        }
+
+        return $output;
     }
 
     private function _pages_include ($element, $data)
     {
-        return '';
+        $output = '';
+
+        return $output;
     }
 
     public function output ($content, $menu)
     {
-        $template = $this->template();
-        $template = preg_replace("#(id=['\"]{$this->_info['content']}['\"][^>]*>)#", '$1'.$content, $template);
-        $template = preg_replace("#(id=['\"]{$this->_info['menu']}['\"][^>]*>)#", '$1'.$menu, $template);
+        $template = $this->html();
+        $template = preg_replace("#(id=['\"]{$this->_info['content']}['\"][^>]*>)#", '${1}'.$content, $template);
+        $template = preg_replace("#(id=['\"]{$this->_info['menu']}['\"][^>]*>)#", '${1}'.$menu, $template);
 
         return $template;
     }
