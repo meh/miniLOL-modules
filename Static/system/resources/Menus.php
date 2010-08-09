@@ -27,10 +27,10 @@ class MenusResource extends Resource
 
     public function _load ($path)
     {
-        foreach (simplexml_load_file($path)->xpath('/menus/menu') as $menu) {
-            $attributes = $menu->attributes();
-
-            $this->_data[(string) $attributes['id']] = $menu;
+        foreach (DOMDocument::load($path)->documentElement->childNodes as $node) {
+            if ($node->nodeName == 'menu') {
+                $this->_data[$node->getAttribute('id')] = $node;
+            }
         }
     }
 

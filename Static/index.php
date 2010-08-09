@@ -47,8 +47,7 @@ foreach ($miniLOL->resources->get('miniLOL.modules')->load('resources/modules.xm
 }
 
 if (ob_get_length() > 0) {
-    ob_flush();
-    exit;
+    $miniLOL->error(ob_get_contents());
 }
 
 ob_clean();

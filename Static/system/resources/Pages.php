@@ -27,10 +27,8 @@ class PagesResource extends Resource
 
     public function _load ($path)
     {
-        foreach (simplexml_load_file($path)->xpath('/pages/page') as $page) {
-            $attributes = $page->attributes();
-
-            $this->_data[(string) $attributes['id']] = $page;
+        foreach (DOMDocument::load($path)->getElementsByTagName('page') as $page) {
+            $this->_data[$page->getAttribute('id')] = $page;
         }
     }
 

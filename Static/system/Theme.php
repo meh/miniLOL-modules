@@ -81,18 +81,48 @@ class Theme
         return $this->_template;
     }
 
-    public function menus ($menu)
+    public function menus ($menu, $layer=0)
     {
-
+        
     }
 
-    public function pages ($page)
+    public function pages ($page, $data=array())
     {
+        $output = '';
+        
+        foreach ($page->childNodes as $node) {
+            switch ($node->nodeType) {
+                case XML_ELEMENT_NODE:
+                try { $output .= $this->{"_pages_{$node->nodeName}"}($node, $data); } catch (Exception $e) { }
+                break;
+
+                case XML_CDATA_SECTION_NODE:
+                case XML_TEXT_NODE:
+                $output .= $node->nodeValue;
+                break;
+            }
+        }
+
+        return $output;
+    }
+
+    private function _pages_list ($element, $data)
+    {
+        return '';
+    }
+
+    private function _pages_include ($element, $data)
+    {
+        return '';
     }
 
     public function output ($content, $menu)
     {
+        $template = $this->template();
+        $template = preg_replace("#(id=['\"]{$this->_info['content']}['\"][^>]*>)#", '$1'.$content, $template);
+        $template = preg_replace("#(id=['\"]{$this->_info['menu']}['\"][^>]*>)#", '$1'.$menu, $template);
 
+        return $template;
     }
 }
 

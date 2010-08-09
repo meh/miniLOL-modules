@@ -104,7 +104,7 @@ class miniLOL
 
         preg_match('/[?#](([^=&]*)&|([^=&]*)$)/', $url, $matches);
 
-        $internal = (isset($matches[2])) ? $matches[2] : $matches[3];
+        $internal = (!empty($matches[2])) ? $matches[2] : $matches[3];
 
         if ($internal) {
             $content = $this->resources->get('miniLOL.pages')->get($internal);
