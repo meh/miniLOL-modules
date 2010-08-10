@@ -18,8 +18,8 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-require(SYSTEM.'/modules/Blog/Post.php');
-require(SYSTEM.'/modules/Blog/Resource.php');
+require(ADAPTERS.'/modules/Blog/Post.php');
+require(ADAPTERS.'/modules/Blog/Resource.php');
 
 class BlogModule extends Module
 {

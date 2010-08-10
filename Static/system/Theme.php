@@ -211,11 +211,15 @@ class Theme
                     }
 
                     if (!($before = $link->getAttribute('before'))) {
-                        $before = '';
+                        if (!($before = $listBefore)) {
+                            $before = '';
+                        }
                     } $link->removeAttribute('before');
 
                     if (!($after = $link->getAttribute('after'))) {
-                        $after = '';
+                        if (!($after = $listAfter)) {
+                            $after = '';
+                        }
                     } $link->removeAttribute('after');
 
                     if (!($domain = $link->getAttribute('domain'))) {
@@ -270,7 +274,7 @@ class Theme
                         $href[0] = '?';
 
                         if (!empty($args)) {
-                            $args = preg_replace('/[ ,]+/g', '&amp;', $args);
+                            $args = preg_replace('/[ ,]+/', '&amp;', $args);
                         }
 
                         if ($ltype) {
@@ -347,8 +351,37 @@ class Theme
                     $output .= _pages_list($node, array($element));
                 }
                 else if ($node->nodeName == 'nest') {
+                    $toParse = $node->cloneNode(true);
 
+                    if (!($before = $node->getAttribute('before'))) {
+                        if (!($before = $listBefore)) {
+                            $before = '';
+                        }
+                    }
+
+                    if (!($after = $node->getAttribute('after'))) {
+                        if (!($after = $listAfter)) {
+                            $after = '';
+                        }
+                    }
+
+                    $output .= interpolate($this->_template['list'][$listTemplate]['nest'], array(
+                        'class'  => $node->getAttribute('class'),
+                        'style'  => $node->getAttribute('style'),
+                        'before' => interpolate($this->_template['list'][$listTemplate]['before'], array('data' => $before)),
+                        'after'  => interpolate($this->_template['list'][$listTemplate]['after'], array('data' => $after)),
+                        'data'   => $this->pages($toParse, array($element))
+                    ));
                 }
+            }
+            else if ($node->nodeType == XML_CDATA_SECTION_NODE || $node->nodeType == XML_TEXT_NODE) {
+                if (!preg_replace('/[\s\n]+/', '', $node->nodeValue)) {
+                    continue;
+                }
+
+                $output .= interpolate($this->_template['list'][$listTemplate]['data'], array(
+                    'data' => $node->nodeValue
+                ));
             }
         }
 

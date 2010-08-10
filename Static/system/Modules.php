@@ -20,7 +20,7 @@
 
 require(SYSTEM.'/Module.php');
 
-foreach (glob(SYSTEM.'/modules/*/main.php') as $module) {
+foreach (glob(ADAPTERS.'/modules/*/main.php') as $module) {
     require($module);
 }
 
@@ -39,7 +39,7 @@ class Modules
 
     public function load ($name)
     {
-        $path = SYSTEM.'/modules/'.$name.'/main.php';
+        $path = ADAPTERS.'/modules/'.$name.'/main.php';
 
         if (!file_exists($path)) {
             return;

@@ -23,9 +23,10 @@ define('__VERSION__', '0.1');
 
 ob_start();
 
-define('ROOT',    realpath(dirname(__FILE__)));
-define('MODULES', ROOT.'/modules');
-define('SYSTEM',  MODULES.'/Static/system');
+define('ROOT',     realpath(dirname(__FILE__)));
+define('MODULES',  ROOT.'/modules');
+define('SYSTEM',   MODULES.'/Static/system');
+define('ADAPTERS', MODULES.'/Static/adapters');
 
 require(SYSTEM.'/utils.php');
 require(SYSTEM.'/miniLOL.php');
@@ -118,9 +119,19 @@ echo <<<HTML
     <script type="text/javascript" src="system/cookiejar.min.js"></script>
 
     <script type="text/javascript" src="system/miniLOL.min.js"></script>
+
+    <script type="text/javascript">// <![CDATA[
+        function __fixURL () {
+            var matches = location.href.match(/\?(.*)$/);
+
+            if (matches) {
+                location.href = location.href.replace(/\?(.*)$/, "#" + matches[1]);
+            }
+        }
+    // ]]></script>
 </head>
 
-<body onload="miniLOL.initialize()">
+<body onload="__fixURL(); miniLOL.initialize()">
     {$output['content']}
 </body>
 </html>

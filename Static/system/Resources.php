@@ -20,7 +20,7 @@
 
 require(SYSTEM.'/Resource.php');
 
-foreach (glob(SYSTEM.'/resources/*.php') as $resource) {
+foreach (glob(ADAPTERS.'/resources/*.php') as $resource) {
     require($resource);
 }
 
@@ -36,7 +36,7 @@ class Resources
 
         $this->_resources = array();
 
-        foreach (glob(SYSTEM.'/resources/*.php') as $resource) {
+        foreach (glob(ADAPTERS.'/resources/*.php') as $resource) {
             preg_match('#([^/]*)\.php$#', $resource, $matches);
             $class = "{$matches[1]}Resource";
 
