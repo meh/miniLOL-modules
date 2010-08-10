@@ -45,12 +45,12 @@ class Theme
         $xml   = DOMDocument::load($this->path().'/theme.xml');
         $xpath = new DOMXpath($xml);
 
-        foreach ($xml->attributes as $name => $value) {
-            $this->_info[$name] = $value;
+        foreach ($xml->documentElement->attributes as $attribute) {
+            $this->_info[$attribute->name] = $attribute->value;
         }
 
         foreach ($xpath->query('/theme/styles/style') as $style) {
-            array_push($this->_styles, $style->attributes->getNamedItem('name'));
+            array_push($this->_styles, $style->getAttribute('name'));
         }
 
         $this->_html = file_get_contents("{$this->_path}/template.html");
@@ -85,7 +85,9 @@ class Theme
 
         // Reading and parsing additional list templates
         foreach ($xpath->query('/theme/templates/*') as $template) {
-
+            foreach ($template->getElementsByTagName('*') as $element) {
+                $this->_template[$template->nodeName][$element->nodeName] = $element->firstChild->nodeValue;
+            }
         }
     }
 
@@ -112,6 +114,11 @@ class Theme
     public function html ()
     {
         return $this->_html;
+    }
+
+    public function template ($what, $name)
+    {
+        return $this->_template[$what][$name];
     }
 
     public function menus ($menu, $layer=0)
@@ -180,7 +187,7 @@ class Theme
             }
         } $list->removeAttribute('template');
 
-        if (!$this->template($listTemplate)) {
+        if (!$this->template('list', $listTemplate)) {
             $listTemplate = 'default';
         }
 
@@ -260,6 +267,8 @@ class Theme
                             $href = "#page={$href}";
                         }
 
+                        $href[0] = '?';
+
                         if (!empty($args)) {
                             $args = preg_replace('/[ ,]+/g', '&amp;', $args);
                         }
@@ -286,12 +295,12 @@ class Theme
                         $href = "{$href}{$args}{$ltype}{$menu}{$title}";
                     }
 
-                    $output .= interpolate($this->_template['list']['listTemplate']['link'], array_merge(ObjectFromAttributes($link->attributes), array(
+                    $output .= interpolate($this->_template['list'][$listTemplate]['link'], array_merge(ObjectFromAttributes($link->attributes), array(
                         'class'      => $linkClass,
                         'id'         => $linkId,
                         'attributes' => StringFromAttributes($link->attributes),
-                        'before'     => interpolate($this->_template['list']['listTemplate']['before'], array('data' => $before)),
-                        'after'      => interpolate($this->_template['list']['listTemplate']['after'], array('data' => $after)),
+                        'before'     => interpolate($this->_template['list'][$listTemplate]['before'], array('data' => $before)),
+                        'after'      => interpolate($this->_template['list'][$listTemplate]['after'], array('data' => $after)),
                         'href'       => $href,
                         'target'     => $target,
                         'text'       => $text,
@@ -325,12 +334,12 @@ class Theme
                         $itemId = '';
                     } $item->removeAttribute('id');
 
-                    $output .= interpolate($this->_template['list']['listTemplate']['item'], array_merge(ObjectFromAttributes($item->attributes), array(
+                    $output .= interpolate($this->_template['list'][$listTemplate]['item'], array_merge(ObjectFromAttributes($item->attributes), array(
                         'class'      => $itemClass,
                         'id'         => $itemId,
                         'attributes' => StringFromAttributes($item->attributes),
-                        'before'     => interpolate($this->_template['list']['listTemplate']['before'], array('data' => $before)),
-                        'after'      => interpolate($this->_template['list']['listTemplate']['after'], array('data' => $after)),
+                        'before'     => interpolate($this->_template['list'][$listTemplate]['before'], array('data' => $before)),
+                        'after'      => interpolate($this->_template['list'][$listTemplate]['after'], array('data' => $after)),
                         'text'       => $text
                     )));
                 }
@@ -343,7 +352,10 @@ class Theme
             }
         }
 
-        return $output;
+        return interpolate($this->_template['list'][$listTemplate]['global'], array_merge(ObjectFromAttributes($list->attributes), array(
+            'attributes' => StringFromAttributes($list->attributes),
+            'data'       => $output
+        )));
     }
 
     private function _pages_include ($element, $data)
