@@ -86,7 +86,7 @@ foreach ($miniLOL->theme->styles() as $style) {
 
 $output['javascript'] = array();
 
-if ($config['Static']['alwaysOn']) {
+if ($config['Static']['alwaysOn'] != 'true') {
     $output['javascript']['dependencies'] = <<<HTML
 
     <!--

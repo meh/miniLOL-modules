@@ -33,7 +33,21 @@ function __fix_menu ($event)
     }
 
     if (!$set) {
-        $menu->find('a', 0)->parent()->class = 'current';
+        if ($_SERVER['HTTP_REFERER']) {
+            $url = parse_url($_SERVER['HTTP_REFERER']);
+
+            foreach ($menu->find('a') as $link) {
+                if (strstr("?{$url['query']}", $link->href) !== false) {
+                    $link->parent()->class = 'current';
+                    $set = true;
+                    break;
+                }
+            }
+        }
+
+        if (!$set) {
+            $menu->find('a', 0)->parent()->class = 'current';
+        }
     }
 
     $event->miniLOL->set('menu', $menu->save());
