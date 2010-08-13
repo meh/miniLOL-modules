@@ -85,9 +85,7 @@ class Theme
 
         // Reading and parsing additional list templates
         foreach ($xpath->query('/theme/templates/*') as $template) {
-            foreach ($template->getElementsByTagName('*') as $element) {
-                $this->_template[$template->nodeName][$element->nodeName] = $element->firstChild->nodeValue;
-            }
+            $this->_template[$template->nodeName] =& XMLToArray($template);
         }
     }
 
@@ -123,7 +121,12 @@ class Theme
 
     public function menus ($menu, $layer=0)
     {
-        
+        $template = 
+    }
+
+    public function _menus_layer ($template, $layer)
+    {
+
     }
 
     public function pages ($page, $data=null)

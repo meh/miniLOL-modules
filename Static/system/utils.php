@@ -27,6 +27,37 @@ function interpolate ($string, $object)
     return $string;
 }
 
+function &XMLToArray ($xml)
+{
+    $result = array();
+    $class  = get_class($xml);
+
+    if (preg_match('/^SimpleXML', $class)) {
+        if (count($xml->children()) == 0) {
+            return (string) $xml;
+        }
+
+        foreach ($xml as $name => $value) {
+            $result[$name] =& XMLToArray($value);
+        }
+    }
+    else if (preg_match('/^DOM', $class)) {
+        if ($xml->nodeType == XML_CDATA_SECTION_NODE || $xml->nodeType == XML_TEXT_NODE) {
+            return $xml->nodeValue;
+        }
+
+        foreach ($xml->childNodes as $node) {
+            if ($node->nodeType != XML_ELEMENT_NODE) {
+                continue;
+            }
+
+            $result[$node->nodeName] =& XMLToArray($node);
+        }
+    }
+
+    return $result;
+}
+
 function isURL ($text)
 {
     if (preg_match('/^mailto:([\w.%+-]+@[\w.]+\.[A-Za-z]{2,4})$/', $text, $match)) {

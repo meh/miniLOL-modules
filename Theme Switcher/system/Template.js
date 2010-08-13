@@ -17,7 +17,7 @@ var Template = Class.create({
         this.root = root;
 
         this.template = miniLOL.theme.template.load("Theme Switcher/template")
-                      || miniLOL.theme.template.load("/resources/template", this.root);
+                      || miniLOL.theme.template.load("resources/template", this.root);
 
         if (!this.template) {
             throw new Error("Theme Switcher template not found.");

@@ -33,7 +33,7 @@ var Template = Class.create({
 
         // load and parse blog's template
         var template = miniLOL.theme.template.load("Blog/template")
-                    || miniLOL.theme.template.load("/resources/template", this.root);
+                    || miniLOL.theme.template.load("resources/template", this.root);
 
         if (!template) {
             if (!miniLOL.error()) {

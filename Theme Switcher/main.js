@@ -19,7 +19,6 @@ miniLOL.module.create("Theme Switcher", {
 
     initialize: function () {
         miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/config.xml");
-        miniLOL.resource.get("miniLOL.functions").load(this.root+"/resources/functions.xml");
 
         this.Themes = miniLOL.utils.execute(this.root+"/system/Themes.min.js");
         this.themes = new this.Themes;
@@ -41,13 +40,13 @@ miniLOL.module.create("Theme Switcher", {
 
         Event.observe(document, ":module.loaded", function (event) {
             if (event.memo == "Theme Switcher") {
-                var query = location.href.parseQuery();
+                var query = location.href.toQueryParams();
 
-                if (query.type != "theme") {
-                    miniLOL.module.execute("Theme Switcher", { theme: miniLOL.module.get("Theme Switcher").theme });
+                if (query.theme) {
+                    miniLOL.module.execute("Theme Switcher", { theme: query.theme });
                 }
                 else {
-                    miniLOL.module.execute("Theme Switcher", { theme: query.theme });
+                    miniLOL.module.execute("Theme Switcher", { theme: miniLOL.module.get("Theme Switcher").theme });
                 }
             }
         })

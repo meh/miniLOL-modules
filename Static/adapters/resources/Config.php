@@ -71,7 +71,7 @@ class ConfigResource extends Resource
             $this->_data[$domain] = array();
         }
         
-        $this->_data[$domain] = array_merge($this->_data[$domain], ConfigResource::toArray($xml));
+        $this->_data[$domain] = array_merge($this->_data[$domain], XMLToArray($xml));
     }
 
     public function &get ($domain=null)
@@ -82,21 +82,6 @@ class ConfigResource extends Resource
         else {
             return $this->_data;
         }
-    }
-
-    public static function &toArray ($xml)
-    {
-        if (count($xml->children()) == 0) {
-            return (string) $xml;
-        }
-    
-        $result = array();
-    
-        foreach ($xml as $name => $value) {
-            $result[$name] =& ConfigResource::toArray($value);
-        }
-    
-        return $result;
     }
 }
 
