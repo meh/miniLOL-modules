@@ -42,16 +42,31 @@ function &XMLToArray ($xml)
         }
     }
     else if (preg_match('/^DOM/', $class)) {
-        if ($xml->nodeType == XML_CDATA_SECTION_NODE || $xml->nodeType == XML_TEXT_NODE) {
-            return $xml->nodeValue;
-        }
-
         foreach ($xml->childNodes as $node) {
             if ($node->nodeType != XML_ELEMENT_NODE) {
                 continue;
             }
 
-            $result[$node->nodeName] =& XMLToArray($node);
+            if ($node->getElementsByTagName('*')->length == 0) {
+                $content = '';
+
+                foreach ($node->childNodes as $text) {
+                    if ($text->nodeType != XML_CDATA_SECTION_NODE && $xml->nodeType != XML_TEXT_NODE) {
+                        continue;
+                    }
+
+                    if (preg_match('/^[\s\n]*$/D', $text->nodeValue)) {
+                        continue;
+                    }
+
+                    $content .= $text->nodeValue;
+                }
+
+                $result[$node->nodeName] = $content;
+            }
+            else {
+                $result[$node->nodeName] = XMLToArray($node);
+            }
         }
     }
 
@@ -97,6 +112,24 @@ function StringFromAttributes ($data)
     }
 
     return $attributes;
+}
+
+function GetFirstText ($elements)
+{
+    $result = '';
+
+    foreach ($elements as $element) {
+        if ($element->nodeType != XML_CDATA_SECTION_NODE && $element->nodeType != XML_TEXT_NODE) {
+            break;
+        }
+
+        if (!preg_match('/^[\s\n]*$/', $element->nodeValue)) {
+            $result = trim($element->nodeValue);
+            break;
+        }
+    }
+
+    return $result;
 }
 
 ?>

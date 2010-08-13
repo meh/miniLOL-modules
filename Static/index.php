@@ -64,44 +64,30 @@ if ($miniLOL->error()) {
     exit;
 }
 
-$content = $miniLOL->go($_ENV['REQUEST_URI'], $_REQUEST);
-$title   = $miniLOL->get('title');
+$output['content'] = $miniLOL->go($_ENV['REQUEST_URI'], $_REQUEST);
 
 if ($content === false) {
     exit;
 }
 
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title><?php echo $title ?></title>
+$output['title'] = $miniLOL->get('title');
 
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+$output['meta'] = '';
+if (is_array($config['Static']['meta'])) {
+    foreach ($config['Static']['meta'] as $name => $content) {
+        $output['meta'] .= "<meta name='{$name}' content='{$content}'/>\n";
+    }
+}
 
-    <?php
-        $output = '';
+$output['styles'] = '';
+foreach ($miniLOL->theme->styles() as $style) {
+    $output['styles'] .= "<link rel='stylesheet' type='text/css' href='{$miniLOL->theme->path(true)}/{$style}.css'/>\n";
+}
 
-        if (is_array($config['Static']['meta'])) {
-            foreach ($config['Static']['meta'] as $name => $value) {
-                $output .= "<meta name='{$name}' content='{$value}'/>\n";
-            }
-        }
+$output['javascript'] = array();
 
-        echo $output;
-    ?>
-
-    <?php
-        $output = '';
-
-        foreach ($miniLOL->theme->styles() as $style) {
-            $output .= "<link rel='stylesheet' type='text/css' href='{$miniLOL->theme->path(true)}/{$style}.css'/>\n";
-        }
-
-        echo $output;
-    ?>
-
-    <?php if ($config['Static']['alwaysOn'] != 'true') { ?>
+if ($config['Static']['alwaysOn']) {
+    $output['javascript']['dependencies'] = <<<HTML
 
     <!--
     If you don't phear the Google empire and want more speed, you can use the Google lib APIs.
@@ -146,10 +132,34 @@ if ($content === false) {
         }
     // ]]></script>
 
-    <?php } ?>
+HTML;
+
+    $output['javascript']['initialization'] = 'if (miniLOL.utils.fixURL()) return false; miniLOL.initialize()';
+}
+
+$output['whole'] = <<<HTML
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$output['title']}</title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+
+    {$output['meta']}
+
+    {$output['styles']}
+
+    {$output['javascript']['dependencies']}
 </head>
 
-<body onload="<?php if ($config['Static']['alwaysOn'] != 'true') echo 'if (miniLOL.utils.fixURL()) return false; miniLOL.initialize()' ?>">
-    <?php echo $content ?>
+<body onload="{$output['javascript']['initialization']}">
+    {$output['content']}
 </body>
 </html>
+
+HTML;
+
+echo preg_replace('/(href=[\'"])#/', '$1?', $output['whole']);
+
+?>

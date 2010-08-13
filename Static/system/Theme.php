@@ -55,7 +55,7 @@ class Theme
 
         $this->_html = file_get_contents("{$this->_path}/template.html");
 
-        $this->_template = array(
+        $this->_templates = array(
             'list' => array(
                 'default' => array(
                     'global' => '<div #{attributes}>#{data}</div>',
@@ -85,7 +85,7 @@ class Theme
 
         // Reading and parsing additional list templates
         foreach ($xpath->query('/theme/templates/*') as $template) {
-            $this->_template[$template->nodeName] =& XMLToArray($template);
+            $this->_templates[$template->nodeName] =& XMLToArray($template);
         }
     }
 
@@ -116,17 +116,143 @@ class Theme
 
     public function template ($what, $name)
     {
-        return $this->_template[$what][$name];
+        return $this->_templates[$what][$name];
     }
 
     public function menus ($menu, $layer=0)
     {
-        $template = '';
+        $template = $this->_templates['menu'];
+
+        if (!$template || !$menu) {
+            return false;
+        }
+
+        $first  = true;
+        $output = '';
+
+        foreach ($menu->childNodes as $node) {
+            switch ($node->nodeType) {
+                case XML_ELEMENT_NODE:
+                if ($node->nodeName == 'menu') {
+                    $tmp = $this->_menus_layer($template, $layer);
+
+                    $output .= interpolate($tmp['menu'], array(
+                        'data' => $this->menus($node, $layer)
+                    ));
+                }
+                else if ($node->nodeName == 'item') {
+                    $output .= $this->_menus_item($node, $template, $layer);
+                }
+                else {
+                    $output .= $this->_menus_other($node, $template);
+                }
+                break;
+
+                case XML_CDATA_SECTION_NODE:
+                case XML_TEXT_NODE:
+                if (!$first) {
+                    $output .= $node->nodeValue;
+                }
+
+                $first = false;
+                break;
+            }
+        }
+
+        if (!preg_match('/^[\s\n]*$/D', $output)) {
+            if ($layer == 0) {
+                $tmp = $this->_menus_layer($template, $layer);
+
+                return interpolate($tmp['menu'], array(
+                    'data' => $output
+                ));
+            }
+            else {
+                return $output;
+            }
+        }
+        else {
+            return '';
+        }
     }
 
     public function _menus_layer ($template, $layer)
     {
+        $result = array(
+            'menu' => '',
+            'item' => ''
+        );
 
+        if ($template) {
+            // Object.extend(result, template.layers["_" + layer] || template.layers["default"] || {});
+            $result = array_merge($result, array_shift(array_filter(array(
+                $template['layers']["_{$layer}"],
+                $template['layers']['default'],
+                array()
+            ), 'is_array')));
+
+            if (!$result['menu']) {
+                $result['menu'] = '#{data}';
+            }
+            
+            if (!$result['item']) {
+                $result['item'] = '<a href="#{href}" #{attributes}>#{text}</a> ';
+            }
+        }
+
+        return $result;
+    }
+
+    public function _menus_item ($element, $template, $layer)
+    {
+        $item = $element->cloneNode(true);
+
+        if (!($itemClass = $item->getAttribute('class'))) {
+            $itemClass = '';
+        } $item->removeAttribute('class');
+
+        if (!($itemId = $item->getAttribute('id'))) {
+            $itemId = '';
+        } $item->removeAttribute('id');
+
+        if (!($itemHref = $item->getAttribute('href'))) {
+            $itemHref = $item->getAttribute('href');
+        } $item->removeAttribute('href');
+
+        $tmp = $this->_menus_layer($template, $layer);
+
+        return interpolate($tmp['item'], array_merge(ObjectFromAttributes($item->attributes), array(
+            'class'      => $itemClass,
+            'id'         => $itemId,
+            'href'       => $itemHref,
+            'attributes' => StringFromAttributes($item->attributes),
+            'text'       => GetFirstText($element->childNodes),
+            'data'       => $this->menus($element, $layer + 1)
+        )));
+    }
+
+    public function _menus_other ($data, $template)
+    {
+        if (!$data || !$template) {
+            return '';
+        }
+
+        $text = $template[$data->nodeName];
+
+        if (!$text) {
+            return '';
+        }
+
+        $output  = '';
+        $outputs = array();
+
+        foreach ($data->childNodes as $node) {
+            if ($node->nodeType == XML_ELEMENT_NODE) {
+                $outputs[$node->nodeName] = $this->_menus_other($node, $template);
+            }
+        }
+
+        return interpolate($text, array_merge($outputs, ObjectFromAttributes($data->attributes)));
     }
 
     public function pages ($page, $data=null)
@@ -302,12 +428,12 @@ class Theme
                         $href = "{$href}{$args}{$ltype}{$menu}{$title}";
                     }
 
-                    $output .= interpolate($this->_template['list'][$listTemplate]['link'], array_merge(ObjectFromAttributes($link->attributes), array(
+                    $output .= interpolate($this->_templates['list'][$listTemplate]['link'], array_merge(ObjectFromAttributes($link->attributes), array(
                         'class'      => $linkClass,
                         'id'         => $linkId,
                         'attributes' => StringFromAttributes($link->attributes),
-                        'before'     => interpolate($this->_template['list'][$listTemplate]['before'], array('data' => $before)),
-                        'after'      => interpolate($this->_template['list'][$listTemplate]['after'], array('data' => $after)),
+                        'before'     => interpolate($this->_templates['list'][$listTemplate]['before'], array('data' => $before)),
+                        'after'      => interpolate($this->_templates['list'][$listTemplate]['after'], array('data' => $after)),
                         'href'       => $href,
                         'target'     => $target,
                         'text'       => $text,
@@ -341,12 +467,12 @@ class Theme
                         $itemId = '';
                     } $item->removeAttribute('id');
 
-                    $output .= interpolate($this->_template['list'][$listTemplate]['item'], array_merge(ObjectFromAttributes($item->attributes), array(
+                    $output .= interpolate($this->_templates['list'][$listTemplate]['item'], array_merge(ObjectFromAttributes($item->attributes), array(
                         'class'      => $itemClass,
                         'id'         => $itemId,
                         'attributes' => StringFromAttributes($item->attributes),
-                        'before'     => interpolate($this->_template['list'][$listTemplate]['before'], array('data' => $before)),
-                        'after'      => interpolate($this->_template['list'][$listTemplate]['after'], array('data' => $after)),
+                        'before'     => interpolate($this->_templates['list'][$listTemplate]['before'], array('data' => $before)),
+                        'after'      => interpolate($this->_templates['list'][$listTemplate]['after'], array('data' => $after)),
                         'text'       => $text
                     )));
                 }
@@ -368,11 +494,11 @@ class Theme
                         }
                     }
 
-                    $output .= interpolate($this->_template['list'][$listTemplate]['nest'], array(
+                    $output .= interpolate($this->_templates['list'][$listTemplate]['nest'], array(
                         'class'  => $node->getAttribute('class'),
                         'style'  => $node->getAttribute('style'),
-                        'before' => interpolate($this->_template['list'][$listTemplate]['before'], array('data' => $before)),
-                        'after'  => interpolate($this->_template['list'][$listTemplate]['after'], array('data' => $after)),
+                        'before' => interpolate($this->_templates['list'][$listTemplate]['before'], array('data' => $before)),
+                        'after'  => interpolate($this->_templates['list'][$listTemplate]['after'], array('data' => $after)),
                         'data'   => $this->pages($toParse, array($element))
                     ));
                 }
@@ -382,13 +508,13 @@ class Theme
                     continue;
                 }
 
-                $output .= interpolate($this->_template['list'][$listTemplate]['data'], array(
+                $output .= interpolate($this->_templates['list'][$listTemplate]['data'], array(
                     'data' => $node->nodeValue
                 ));
             }
         }
 
-        return interpolate($this->_template['list'][$listTemplate]['global'], array_merge(ObjectFromAttributes($list->attributes), array(
+        return interpolate($this->_templates['list'][$listTemplate]['global'], array_merge(ObjectFromAttributes($list->attributes), array(
             'attributes' => StringFromAttributes($list->attributes),
             'data'       => $output
         )));

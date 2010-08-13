@@ -129,6 +129,7 @@ class miniLOL
 
             $alias = $this->resources->get('miniLOL.pages')->attribute($page, 'alias');
             $type  = $this->resources->get('miniLOL.pages')->attribute($page, 'type');
+            $menu  = $this->resources->get('miniLOL.pages')->attribute($page, 'menu');
 
             if (($title = $this->resources->get('miniLOL.pages')->attribute($page, 'title'))) {
                 $this->set('title', $title);
@@ -177,6 +178,16 @@ class miniLOL
                 $content = $this->resources->get('miniLOL.functions')->render($type, $content, $arguments);
             }
         }
+
+        if ($arguments['menu']) {
+            $menu = $arguments['menu'];
+        }
+
+        if (!$menu) {
+            $menu = 'default';
+        }
+
+        $menu = $this->resources->get('miniLOL.menus')->get($menu);
 
         $this->set('content', $content);
 

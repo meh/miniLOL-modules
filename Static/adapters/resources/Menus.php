@@ -48,9 +48,9 @@ class MenusResource extends Resource
         return $this->_enabled;
     }
 
-    public function get ($id)
+    public function get ($name)
     {
-        return $this->_data[$id];
+        return $this->_data[$name];
     }
 
     public function normalize ($callback)
