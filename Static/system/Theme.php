@@ -42,10 +42,10 @@ class Theme
         $this->_info   = array();
         $this->_styles = array();
 
-        $xml   = DOMDocument::load($this->path().'/theme.xml');
-        $xpath = new DOMXpath($xml);
+        $dom   = DOMDocument::load($this->path().'/theme.xml');
+        $xpath = new DOMXpath($dom);
 
-        foreach ($xml->documentElement->attributes as $attribute) {
+        foreach ($dom->documentElement->attributes as $attribute) {
             $this->_info[$attribute->name] = $attribute->value;
         }
 

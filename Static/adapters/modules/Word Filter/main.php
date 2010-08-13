@@ -18,71 +18,42 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-class Post
+require(ADAPTERS.'/modules/Word Filter/Filters.php');
+require(ADAPTERS.'/modules/Word Filter/simple_html_dom.php');
+
+class WordFilterModule extends Module
 {
-    private $_id;
-    private $_date;
-    private $_title;
-    private $_author;
-    private $_content;
-
-    public function __construct ($dom)
+    public function name ()
     {
-        $this->id($dom->getAttribute('id'));
-        $this->date($dom->getAttribute('date'));
-        $this->title($dom->getAttribute('title'));
-        $this->author($dom->getAttribute('author'));
-        $this->content($dom->firstChild->nodeValue);
+        return 'Word Filter';
     }
 
-    public function id ($value=null)
+    private $_filters;
+
+    public function __construct ($miniLOL)
     {
-        if ($value) {
-            $this->_id = $value;
-        }
-        else {
-            return $this->_id;
-        }
+        parent::__construct($miniLOL);
+
+        $this->_filters = new Filters($miniLOL);
+        $this->_filters->load('modules/Word Filter/resources/words.xml');
+
+        $miniLOL->events->observe(':go', array($this, 'event'));
     }
 
-    public function date ($value=null)
+    public function event ($event)
     {
-        if ($value) {
-            $this->_date = $value;
-        }
-        else {
-            return $this->_date;
-        }
+        $this->miniLOL->set('content', $this->execute($this->miniLOL->get('content')));
     }
 
-    public function title ($value=null)
+    public function execute ($content)
     {
-        if ($value) {
-            $this->_title = $value;
-        }
-        else {
-            return $this->_title;
-        }
-    }
+        $html = str_get_html($content);
 
-    public function author ($value=null)
-    {
-        if ($value) {
-            $this->_author = $value;
+        foreach ($html->find('text') as $text) {
+            $text->innertext = $this->_filters->apply($text);
         }
-        else {
-            return $this->_author;
-        }
-    }
 
-    public function content ($value=null)
-    {
-        if ($value) {
-            $this->_content = $value;
-        }
-        else {
-            return $this->_content;
-        }
+        return $html->save();
     }
 }
 

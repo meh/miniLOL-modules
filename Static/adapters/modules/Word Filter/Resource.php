@@ -18,71 +18,42 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-class Post
+require(ADAPTERS.'/modules/Word Filter/Filter.php');
+
+class WordFilterResource extends Resource
 {
-    private $_id;
-    private $_date;
-    private $_title;
-    private $_author;
-    private $_content;
-
-    public function __construct ($dom)
+    public function name ()
     {
-        $this->id($dom->getAttribute('id'));
-        $this->date($dom->getAttribute('date'));
-        $this->title($dom->getAttribute('title'));
-        $this->author($dom->getAttribute('author'));
-        $this->content($dom->firstChild->nodeValue);
+        return 'Word Filter';
     }
 
-    public function id ($value=null)
+    public function _load ($path)
     {
-        if ($value) {
-            $this->_id = $value;
-        }
-        else {
-            return $this->_id;
+        $dom = DOMDocument::load($path);
+
+        $this->_data['censor'] = $dom->documentElement->getAttribute('censor');
+
+        foreach ($dom->getElementsByTagName('filter') as $filter) {
+            array_push($this->_data['filters'], new Filter($filter, $this->_data['censor']));
         }
     }
 
-    public function date ($value=null)
+    public function clear ()
     {
-        if ($value) {
-            $this->_date = $value;
-        }
-        else {
-            return $this->_date;
-        }
+        $this->_data = array(
+            'filters' => array(),
+            'censor'  => '@#!%$'
+        );
     }
 
-    public function title ($value=null)
+    public function filters ()
     {
-        if ($value) {
-            $this->_title = $value;
-        }
-        else {
-            return $this->_title;
-        }
+        return $this->_data['filters'];
     }
 
-    public function author ($value=null)
+    public function censor ()
     {
-        if ($value) {
-            $this->_author = $value;
-        }
-        else {
-            return $this->_author;
-        }
-    }
-
-    public function content ($value=null)
-    {
-        if ($value) {
-            $this->_content = $value;
-        }
-        else {
-            return $this->_content;
-        }
+        return $this->_data['censor'];
     }
 }
 

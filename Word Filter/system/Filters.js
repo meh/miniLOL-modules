@@ -44,7 +44,7 @@ Filters.Filter = Class.create({
     },
 
     toString: function () {
-        return "s/#{_regexp}/#{_to}/gi".interpolate(this);
+        return "s/#{regexp}/#{to}/gi".interpolate(this);
     }
 });
 

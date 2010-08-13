@@ -36,8 +36,8 @@ class FunctionsResource extends Resource
 
     public function _load ($path)
     {
-        $xml   = DOMDocument::load($path);
-        $xpath = new DOMXpath($xml);
+        $dom   = DOMDocument::load($path);
+        $xpath = new DOMXpath($dom);
     
         foreach ($xpath->query('/functions/function') as $function) {
             $name = $function->getAttribute('name');

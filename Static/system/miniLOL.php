@@ -99,9 +99,7 @@ class miniLOL
     public function load ($page, $arguments)
     {
         if (ini_get('allow_url_fopen')) {
-            $root = dirname($_ENV['SCRIPT_NAME']);
-
-            return file_get_contents("http://{$_SERVER['HTTP_HOST']}{$root}/data/{$page}?{$arguments}");
+            return file_get_contents("http://{$_SERVER['HTTP_HOST']}".WEB_ROOT."/data/{$page}?{$arguments}");
         }
         else {
             return file_get_contents(ROOT."/data/{$page}");
@@ -110,9 +108,16 @@ class miniLOL
 
     public function go ($url, $arguments, $query=null, $again=false)
     {
+        $this->events->fire(':go.before', array(
+            'url'       => &$url,
+            'arguments' => &$arguments,
+            'query'     => &$query,
+            'again'     => &$again
+        ));
+
         if (isURL($url)) {
             header("Location: {$url}");
-            return;
+            return false;
         }
 
         if (!$query) {
@@ -122,13 +127,28 @@ class miniLOL
         if (preg_match('/[?#](([^=&]*)&|([^=&]*)$)/', $url, $matches)) {
             $page = (!empty($matches[2])) ? $matches[2] : $matches[3];
 
-            $content = $this->resources->get('miniLOL.pages')->get($page);
+            $alias = $this->resources->get('miniLOL.pages')->attribute($page, 'alias');
+            $type  = $this->resources->get('miniLOL.pages')->attribute($page, 'type');
 
             if (($title = $this->resources->get('miniLOL.pages')->attribute($page, 'title'))) {
                 $this->set('title', $title);
             }
 
-            $type = $this->resources->get('miniLOL.pages')->attribute($page, 'type');
+            if ($alias) {
+                if ($alias[0] == '#') {
+                    $alias[0] = '?';
+                }
+
+                if ($alias[0] != '?') {
+                    $alias = "?{$alias}";
+                }
+
+                header("Location: $alias"); 
+                return false;
+            }
+            else {
+                $content = $this->resources->get('miniLOL.pages')->get($page);
+            }
         }
         else if ($arguments['module']) {
             $content = $this->modules->execute($arguments['module'], $arguments);
@@ -158,7 +178,11 @@ class miniLOL
             }
         }
 
-        return $this->theme->output($content, $menu);
+        $this->set('content', $content);
+
+        $this->events->fire(':go', $url);
+
+        return $this->theme->output($this->get('content'), $menu);
     }
 }
 

@@ -24,6 +24,7 @@ define('__VERSION__', '0.1');
 ob_start();
 
 define('ROOT',     realpath(dirname(__FILE__)));
+define('WEB_ROOT', dirname($_ENV['SCRIPT_NAME']));
 define('MODULES',  ROOT.'/modules');
 define('SYSTEM',   MODULES.'/Static/system');
 define('ADAPTERS', MODULES.'/Static/adapters');
@@ -56,42 +57,51 @@ if (ob_get_length() > 0) {
     $miniLOL->error(ob_get_contents());
 }
 
-ob_clean();
+ob_end_clean();
 
 if ($miniLOL->error()) {
     echo $miniLOL->error();
-    ob_end_flush();
     exit;
 }
 
-$output = array();
+$content = $miniLOL->go($_ENV['REQUEST_URI'], $_REQUEST);
+$title   = $miniLOL->get('title');
 
-$output['meta']    = '';
-$output['styles']  = '';
-$output['content'] = $miniLOL->go($_ENV['REQUEST_URI'], $_REQUEST);
-$output['title']   = $miniLOL->get('title');
-
-if (is_array($config['Static']['meta'])) {
-    foreach ($config['Static']['meta'] as $name => $content) {
-        $output['meta'] .= "<meta name='{$name}' content='{$content}'/>\n";
-    }
+if ($content === false) {
+    exit;
 }
 
-foreach ($miniLOL->theme->styles() as $style) {
-    $output['styles'] .= "<link rel='stylesheet' type='text/css' href='{$miniLOL->theme->path(true)}/{$style}.css'/>\n";
-}
-
-echo <<<HTML
+?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{$output['title']}</title>
+    <title><?php echo $title ?></title>
 
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 
-    {$output['meta']}
+    <?php
+        $output = '';
 
-    {$output['styles']}
+        if (is_array($config['Static']['meta'])) {
+            foreach ($config['Static']['meta'] as $name => $value) {
+                $output .= "<meta name='{$name}' content='{$value}'/>\n";
+            }
+        }
+
+        echo $output;
+    ?>
+
+    <?php
+        $output = '';
+
+        foreach ($miniLOL->theme->styles() as $style) {
+            $output .= "<link rel='stylesheet' type='text/css' href='{$miniLOL->theme->path(true)}/{$style}.css'/>\n";
+        }
+
+        echo $output;
+    ?>
+
+    <?php if ($config['Static']['alwaysOn'] != 'true') { ?>
 
     <!--
     If you don't phear the Google empire and want more speed, you can use the Google lib APIs.
@@ -131,18 +141,15 @@ echo <<<HTML
             if (matches) {
                 location.href = location.href.replace(/\?(.*)$/, "#" + matches[1]);
 
-                throw 'Changing location.';
+                return true;
             }
         }
     // ]]></script>
+
+    <?php } ?>
 </head>
 
-<body onload="miniLOL.utils.fixURL(); miniLOL.initialize()">
-    {$output['content']}
+<body onload="<?php if ($config['Static']['alwaysOn'] != 'true') echo 'if (miniLOL.utils.fixURL()) return false; miniLOL.initialize()' ?>">
+    <?php echo $content ?>
 </body>
 </html>
-HTML;
-
-ob_end_flush();
-
-?>

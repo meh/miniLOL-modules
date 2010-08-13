@@ -18,71 +18,39 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-class Post
+class Filter
 {
-    private $_id;
-    private $_date;
-    private $_title;
-    private $_author;
-    private $_content;
+    private $_type;
+    private $_regexp;
+    private $_to;
 
-    public function __construct ($dom)
+    public function __construct ($dom, $censor)
     {
-        $this->id($dom->getAttribute('id'));
-        $this->date($dom->getAttribute('date'));
-        $this->title($dom->getAttribute('title'));
-        $this->author($dom->getAttribute('author'));
-        $this->content($dom->firstChild->nodeValue);
-    }
+        $this->_type = $dom->getAttribute('type');
 
-    public function id ($value=null)
-    {
-        if ($value) {
-            $this->_id = $value;
+        if (($tmp = $dom->getAttribute('regexp'))) {
+            $this->_regexp = $tmp;
+        }
+        else if (($tmp = $dom->getAttribute('raw'))) {
+            $this->_regexp = "/{$tmp}/i";
+        }
+
+        $this->_regexp = preg_replace('#/([^/g]*)g([^/g]*)$#', '/$1$2', $this->_regexp);
+
+        if ($this->_type == 'censor') {
+            $this->_to = ($censor) ? $censor : '@#!%$';
+        }
+        else if ($this->_type == 'replace') {
+            $this->_to = ($tmp = $dom->getAttribute('to')) ? $tmp : '$1';
         }
         else {
-            return $this->_id;
-        }
-    }
-
-    public function date ($value=null)
-    {
-        if ($value) {
-            $this->_date = $value;
-        }
-        else {
-            return $this->_date;
+            $this->_to = '$1';
         }
     }
 
-    public function title ($value=null)
+    public function apply ($text)
     {
-        if ($value) {
-            $this->_title = $value;
-        }
-        else {
-            return $this->_title;
-        }
-    }
-
-    public function author ($value=null)
-    {
-        if ($value) {
-            $this->_author = $value;
-        }
-        else {
-            return $this->_author;
-        }
-    }
-
-    public function content ($value=null)
-    {
-        if ($value) {
-            $this->_content = $value;
-        }
-        else {
-            return $this->_content;
-        }
+        return preg_replace($this->_regexp, $this->_to, $text);
     }
 }
 

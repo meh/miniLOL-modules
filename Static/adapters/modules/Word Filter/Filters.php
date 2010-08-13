@@ -18,71 +18,27 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-class Post
+require(ADAPTERS.'/modules/Word Filter/Resource.php');
+
+class Filters
 {
-    private $_id;
-    private $_date;
-    private $_title;
-    private $_author;
-    private $_content;
-
-    public function __construct ($dom)
+    public function __construct ($miniLOL)
     {
-        $this->id($dom->getAttribute('id'));
-        $this->date($dom->getAttribute('date'));
-        $this->title($dom->getAttribute('title'));
-        $this->author($dom->getAttribute('author'));
-        $this->content($dom->firstChild->nodeValue);
+        $this->_resource = new WordFilterResource($miniLOL);
     }
 
-    public function id ($value=null)
+    public function apply ($text)
     {
-        if ($value) {
-            $this->_id = $value;
+        foreach ($this->_resource->filters() as $filter) {
+            $text = $filter->apply($text);
         }
-        else {
-            return $this->_id;
-        }
+
+        return $text;
     }
 
-    public function date ($value=null)
+    public function load ($path)
     {
-        if ($value) {
-            $this->_date = $value;
-        }
-        else {
-            return $this->_date;
-        }
-    }
-
-    public function title ($value=null)
-    {
-        if ($value) {
-            $this->_title = $value;
-        }
-        else {
-            return $this->_title;
-        }
-    }
-
-    public function author ($value=null)
-    {
-        if ($value) {
-            $this->_author = $value;
-        }
-        else {
-            return $this->_author;
-        }
-    }
-
-    public function content ($value=null)
-    {
-        if ($value) {
-            $this->_content = $value;
-        }
-        else {
-            return $this->_content;
-        }
+        $this->_resource->load($path);
     }
 }
 

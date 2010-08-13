@@ -12,4 +12,7 @@
         <keywords>javascript ajax js cms</keywords>
         <description>miniLOL is an awesome Javascript/XML modular CMS.</description>
     </meta>
+
+    <!-- If you want to disable completely the JS part of miniLOL set this to true -->
+    <alwaysOn>false</alwaysOn>
 </configuration>
