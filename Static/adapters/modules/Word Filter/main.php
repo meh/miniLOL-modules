@@ -19,7 +19,6 @@
  ****************************************************************************/
 
 require(ADAPTERS.'/modules/Word Filter/Filters.php');
-require(ADAPTERS.'/modules/Word Filter/simple_html_dom.php');
 
 class WordFilterModule extends Module
 {

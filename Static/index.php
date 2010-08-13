@@ -137,7 +137,7 @@ HTML;
     $output['javascript']['initialization'] = 'if (miniLOL.utils.fixURL()) return false; miniLOL.initialize()';
 }
 
-$output['whole'] = <<<HTML
+echo <<<HTML
 
 <!DOCTYPE html>
 <html>
@@ -159,7 +159,5 @@ $output['whole'] = <<<HTML
 </html>
 
 HTML;
-
-echo preg_replace('/(href=[\'"])#/', '$1?', $output['whole']);
 
 ?>

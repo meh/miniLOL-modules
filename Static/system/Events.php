@@ -60,7 +60,7 @@ class Events
     public function fire ($name, $memo)
     {
         if (is_array($this->_events[$name])) {
-            $event = new Event($name, $memo);
+            $event = new Event($this->miniLOL, $name, $memo);
 
             foreach ($this->_events[$name] as $callback) {
                 if (is_array($callback)) {

@@ -18,6 +18,8 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
+require(SYSTEM.'/simple_html_dom.php');
+
 function interpolate ($string, $object)
 {
     foreach ($object as $name => $value) {

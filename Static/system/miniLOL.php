@@ -108,6 +108,10 @@ class miniLOL
 
     public function go ($url, $arguments, $query=null, $again=false)
     {
+        if ($url[0] == '#') {
+            $url[0] = '?';
+        }
+
         $this->events->fire(':go.before', array(
             'url'       => &$url,
             'arguments' => &$arguments,
@@ -124,7 +128,7 @@ class miniLOL
             $query = $_SERVER['QUERY_STRING'];
         }
 
-        if (preg_match('/[?#](([^=&]*)&|([^=&]*)$)/', $url, $matches)) {
+        if (preg_match('/\?(([^=&]*)&|([^=&]*)$)/', $url, $matches)) {
             $page = (!empty($matches[2])) ? $matches[2] : $matches[3];
 
             $alias = $this->resources->get('miniLOL.pages')->attribute($page, 'alias');
@@ -187,13 +191,12 @@ class miniLOL
             $menu = 'default';
         }
 
-        $menu = $this->resources->get('miniLOL.menus')->get($menu);
-
-        $this->set('content', $content);
+        $this->set('menu', preg_replace('/(href=[\'"])#/', '$1?', $this->resources->get('miniLOL.menus')->get($menu)));
+        $this->set('content', preg_replace('/(href=[\'"])#/', '$1?', $content));
 
         $this->events->fire(':go', $url);
 
-        return $this->theme->output($this->get('content'), $menu);
+        return $this->theme->output($this->get('content'), $this->get('menu'));
     }
 }
 

@@ -18,30 +18,30 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-class Event
+function __fix_menu ($event)
 {
-    public $miniLOL;
+    $menu = str_get_html($event->miniLOL->get('menu'));
 
-    private $_name;
-    private $_memo;
+    $set = false;
 
-    public function __construct ($miniLOL, $name, $memo)
-    {
-        $this->miniLOL = $miniLOL;
-
-        $this->_name = $name;
-        $this->_memo = $memo;
+    foreach ($menu->find('a') as $link) {
+        if (strstr($event->memo(), $link->href) !== false) {
+            $link->parent()->class = 'current';
+            $set = true;
+            break;
+        }
     }
 
-    public function name ()
-    {
-        return $this->_name;
+    if (!$set) {
+        $menu->find('a', 0)->parent()->class = 'current';
     }
 
-    public function memo ()
-    {
-        return $this->_memo;
-    }
+    $event->miniLOL->set('menu', $menu->save());
+}
+
+function Theme_callback ($miniLOL)
+{
+    $miniLOL->events->observe(':go', __fix_menu);
 }
 
 ?>

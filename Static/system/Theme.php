@@ -35,6 +35,10 @@ class Theme
 
     public function load ($name)
     {
+        if ($this->_name) {
+            throw new Exception('Already loaded a theme.');
+        }
+
         $path = ROOT."/themes/{$name}";
 
         $this->_name   = $name;
@@ -53,7 +57,7 @@ class Theme
             array_push($this->_styles, $style->getAttribute('name'));
         }
 
-        $this->_html = file_get_contents("{$this->_path}/template.html");
+        $this->_html = preg_replace('/(href=[\'"])#/', '$1?', file_get_contents("{$this->_path}/template.html"));
 
         $this->_templates = array(
             'list' => array(
@@ -86,6 +90,12 @@ class Theme
         // Reading and parsing additional list templates
         foreach ($xpath->query('/theme/templates/*') as $template) {
             $this->_templates[$template->nodeName] =& XMLToArray($template);
+        }
+
+        if (include(ADAPTERS."/themes/{$name}.php")) {
+            if (function_exists('Theme_callback')) {
+                Theme_callback($this->miniLOL);
+            }
         }
     }
 
