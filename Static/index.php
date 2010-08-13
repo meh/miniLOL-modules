@@ -39,10 +39,14 @@ $miniLOL->resources->get('miniLOL.config')->load('resources/config.xml');
 
 $config =& $miniLOL->resources->get('miniLOL.config')->get();
 
+$miniLOL->set('title', $config['core']['siteTitle']);
+
 $miniLOL->theme->load($config['core']['theme']);
 
 $miniLOL->resources->get('miniLOL.menus')->load('resources/menus.xml')->normalize(array($miniLOL->theme, 'menus'));
 $miniLOL->resources->get('miniLOL.pages')->load('resources/pages.xml')->normalize(array($miniLOL->theme, 'pages'));
+
+$miniLOL->resources->get('miniLOL.functions')->load('resources/functions.xml');
 
 foreach ($miniLOL->resources->get('miniLOL.modules')->load('resources/modules.xml') as $module) {
     $miniLOL->modules->load($module);
@@ -62,10 +66,10 @@ if ($miniLOL->error()) {
 
 $output = array();
 
-$output['title']   = $config['core']['siteTitle'];
 $output['meta']    = '';
 $output['styles']  = '';
 $output['content'] = $miniLOL->go($_ENV['REQUEST_URI'], $_REQUEST);
+$output['title']   = $miniLOL->get('title');
 
 if (is_array($config['Static']['meta'])) {
     foreach ($config['Static']['meta'] as $name => $content) {
@@ -121,17 +125,19 @@ echo <<<HTML
     <script type="text/javascript" src="system/miniLOL.min.js"></script>
 
     <script type="text/javascript">// <![CDATA[
-        function __fixURL () {
+        miniLOL.utils.fixURL = function () {
             var matches = location.href.match(/\?(.*)$/);
 
             if (matches) {
                 location.href = location.href.replace(/\?(.*)$/, "#" + matches[1]);
+
+                throw 'Changing location.';
             }
         }
     // ]]></script>
 </head>
 
-<body onload="__fixURL(); miniLOL.initialize()">
+<body onload="miniLOL.utils.fixURL(); miniLOL.initialize()">
     {$output['content']}
 </body>
 </html>

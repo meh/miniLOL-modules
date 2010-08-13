@@ -18,18 +18,9 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-abstract class Module
+function Function_markdown ($miniLOL, $text, $args)
 {
-    public $miniLOL;
-
-    public $aliases = array();
-
-    public function __construct ($miniLOL)
-    {
-        $this->miniLOL = $miniLOL;
-    }
-
-    abstract public function name ();    
+    return $miniLOL->modules->execute('Markdown', array(array('content' => $text)));
 }
 
 ?>

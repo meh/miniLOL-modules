@@ -32,10 +32,13 @@ class MarkdownModule extends Module
         parent::__construct($miniLOL);
 
         $this->miniLOL->resources->get('miniLOL.config')->load('modules/Markdown/resources/config.xml');
+        $this->miniLOL->resources->get('miniLOL.functions')->load('modules/Markdown/resources/functions.xml');
     }
 
     public function execute ($what)
     {
-
+        if (is_string($what['content'])) {
+            return Markdown($what['content']);
+        }
     }
 }

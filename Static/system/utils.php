@@ -32,7 +32,7 @@ function &XMLToArray ($xml)
     $result = array();
     $class  = get_class($xml);
 
-    if (preg_match('/^SimpleXML', $class)) {
+    if (preg_match('/^SimpleXML/', $class)) {
         if (count($xml->children()) == 0) {
             return (string) $xml;
         }
@@ -41,7 +41,7 @@ function &XMLToArray ($xml)
             $result[$name] =& XMLToArray($value);
         }
     }
-    else if (preg_match('/^DOM', $class)) {
+    else if (preg_match('/^DOM/', $class)) {
         if ($xml->nodeType == XML_CDATA_SECTION_NODE || $xml->nodeType == XML_TEXT_NODE) {
             return $xml->nodeValue;
         }

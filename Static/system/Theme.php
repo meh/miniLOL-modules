@@ -121,7 +121,7 @@ class Theme
 
     public function menus ($menu, $layer=0)
     {
-        $template = 
+        $template = '';
     }
 
     public function _menus_layer ($template, $layer)

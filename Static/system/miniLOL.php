@@ -53,6 +53,8 @@ class miniLOL
 
     public $theme;
 
+    private $_data;
+
     private function __construct ()
     {
         $this->events = new Events($this);
@@ -84,6 +86,16 @@ class miniLOL
         }
     }
 
+    public function &get ($name)
+    {
+        return $this->_data[$name];
+    }
+
+    public function &set ($name, $value)
+    {
+        return $this->_data[$name] = $value;
+    }
+
     public function load ($page, $arguments)
     {
         if (ini_get('allow_url_fopen')) {
@@ -108,7 +120,15 @@ class miniLOL
         }
 
         if (preg_match('/[?#](([^=&]*)&|([^=&]*)$)/', $url, $matches)) {
-            $content = $this->resources->get('miniLOL.pages')->get((!empty($matches[2])) ? $matches[2] : $matches[3]);
+            $page = (!empty($matches[2])) ? $matches[2] : $matches[3];
+
+            $content = $this->resources->get('miniLOL.pages')->get($page);
+
+            if (($title = $this->resources->get('miniLOL.pages')->attribute($page, 'title'))) {
+                $this->set('title', $title);
+            }
+
+            $type = $this->resources->get('miniLOL.pages')->attribute($page, 'type');
         }
         else if ($arguments['module']) {
             $content = $this->modules->execute($arguments['module'], $arguments);
@@ -127,6 +147,15 @@ class miniLOL
 
         if ($content === null && !isset($arguments['module'])) {
             $content = '404 - Not Found';
+        }
+        else {
+            if (isset($arguments['type'])) {
+                $type = $arguments['type'];
+            }
+
+            if ($type) {
+                $content = $this->resources->get('miniLOL.functions')->render($type, $content, $arguments);
+            }
         }
 
         return $this->theme->output($content, $menu);

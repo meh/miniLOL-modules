@@ -18,18 +18,51 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-abstract class Module
-{
-    public $miniLOL;
+foreach (glob(ADAPTERS.'/functions/*.php') as $function) {
+    require($function);
+}
 
-    public $aliases = array();
+class FunctionsResource extends Resource
+{
+    public function name ()
+    {
+        return 'miniLOL.functions';
+    }
 
     public function __construct ($miniLOL)
     {
-        $this->miniLOL = $miniLOL;
+        parent::__construct($miniLOL);
     }
 
-    abstract public function name ();    
+    public function _load ($path)
+    {
+        $xml   = DOMDocument::load($path);
+        $xpath = new DOMXpath($xml);
+    
+        foreach ($xpath->query('/functions/function') as $function) {
+            $name = $function->getAttribute('name');
+
+            if (function_exists("Function_$name")) {
+                $this->_data[$name] = "Function_$name";
+            }
+        }
+    }
+
+    public function get ($name)
+    {
+        return $this->_data[$name];
+    }
+
+    public function render ($types, $content, $arguments)
+    {
+        foreach (preg_split('/\s*,\s*/', $types) as $type) {
+            if (($callback = $this->get($type))) {
+                $content = $callback($this->miniLOL, $content, $arguments);
+            }
+        }
+
+        return $content;
+    }
 }
 
 ?>

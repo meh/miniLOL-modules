@@ -28,23 +28,30 @@ class PagesResource extends Resource
     public function _load ($path)
     {
         foreach (DOMDocument::load($path)->getElementsByTagName('page') as $page) {
-            $this->_data[$page->getAttribute('id')] = $page;
+            $this->_data['content'][$page->getAttribute('id')] = $page;
         }
     }
 
     public function get ($id)
     {
-        return $this->_data[$id];
+        return $this->_data['content'][$id];
+    }
+
+    public function attribute ($page, $name)
+    {
+        return $this->_data['attributes'][$page][$name];
     }
 
     public function normalize ($callback)
     {
-        foreach ($this->_data as $name => $page) {
+        foreach ($this->_data['content'] as $name => $page) {
+            $this->_data['attributes'][$name] = ObjectFromAttributes($page->attributes);
+
             if (is_array($callback)) {
-                $this->_data[$name] = $callback[0]->{$callback[1]}($page);
+                $this->_data['content'][$name] = $callback[0]->{$callback[1]}($page);
             }
             else {
-                $this->_data[$name] = $callback($page);
+                $this->_data['content'][$name] = $callback($page);
             }
         }
     }

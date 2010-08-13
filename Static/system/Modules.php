@@ -47,12 +47,26 @@ class Modules
 
         $class = str_replace(' ', '', $name) . 'Module';
 
-        $this->_modules[$name] = new $class($this->miniLOL);
+        $module = $this->_modules[$name] = new $class($this->miniLOL);
+
+        foreach ($module->aliases as $alias) {
+            $this->_modules[$alias] = $module;
+        }
     }
 
     public function &get ($name)
     {
         return $this->_modules[$name];
+    }
+
+    public function execute ($name, $args, $output=false)
+    {
+        if ($this->_modules[$name]) {
+            return call_user_method_array('execute', $this->_modules[$name], $args);
+        }
+        else {
+            return false;
+        }
     }
 }
 
