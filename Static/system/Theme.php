@@ -92,7 +92,7 @@ class Theme
             $this->_templates[$template->nodeName] =& XMLToArray($template);
         }
 
-        if (include(ADAPTERS."/themes/{$name}.php")) {
+        if (@include(ADAPTERS."/themes/{$name}.php")) {
             if (function_exists('Theme_callback')) {
                 Theme_callback($this->miniLOL);
             }
