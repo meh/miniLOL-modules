@@ -65,7 +65,12 @@ class Modules
             return call_user_method_array('execute', $this->_modules[$name], $args);
         }
         else {
-            return false;
+            if ($output) {
+                return 'Module `' . htmlentities($name) . '` not found.';
+            }
+            else {
+                return false;
+            }
         }
     }
 }

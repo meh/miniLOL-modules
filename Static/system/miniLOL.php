@@ -156,7 +156,7 @@ class miniLOL
             }
         }
         else if ($arguments['module']) {
-            $content = $this->modules->execute($arguments['module'], $arguments);
+            $content = $this->modules->execute($arguments['module'], $arguments, true);
         }
         else if ($arguments['page']) {
             $page = $arguments['page']; unset($arguments['page']);

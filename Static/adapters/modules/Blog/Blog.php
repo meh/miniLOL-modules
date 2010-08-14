@@ -18,48 +18,35 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-require(ADAPTERS.'/modules/Blog/Blog.php');
+require(ADAPTERS.'/modules/Blog/Post.php');
+require(ADAPTERS.'/modules/Blog/Resource.php');
+require(ADAPTERS.'/modules/Blog/Template.php');
 
-class BlogModule extends Module
+class Blog
 {
-    private $_resource;
+    public $miniLOL;
 
-    public function name ()
+    public function __construct ($miniLOL, $path)
     {
-        return 'Blog';
-    }
+        $this->miniLOL = $miniLOL;
 
-    public function __construct ($miniLOL)
-    {
-        parent::__construct($miniLOL);
-
-        $this->_blog = new Blog($miniLOL, MODULES.'/Blog/resources/data.xml');
+        $this->_resource = new BlogResource($miniLOL);
+        $this->_resource->load($path);
     }
 
     public function get ($what, $data)
     {
-        return $this->_blog->get($what, $data);
+        
     }
 
-    public function page ($number, $posts=null)
+    public function page ($number, $posts)
     {
-        return $this->_blog->get($number, $posts);
+
     }
 
-    public function execute ($args)
+    public function output ($what, $args)
     {
-        if ($args['id']) {
-            return $this->_blog->output('post', $args);
-        }
-        else if ($args['number']) {
-            return $this->_blog->output('post', $args);
-        }
-        else if ($args['page']) {
-            return $this->_blog->output('page', $args);
-        }
-        else {
-            return $this->_blog->output('page', array('page' => 1));
-        }
+
     }
 }
 

@@ -31,8 +31,8 @@ miniLOL.module.create("Syntax Highlighter", {
         SyntaxHighlighter.config["toolbar"] = false;
 
         for (var conf in miniLOL.config["Syntax Highlighter"]) {
-            SyntaxHighlighter.defaults[conf] = (miniLOL.config["Syntax Highlighter"][conf][0] == '[' && confs[conf][confs[conf].length-1] == ']')
-                ? eval(miniLOL.config["Syntax Highlighter"][conf].replace(/[^\d\[\],]/g, ''))
+            SyntaxHighlighter.defaults[conf] = (miniLOL.config["Syntax Highlighter"][conf][0] == "[" && confs[conf][confs[conf].length-1] == "]")
+                ? eval(miniLOL.config["Syntax Highlighter"][conf].replace(/[^\d\[\],]/g, ""))
                 : miniLOL.config["Syntax Highlighter"][conf];
         }
 
@@ -70,6 +70,10 @@ miniLOL.module.create("Syntax Highlighter", {
         Event.observe(document, ":go", function () {
             miniLOL.module.execute("Syntax Highlighter");
         });
+
+        Event.observe(window, "resize", this.doWrap);
+
+        miniLOL.utils.css("body .syntaxhighlighter .line { white-space: pre-wrap !important; }");
     },
 
     loadFile: function (name) {
@@ -96,7 +100,7 @@ miniLOL.module.create("Syntax Highlighter", {
                     var alias = ((tag.getAttribute("class") || "").match(/brush:\s*(.*?)(;|$)/) || [])[1];
 
                     if (alias && this.aliases[alias] == name) {
-                        tag.setAttribute("class", tag.getAttribute("class").replace(/brush:.*(;|$)/, ''));
+                        tag.setAttribute("class", tag.getAttribute("class").replace(/brush:.*(;|$)/, ""));
 
                         tag.update("Could not load the brush.");
                     }
@@ -115,8 +119,30 @@ miniLOL.module.create("Syntax Highlighter", {
         }, this);
     },
 
+    doWrap: function () {
+        $$(".syntaxhighlighter").each(function (highlighter) {
+            var gutter = highlighter.select("td.gutter").first();
+            var code   = highlighter.select("td.code").first();
+
+            gutter.select(".line").each(function (line, index) {
+                var gutterLine = line;
+                var codeLine   = code.select(".line:nth-child(#{index})".interpolate({ index: index + 1 })).first();
+
+                var height = codeLine.getHeight();
+                if (!height) {
+                    height = "auto";
+                }
+                else {
+                    height += "px";
+                }
+
+                gutterLine.setStyle("height: #{height} !important".interpolate({ height: height }));
+            })
+        }, this);
+    },
+
     execute: function (args) {
-        if ($$('.syntaxhighlighter').length) {
+        if ($$(".syntaxhighlighter").length) {
             return;
         }
  
@@ -125,8 +151,8 @@ miniLOL.module.create("Syntax Highlighter", {
         var defaults = Object.extend({}, SyntaxHighlighter.defaults);
 
         for (var arg in args) {
-            SyntaxHighlighter.defaults[arg] = (args[arg][0] == '[' && args[arg][args[arg].length-1] == ']')
-                ? eval(args[arg].replace(/[^\d\[\],]/g, ''))
+            SyntaxHighlighter.defaults[arg] = (args[arg][0] == "[" && args[arg][args[arg].length-1] == "]")
+                ? eval(args[arg].replace(/[^\d\[\],]/g, ""))
                 : args[arg];
         }
 
@@ -140,5 +166,7 @@ miniLOL.module.create("Syntax Highlighter", {
         SyntaxHighlighter.highlight();
 
         SyntaxHighlighter.defaults = defaults;
+
+        this.doWrap();
     }
 });
