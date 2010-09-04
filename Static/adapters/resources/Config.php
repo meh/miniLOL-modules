@@ -25,11 +25,11 @@ class ConfigResource extends Resource
         return 'miniLOL.config';
     }
 
-    public function __construct ($miniLOL)
+    public function __construct ()
     {
-        parent::__construct($miniLOL);
+        parent::__construct();
 
-        $this->miniLOL->events->observe(':resource.loaded', array($this, '_fix'));
+        miniLOL::instance()->events->observe(':resource.loaded', array($this, '_fix'));
     }
 
 

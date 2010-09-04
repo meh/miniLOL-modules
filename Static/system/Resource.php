@@ -20,15 +20,11 @@
 
 abstract class Resource
 {
-    public $miniLOL;
-
     protected $_calls;
     protected $_data;
 
-    public function __construct ($miniLOL)
+    public function __construct ()
     {
-        $this->miniLOL = $miniLOL;
-
         $this->clear();
         $this->flush();
     }
@@ -37,7 +33,7 @@ abstract class Resource
     {
         $args = func_get_args();
 
-        $this->miniLOL->events->fire(':resource.load', array(
+        miniLOL::instance()->events->fire(':resource.load', array(
             'resource'  => $this,
             'arguments' => $args
         ));
@@ -51,7 +47,7 @@ abstract class Resource
             throw $e;
         }
 
-        $this->miniLOL->events->fire(':resource.loaded', array(
+        miniLOL::instance()->events->fire(':resource.loaded', array(
             'resource'  => $this,
             'arguments' => $args
         ));
@@ -61,7 +57,7 @@ abstract class Resource
 
     public function clear ()
     {
-        $this->miniLOL->events->fire(':resource.clear', array(
+        miniLOL::instance()->events->fire(':resource.clear', array(
             'resource' => $this
         ));
 
@@ -70,7 +66,7 @@ abstract class Resource
 
     public function flush ()
     {
-        $this->miniLOL->events->fire(':resource.flush', array(
+        miniLOL::instance()->events->fire(':resource.flush', array(
             'resource' => $this
         ));
 
@@ -82,7 +78,7 @@ abstract class Resource
 
     public function reload ()
     {
-        $this->miniLOL->events->fire(':resource.reload', array(
+        miniLOL::instance()->events->fire(':resource.reload', array(
             'resource' => $this
         ));
 
@@ -92,7 +88,7 @@ abstract class Resource
             call_user_func($this->load, $call);
         }
 
-        $this->miniLOL->events->fire(':resource.reloaded', array(
+        miniLOL::instance()->events->fire(':resource.reloaded', array(
             'resource' => $this
         ));
     }

@@ -20,17 +20,15 @@
 
 class Theme
 {
-    public $miniLOL;
-
     private $_name;
     private $_path;
     private $_info;
     private $_styles;
     private $_template;
+    private $_html;
     
-    public function __construct ($miniLOL)
+    public function __construct ()
     {
-        $this->miniLOL = $miniLOL;
     }
 
     public function load ($name)
@@ -94,7 +92,7 @@ class Theme
 
         if (@include(ADAPTERS."/themes/{$name}.php")) {
             if (function_exists('Theme_callback')) {
-                Theme_callback($this->miniLOL);
+                Theme_callback();
             }
         }
     }
@@ -119,9 +117,14 @@ class Theme
         return $this->_styles;
     }
 
-    public function html ()
+    public function html ($value=null)
     {
-        return $this->_html;
+        if (is_null($value)) {
+            return $this->_html;
+        }
+        else {
+            $this->_html = $value;
+        }
     }
 
     public function template ($what, $name)
@@ -420,7 +423,7 @@ class Theme
                             $ltype = "&type={$ltype}";
                         }
 
-                        if ($this->miniLOL->resources->get('miniLOL.menus')->enabled() && $menu) {
+                        if (miniLOL::instance()->resources->get('miniLOL.menus')->enabled() && $menu) {
                             $menu = "&amp;menu={$menu}";
                         }
 

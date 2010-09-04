@@ -29,19 +29,17 @@ class WordFilterModule extends Module
 
     private $_filters;
 
-    public function __construct ($miniLOL)
+    public function __construct ()
     {
-        parent::__construct($miniLOL);
-
-        $this->_filters = new Filters($miniLOL);
+        $this->_filters = new Filters;
         $this->_filters->load('modules/Word Filter/resources/words.xml');
 
-        $miniLOL->events->observe(':go', array($this, 'event'));
+        miniLOL::instance()->events->observe(':go', array($this, 'event'));
     }
 
     public function event ($event)
     {
-        $this->miniLOL->set('content', $this->execute($this->miniLOL->get('content')));
+        miniLOL::instance()->set('content', $this->execute(miniLOL::instance()->get('content')));
     }
 
     public function execute ($content)

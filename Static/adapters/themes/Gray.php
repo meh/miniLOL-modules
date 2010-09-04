@@ -20,7 +20,7 @@
 
 function __fix_menu ($event)
 {
-    $menu = str_get_html($event->miniLOL->get('menu'));
+    $menu = str_get_html(miniLOL::instance()->get('menu'));
 
     $set = false;
 
@@ -50,12 +50,23 @@ function __fix_menu ($event)
         }
     }
 
-    $event->miniLOL->set('menu', $menu->save());
+    miniLOL::instance()->set('menu', $menu->save());
 }
 
-function Theme_callback ($miniLOL)
+function __fix_title ($event)
 {
-    $miniLOL->events->observe(':go', __fix_menu);
+    $config  = miniLOL::instance()->resources->get('miniLOL.config')->get('core');
+    $content = str_get_html(miniLOL::instance()->theme->html());
+
+    $content->find('div#siteTitle', 0)->innertext = $config['siteTitle'];
+
+    miniLOL::instance()->theme->html($content->save());
+}
+
+function Theme_callback ()
+{
+    miniLOL::instance()->events->observe(':initialized', __fix_title);
+    miniLOL::instance()->events->observe(':go', __fix_menu);
 }
 
 ?>

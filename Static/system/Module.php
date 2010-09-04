@@ -20,14 +20,7 @@
 
 abstract class Module
 {
-    public $miniLOL;
-
     public $aliases = array();
-
-    public function __construct ($miniLOL)
-    {
-        $this->miniLOL = $miniLOL;
-    }
 
     abstract public function name ();    
 }

@@ -20,15 +20,11 @@
 
 class Event
 {
-    public $miniLOL;
-
     private $_name;
     private $_memo;
 
-    public function __construct ($miniLOL, $name, $memo)
+    public function __construct ($name, $memo)
     {
-        $this->miniLOL = $miniLOL;
-
         $this->_name = $name;
         $this->_memo = $memo;
     }

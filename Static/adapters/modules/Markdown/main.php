@@ -27,12 +27,10 @@ class MarkdownModule extends Module
         return 'Markdown';
     }
 
-    public function __construct ($miniLOL)
+    public function __construct ()
     {
-        parent::__construct($miniLOL);
-
-        $this->miniLOL->resources->get('miniLOL.config')->load('modules/Markdown/resources/config.xml');
-        $this->miniLOL->resources->get('miniLOL.functions')->load('modules/Markdown/resources/functions.xml');
+        miniLOL::instance()->resources->get('miniLOL.config')->load('modules/Markdown/resources/config.xml');
+        miniLOL::instance()->resources->get('miniLOL.functions')->load('modules/Markdown/resources/functions.xml');
     }
 
     public function execute ($what)

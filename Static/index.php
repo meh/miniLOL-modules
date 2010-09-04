@@ -24,7 +24,7 @@ define('__VERSION__', '0.1');
 ob_start();
 
 define('ROOT',     realpath(dirname(__FILE__)));
-define('WEB_ROOT', dirname($_ENV['SCRIPT_NAME']));
+define('WEB_ROOT', dirname($_SERVER['SCRIPT_NAME']));
 define('MODULES',  ROOT.'/modules');
 define('SYSTEM',   MODULES.'/Static/system');
 define('ADAPTERS', MODULES.'/Static/adapters');
@@ -64,7 +64,7 @@ if ($miniLOL->error()) {
     exit;
 }
 
-$output['content'] = $miniLOL->go($_ENV['REQUEST_URI'], $_REQUEST);
+$output['content'] = $miniLOL->go($_SERVER['REQUEST_URI'], $_REQUEST);
 
 if ($content === false) {
     exit;
@@ -78,6 +78,10 @@ if (is_array($config['Static']['meta'])) {
         $output['meta'] .= "<meta name='{$name}' content='{$content}'/>\n";
     }
 }
+
+$output['favicon'] = ($config['Static']['favicon'])
+    ? $output['favicon'] = "<link rel='icon' type='image/png' href='{$config['Static']['favicon']}'/>"
+    : '';
 
 $output['styles'] = '';
 foreach ($miniLOL->theme->styles() as $style) {
@@ -115,13 +119,13 @@ if ($config['Static']['alwaysOn'] != 'true') {
     // ]]></script>
     -->
 
-    <script type="text/javascript" src="system/unFocus-History.js"></script>
+    <script type="text/javascript" src="system/unFocus-History.min.js"></script>
     <script type="text/javascript" src="system/cookiejar.min.js"></script>
 
     <script type="text/javascript" src="system/miniLOL.min.js"></script>
 
     <script type="text/javascript">// <![CDATA[
-        miniLOL.utils.fixURL = function () {
+        (miniLOL.utils.fixURL = function () {
             var matches = location.href.match(/\?(.*)$/);
 
             if (matches) {
@@ -129,7 +133,7 @@ if ($config['Static']['alwaysOn'] != 'true') {
 
                 return true;
             }
-        }
+        })();
     // ]]></script>
 
 HTML;
@@ -137,7 +141,7 @@ HTML;
     $output['javascript']['initialization'] = 'if (miniLOL.utils.fixURL()) return false; miniLOL.initialize()';
 }
 
-echo <<<HTML
+$output['whole'] = <<<HTML
 
 <!DOCTYPE html>
 <html>
@@ -147,6 +151,8 @@ echo <<<HTML
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 
     {$output['meta']}
+
+    {$output['favicon']}
 
     {$output['styles']}
 
@@ -159,5 +165,9 @@ echo <<<HTML
 </html>
 
 HTML;
+
+$miniLOL->set('output', $output['whole']);
+$miniLOL->events->fire(':output');
+echo $miniLOL->get('output');
 
 ?>

@@ -26,14 +26,10 @@ foreach (glob(ADAPTERS.'/modules/*/main.php') as $module) {
 
 class Modules
 {
-    public $miniLOL;
-
     private $_modules;
 
-    public function __construct ($miniLOL)
+    public function __construct ()
     {
-        $this->miniLOL = $miniLOL;
-
         $this->_modules = array();
     }
 
@@ -47,7 +43,7 @@ class Modules
 
         $class = str_replace(' ', '', $name) . 'Module';
 
-        $module = $this->_modules[$name] = new $class($this->miniLOL);
+        $module = $this->_modules[$name] = new $class;
 
         foreach ($module->aliases as $alias) {
             $this->_modules[$alias] = $module;

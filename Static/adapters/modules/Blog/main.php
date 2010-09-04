@@ -29,11 +29,9 @@ class BlogModule extends Module
         return 'Blog';
     }
 
-    public function __construct ($miniLOL)
+    public function __construct ()
     {
-        parent::__construct($miniLOL);
-
-        $this->_blog = new Blog($miniLOL, MODULES.'/Blog/resources/data.xml');
+        $this->_blog = new Blog(MODULES.'/Blog/resources/data.xml');
     }
 
     public function get ($what, $data)

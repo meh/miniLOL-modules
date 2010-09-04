@@ -22,9 +22,9 @@ require(ADAPTERS.'/modules/Word Filter/Resource.php');
 
 class Filters
 {
-    public function __construct ($miniLOL)
+    public function __construct ()
     {
-        $this->_resource = new WordFilterResource($miniLOL);
+        $this->_resource = new WordFilterResource;
     }
 
     public function apply ($text)

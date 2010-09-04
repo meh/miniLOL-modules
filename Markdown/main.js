@@ -28,6 +28,16 @@ miniLOL.module.create("Markdown", {
         miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/config.xml");
         miniLOL.resource.get("miniLOL.functions").load(this.root+"/resources/functions.xml");
 
+        Event.observe(document, ":resource.loaded", function (event) {
+            if (event.memo.resource.name != "miniLOL.config") {
+                return;
+            }
+
+            if (!miniLOL.config["Markdown"]["class"]) {
+                miniLOL.config["Markdown"]["class"] = "markdown";
+            }
+        });
+
         Event.observe(document, ":go", function () {
             this.execute()
         }.bind(this));

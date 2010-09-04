@@ -26,21 +26,17 @@ foreach (glob(ADAPTERS.'/resources/*.php') as $resource) {
 
 class Resources
 {
-    public $miniLOL;
-
     private $_resources;
 
-    public function __construct ($miniLOL)
+    public function __construct ()
     {
-        $this->miniLOL = $miniLOL;
-
         $this->_resources = array();
 
         foreach (glob(ADAPTERS.'/resources/*.php') as $resource) {
             preg_match('#([^/]*)\.php$#', $resource, $matches);
             $class = "{$matches[1]}Resource";
 
-            $resource = new $class($this->miniLOL);
+            $resource = new $class;
 
             $this->_resources[$resource->name()] = $resource;
         }

@@ -13,6 +13,8 @@
         <description>miniLOL is an awesome Javascript/XML modular CMS.</description>
     </meta>
 
+    <favicon></favicon>
+
     <!-- If you want to disable completely the JS part of miniLOL set this to true -->
     <alwaysOn>false</alwaysOn>
 </configuration>

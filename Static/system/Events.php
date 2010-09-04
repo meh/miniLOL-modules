@@ -22,14 +22,10 @@ require(SYSTEM.'/Event.php');
 
 class Events
 {
-    public $miniLOL;
-
     private $_events;
 
-    public function __construct ($miniLOL)
+    public function __construct ()
     {
-        $this->miniLOL = $miniLOL;
-
         $this->_events = array();
     }
 
@@ -57,10 +53,10 @@ class Events
         }
     }
 
-    public function fire ($name, $memo)
+    public function fire ($name, $memo=null)
     {
         if (is_array($this->_events[$name])) {
-            $event = new Event($this->miniLOL, $name, $memo);
+            $event = new Event($name, $memo);
 
             foreach ($this->_events[$name] as $callback) {
                 if (is_array($callback)) {

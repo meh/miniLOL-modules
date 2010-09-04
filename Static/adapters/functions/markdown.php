@@ -18,9 +18,9 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-function Function_markdown ($miniLOL, $text, $args)
+function Function_markdown ($text, $args)
 {
-    return $miniLOL->modules->execute('Markdown', array(array('content' => $text)));
+    return miniLOL::instance()->modules->execute('Markdown', array(array('content' => $text)));
 }
 
 ?>

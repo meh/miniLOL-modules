@@ -31,23 +31,17 @@ class miniLOL
 
     public static function instance ()
     {
-        if (!isset($_SESSION['miniLOL'])) {
-            $_SESSION['miniLOL'] = array();
+        if (self::$_instance) {
+            return self::$_instance;
         }
 
-        // XXX: This is only for development purposes.
-        return new miniLOL;
-        
-        if (!isset($_SESSION['miniLOL']['Static'])) {
-            return $_SESSION['miniLOL']['Static'] = new miniLOL;
-        }
-        else {
-            return $_SESSION['miniLOL']['Static'];
-        }
+        self::$_instance = new miniLOL;
+        self::$_instance->__initialize();
+
+        return self::$_instance;
     }
 
     public $events;
-
     public $resources;
     public $modules;
 
@@ -55,14 +49,13 @@ class miniLOL
 
     private $_data;
 
-    private function __construct ()
-    {
-        $this->events = new Events($this);
+    private function __initialize () {
+        $this->events = new Events;
 
-        $this->resources = new Resources($this);
-        $this->modules   = new Modules($this);
+        $this->resources = new Resources;
+        $this->modules   = new Modules;
 
-        $this->theme = new Theme($this);
+        $this->theme = new Theme;
 
         $this->resources->get('miniLOL.config')->load('modules/Static/resources/config.xml');
     }
@@ -108,6 +101,10 @@ class miniLOL
 
     public function go ($url, $arguments, $query=null, $again=false)
     {
+        if (!$url) {
+            throw new Exception('No url was passed.');
+        }
+
         if ($url[0] == '#') {
             $url[0] = '?';
         }
@@ -194,6 +191,7 @@ class miniLOL
         $this->set('menu', preg_replace('/(href=[\'"])#/', '$1?', $this->resources->get('miniLOL.menus')->get($menu)));
         $this->set('content', preg_replace('/(href=[\'"])#/', '$1?', $content));
 
+        $this->events->fire(':initialized');
         $this->events->fire(':go', $url);
 
         return $this->theme->output($this->get('content'), $this->get('menu'));

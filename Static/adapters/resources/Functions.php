@@ -29,9 +29,9 @@ class FunctionsResource extends Resource
         return 'miniLOL.functions';
     }
 
-    public function __construct ($miniLOL)
+    public function __construct ()
     {
-        parent::__construct($miniLOL);
+        parent::__construct();
     }
 
     public function _load ($path)
@@ -57,7 +57,7 @@ class FunctionsResource extends Resource
     {
         foreach (preg_split('/\s*,\s*/', $types) as $type) {
             if (($callback = $this->get($type))) {
-                $content = $callback($this->miniLOL, $content, $arguments);
+                $content = $callback($content, $arguments);
             }
         }
 

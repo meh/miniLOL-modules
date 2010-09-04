@@ -24,13 +24,9 @@ require(ADAPTERS.'/modules/Blog/Template.php');
 
 class Blog
 {
-    public $miniLOL;
-
-    public function __construct ($miniLOL, $path)
+    public function __construct ($path)
     {
-        $this->miniLOL = $miniLOL;
-
-        $this->_resource = new BlogResource($miniLOL);
+        $this->_resource = new BlogResource;
         $this->_resource->load($path);
     }
 

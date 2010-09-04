@@ -18,7 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-function Function_raw ($miniLOL, $text, $args)
+function Function_raw ($text, $args)
 {
     return '<pre>' . str_replace(array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $text) . '</pre>';
 }
