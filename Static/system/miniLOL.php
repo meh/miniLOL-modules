@@ -149,6 +149,16 @@ class miniLOL
                 return false;
             }
             else {
+                $config =& $this->resources->get('miniLOL.config')->get('Static');
+
+                if ($keywords = $this->resources->get('miniLOL.pages')->attribute($page, 'keywords')) {
+                    $config['meta']['keywords'] = $keywords;
+                }
+
+                if ($description = $this->resources->get('miniLOL.pages')->attribute($page, 'description')) {
+                    $config['meta']['description'] = $description;
+                }
+
                 $content = $this->resources->get('miniLOL.pages')->get($page);
             }
         }

@@ -21,8 +21,7 @@
 function __fix_menu ($event)
 {
     $menu = str_get_html(miniLOL::instance()->get('menu'));
-
-    $set = false;
+    $set  = false;
 
     foreach ($menu->find('a') as $link) {
         if (strstr($event->memo(), $link->href) !== false) {
