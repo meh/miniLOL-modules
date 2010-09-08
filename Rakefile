@@ -15,10 +15,8 @@ def minify (file, out=nil)
         result = `#{COMPILER} --js '#{file}' --js_output_file '#{out}'`
 
         if $? != 0
-            raise 'lol error'
+            return false
         end
-    else
-        return false
     end
 
     return true
@@ -27,14 +25,19 @@ end
 FILES = FileList['**/**.js']
 FILES.exclude('**/**.min.js')
 
+CLEAN.include('**/**.min.js')
+
 task :default do
     root = Dir.pwd
 
     FILES.each {|file|
         Dir.chdir(File.dirname(file))
 
-        if minify(File.basename(file))
-            puts "Compiled `#{file}`"
+        puts "Compiling `#{file}`"
+
+        if !minify(File.basename(file))
+            puts "Failed to compile `#{file}`"
+            exit
         end
 
         Dir.chdir(root)

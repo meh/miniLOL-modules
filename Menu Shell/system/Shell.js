@@ -67,7 +67,7 @@ var Shell = Class.create({
                 return true;
 
             }
-        };
+        });
 
         miniLOL.resource.load(this.resource, this.root+commands);
 
@@ -185,7 +185,7 @@ var Shell = Class.create({
 
     tree: function () {
         
-    },
+    }
 });
 
 return Shell;

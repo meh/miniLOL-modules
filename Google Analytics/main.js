@@ -10,31 +10,21 @@
 *  0. You just DO WHAT THE FUCK YOU WANT TO.                         *
 *********************************************************************/
 
-(function () {
+miniLOL.module.create("Google Analytics", {
+    version: "0.1",
 
-var Template = Class.create({
-    initialize: function (template, path) {
-        this._template = miniLOL.theme.template.load("Menu Shell/template")
-                      || miniLOL.theme.template.load(template, path);
+    initialize: function () {
+        miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/config.xml");
 
-        if (!this._template) {
-            throw new Error("Menu Shell template not found.");
-        }
-    },
+        window._gaq = window._gaq || [];
+        window._gaq.push(["_setAccount", miniLOL.config["Google Analytics"].account]);
 
-    apply: function (type, data) {
-        return this._callbacks[type].call(this, data);
-    },
+        var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+        ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+        var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
 
-    _callbacks: {
-        "PS1": function (data) {
-            return this._template.getElementsByTagName("PS1")[0].firstChild.nodeValue.interpolate({
-                PWD: data.variables.PWD
-            });
-        }
+        Event.observe(document, ":go", function (event) {
+            window._gaq.push(["_trackPageview", "/"+event.memo]);
+        });
     }
 });
-
-return Template;
-
-})();

@@ -20,5 +20,5 @@ miniLOL.module.create('user', {
 
     execute: function (args) {
 
-    },
+    }
 });

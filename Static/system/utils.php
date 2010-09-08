@@ -134,4 +134,6 @@ function GetFirstText ($elements)
     return $result;
 }
 
+require(SYSTEM.'/unify.php');
+
 ?>
