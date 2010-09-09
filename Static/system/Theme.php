@@ -490,7 +490,7 @@ class Theme
                     )));
                 }
                 else if ($node->nodeName == 'list') {
-                    $output .= _pages_list($node, array($element));
+                    $output .= $this->_pages_list($node, array($element));
                 }
                 else if ($node->nodeName == 'nest') {
                     $toParse = $node->cloneNode(true);
@@ -542,11 +542,11 @@ class Theme
 
     public function output ($content, $menu)
     {
-        $template = $this->html();
-        $template = preg_replace("#(id=['\"]{$this->_info['content']}['\"][^>]*>)#", '${1}'.$content, $template);
-        $template = preg_replace("#(id=['\"]{$this->_info['menu']}['\"][^>]*>)#", '${1}'.$menu, $template);
+        $html = str_get_html($this->html());
+        $html->find("#{$this->_info['content']}", 0)->innertext = $content;
+        $html->find("#{$this->_info['menu']}", 0)->innertext    = $menu;
 
-        return $template;
+        return $html->save();
     }
 }
 
