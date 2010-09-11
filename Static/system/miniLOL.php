@@ -18,10 +18,10 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-require(SYSTEM.'/Events.php');
-require(SYSTEM.'/Resources.php');
-require(SYSTEM.'/Modules.php');
-require(SYSTEM.'/Theme.php');
+require(STATIC_SYSTEM.'/Events.php');
+require(STATIC_SYSTEM.'/Resources.php');
+require(STATIC_SYSTEM.'/Modules.php');
+require(STATIC_SYSTEM.'/Theme.php');
 
 class miniLOL
 {
@@ -57,7 +57,27 @@ class miniLOL
 
         $this->theme = new Theme;
 
-        $this->resources->get('miniLOL.config')->load('modules/Static/resources/config.xml');
+        $this->resources->get('miniLOL.config')->load(STATIC_RESOURCES.'/config.xml');
+        $this->resources->get('miniLOL.modules')->load(STATIC_RESOURCES.'/modules.xml', false);
+    }
+
+    public function initialize () {
+        $this->resources->get('miniLOL.config')->load('resources/config.xml');
+        
+        $config =& $this->resources->get('miniLOL.config')->get();
+
+        $this->set('title', $config['core']['siteTitle']);
+        
+        $this->theme->load($config['core']['theme']);
+        
+        $this->resources->get('miniLOL.menus')->load('resources/menus.xml')->normalize(array($this->theme, 'menus'));
+        $this->resources->get('miniLOL.pages')->load('resources/pages.xml')->normalize(array($this->theme, 'pages'));
+        
+        $this->resources->get('miniLOL.functions')->load('resources/functions.xml');
+        
+        foreach ($this->resources->get('miniLOL.modules')->load('resources/modules.xml') as $module) {
+            $this->modules->load($module['name'], $module['adapter']);
+        }
     }
 
     public function error ($what=null)

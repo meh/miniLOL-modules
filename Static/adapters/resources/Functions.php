@@ -18,7 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-foreach (glob(ADAPTERS.'/functions/*.php') as $function) {
+foreach (glob(STATIC_ADAPTERS.'/functions/*.php') as $function) {
     require($function);
 }
 

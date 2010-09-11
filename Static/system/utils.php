@@ -18,7 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-require(SYSTEM.'/simple_html_dom.php');
+require(STATIC_SYSTEM.'/simple_html_dom.php');
 
 function interpolate ($string, $object)
 {
@@ -44,6 +44,10 @@ function &XMLToArray ($xml)
         }
     }
     else if (preg_match('/^DOM/', $class)) {
+        if ($class == 'DOMDocument') {
+            $xml = $xml->documentElement;
+        }
+
         foreach ($xml->childNodes as $node) {
             if ($node->nodeType != XML_ELEMENT_NODE) {
                 continue;
@@ -53,7 +57,7 @@ function &XMLToArray ($xml)
                 $content = '';
 
                 foreach ($node->childNodes as $text) {
-                    if ($text->nodeType != XML_CDATA_SECTION_NODE && $xml->nodeType != XML_TEXT_NODE) {
+                    if ($text->nodeType != XML_CDATA_SECTION_NODE && $text->nodeType != XML_TEXT_NODE) {
                         continue;
                     }
 
@@ -67,7 +71,7 @@ function &XMLToArray ($xml)
                 $result[$node->nodeName] = $content;
             }
             else {
-                $result[$node->nodeName] = XMLToArray($node);
+                $result[$node->nodeName] =& XMLToArray($node);
             }
         }
     }
@@ -134,6 +138,19 @@ function GetFirstText ($elements)
     return $result;
 }
 
-require(SYSTEM.'/unify.php');
+function unifiedScriptsURL ($scripts)
+{
+    $mtime = 0;
+
+    foreach ($scripts as $script) {
+        if (($tmp = @filemtime($script)) > $mtime) {
+            $mtime = $tmp;
+        }
+    }
+
+    $scripts = urlencode(base64_encode(serialize($scripts)));
+
+    return WEB_ROOT."/modules/Static/scripts.php?d={$scripts}&{$mtime}";
+}
 
 ?>

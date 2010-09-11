@@ -18,46 +18,37 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
+ob_start();
+
 define('MINILOL_VERSION', '1.2');
 define('__VERSION__', '0.1');
-
-ob_start();
 
 define('ROOT',     realpath(dirname(__FILE__)));
 define('WEB_ROOT', dirname($_SERVER['SCRIPT_NAME']));
 define('MODULES',  ROOT.'/modules');
-define('SYSTEM',   MODULES.'/Static/system');
-define('ADAPTERS', MODULES.'/Static/adapters');
 
-require(SYSTEM.'/utils.php');
-require(SYSTEM.'/miniLOL.php');
+define('STATIC_ROOT',      MODULES.'/Static');
+define('STATIC_RESOURCES', STATIC_ROOT.'/resources');
+define('STATIC_SYSTEM',    STATIC_ROOT.'/system');
+define('STATIC_ADAPTERS',  STATIC_ROOT.'/adapters');
+define('STATIC_MODULES',   STATIC_ROOT.'/modules');
+
+require(STATIC_SYSTEM.'/utils.php');
+require(STATIC_SYSTEM.'/miniLOL.php');
 
 session_start();
 
 $miniLOL = miniLOL::instance();
-
-$miniLOL->resources->get('miniLOL.config')->load('resources/config.xml');
+$miniLOL->initialize();
 
 $config =& $miniLOL->resources->get('miniLOL.config')->get();
-
-$miniLOL->set('title', $config['core']['siteTitle']);
-
-$miniLOL->theme->load($config['core']['theme']);
-
-$miniLOL->resources->get('miniLOL.menus')->load('resources/menus.xml')->normalize(array($miniLOL->theme, 'menus'));
-$miniLOL->resources->get('miniLOL.pages')->load('resources/pages.xml')->normalize(array($miniLOL->theme, 'pages'));
-
-$miniLOL->resources->get('miniLOL.functions')->load('resources/functions.xml');
-
-foreach ($miniLOL->resources->get('miniLOL.modules')->load('resources/modules.xml') as $module) {
-    $miniLOL->modules->load($module);
-}
 
 if (ob_get_length() > 0) {
     $miniLOL->error(ob_get_contents());
 }
 
 ob_end_clean();
+ob_start('ob_gzhandler');
 
 if ($miniLOL->error()) {
     echo $miniLOL->error();
@@ -103,7 +94,7 @@ if ($config['Static']['alwaysOn'] != 'true') {
 
     <script type="text/javascript" src="{$scripts}"></script>
 
-    <script type="text/javascript">// <![CDATA[
+    <script id="__miniLOL_Static_fixUrl" type="text/javascript">// <![CDATA[
         (miniLOL.utils.fixURL = function () {
             var matches = location.href.match(/\?(.*)$/);
 

@@ -18,11 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-require(SYSTEM.'/Module.php');
-
-foreach (glob(ADAPTERS.'/modules/*/main.php') as $module) {
-    require($module);
-}
+require(STATIC_SYSTEM.'/Module.php');
 
 class Modules
 {
@@ -33,16 +29,22 @@ class Modules
         $this->_modules = array();
     }
 
-    public function load ($name)
+    public function load ($name, $adapter=true)
     {
-        $path = ADAPTERS.'/modules/'.$name.'/main.php';
+        if ($adapter) {
+            $path = STATIC_ADAPTERS."/modules/{$name}/main.php";
+        }
+        else {
+            $path = STATIC_MODULES."/{$name}/main.php";
+        }
 
         if (!file_exists($path)) {
             return;
         }
 
-        $class = str_replace(' ', '', $name) . 'Module';
+        require $path;
 
+        $class  = str_replace(' ', '', $name) . 'Module';
         $module = $this->_modules[$name] = new $class;
 
         foreach ($module->aliases as $alias) {

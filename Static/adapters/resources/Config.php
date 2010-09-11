@@ -59,10 +59,13 @@ class ConfigResource extends Resource
 
     public function _load ($path)
     {
-        $xml    = simplexml_load_file($path);
-        $attrs  = $xml->attributes();
-        $domain = (string) $attrs['domain'];
-        
+        if (!file_exists($path)) {
+            return false;
+        }
+
+        $dom    = DOMDocument::load($path);
+        $domain = $dom->documentElement->getAttribute('domain');
+
         if (empty($domain)) {
             $domain = 'core';
         }
@@ -71,7 +74,9 @@ class ConfigResource extends Resource
             $this->_data[$domain] = array();
         }
         
-        $this->_data[$domain] = array_merge($this->_data[$domain], XMLToArray($xml));
+        $this->_data[$domain] =& array_merge($this->_data[$domain], XMLToArray($dom));
+
+        return true;
     }
 
     public function &get ($domain=null)

@@ -18,11 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-require(SYSTEM.'/Resource.php');
-
-foreach (glob(ADAPTERS.'/resources/*.php') as $resource) {
-    require($resource);
-}
+require(STATIC_SYSTEM.'/Resource.php');
 
 class Resources
 {
@@ -32,7 +28,9 @@ class Resources
     {
         $this->_resources = array();
 
-        foreach (glob(ADAPTERS.'/resources/*.php') as $resource) {
+        foreach (glob(STATIC_ADAPTERS.'/resources/*.php') as $resource) {
+            require $resource;
+
             preg_match('#([^/]*)\.php$#', $resource, $matches);
             $class = "{$matches[1]}Resource";
 

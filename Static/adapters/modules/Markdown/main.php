@@ -18,7 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-require(ADAPTERS.'/modules/Markdown/markdown.php');
+require(STATIC_ADAPTERS.'/modules/Markdown/markdown.php');
 
 class MarkdownModule extends Module
 {

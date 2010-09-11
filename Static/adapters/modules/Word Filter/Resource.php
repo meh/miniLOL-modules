@@ -18,7 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-require(ADAPTERS.'/modules/Word Filter/Filter.php');
+require(STATIC_ADAPTERS.'/modules/Word Filter/Filter.php');
 
 class WordFilterResource extends Resource
 {

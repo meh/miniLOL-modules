@@ -18,7 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-require(ADAPTERS.'/modules/Blog/Blog.php');
+require(STATIC_ADAPTERS.'/modules/Blog/Blog.php');
 
 class BlogModule extends Module
 {

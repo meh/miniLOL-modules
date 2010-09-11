@@ -25,10 +25,13 @@ class ModulesResource extends Resource implements Iterator
         return 'miniLOL.modules';
     }
 
-    public function _load ($path)
+    public function _load ($path, $adapter=true)
     {
         foreach (DOMDocument::load($path)->getElementsByTagName('module') as $module) {
-            array_push($this->_data, $module->getAttribute('name'));
+            array_push($this->_data, array(
+                'name'    => $module->getAttribute('name'),
+                'adapter' => $adapter
+            ));
         }
     }
 

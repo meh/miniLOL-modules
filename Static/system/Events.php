@@ -18,7 +18,7 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-require(SYSTEM.'/Event.php');
+require(STATIC_SYSTEM.'/Event.php');
 
 class Events
 {

@@ -39,6 +39,10 @@ class Theme
 
         $path = ROOT."/themes/{$name}";
 
+        if (!file_exists("{$path}/theme.xml")) {
+            throw new Exception('Theme not found.');
+        }
+
         $this->_name   = $name;
         $this->_path   = realpath($path);
         $this->_info   = array();
@@ -90,7 +94,7 @@ class Theme
             $this->_templates[$template->nodeName] =& XMLToArray($template);
         }
 
-        if (@include(ADAPTERS."/themes/{$name}.php")) {
+        if (@include(STATIC_ADAPTERS."/themes/{$name}.php")) {
             if (function_exists('Theme_callback')) {
                 Theme_callback();
             }
