@@ -27,30 +27,52 @@ class URLRewriteModule extends Module
 
     public static function htaccess ()
     {
-        $root = WEB_ROOT;
+        $_WEB_ROOT = WEB_ROOT;
 
         return <<<APACHE
 
 RewriteEngine On
 RewriteBase /
 
-RewriteRule ^pages/(.*)$ {$root}/?page=$1 [L,QSA]
+RewriteRule ^([^&/]+)$ {$_WEB_ROOT}/?$1 [L,QSA,NS]
 
-RewriteRule ^([^&/\.?]+)$ {$root}/?$1 [L,QSA]
+RewriteRule ^pages/((themes|resources|system|modules)/.+)$ {$_WEB_ROOT}/$1 [L,QSA,NS]
+RewriteRule ^pages/(.*)$ {$_WEB_ROOT}/?page=$1 [L,QSA,NS]
+
+RewriteRule ^module/((themes|resources|system|modules)/.+)$ {$_WEB_ROOT}/$1 [L,QSA,NS]
+RewriteRule ^module/(.*)$ {$_WEB_ROOT}/?module=$1 [L,QSA,NS]
 
 APACHE;
     }
 
     public function __construct ()
     {
-        miniLOL::instance()->events->observe(':output', array($this, 'fixScript'));
+        miniLOL::instance()->events->observe(':go.before', array($this, '__fixUrl'));
+        miniLOL::instance()->events->observe(':output', array($this, '__fixScript'));
+        miniLOL::instance()->events->observe(':output', array($this, '__fixLinks'));
 
-        if (!file_exists(ROOT.'/.htaccess') || filesize(ROOT.'/.htaccess') == 0) {
+        if (!file_exists(ROOT.'/.htaccess')) {
             file_put_contents(ROOT.'/.htaccess', URLRewriteModule::htaccess());
         }
     }
 
-    public function fixScript ()
+    public function __fixUrl ($event)
+    {
+        $url = str_replace(WEB_ROOT.'/', '', miniLOL::instance()->get('go.params.url'));
+
+        if (preg_match('#pages/(.+)$#', $url, $matches)) {
+            $url = '?page=' . str_replace('?', '&', $matches[1]);
+        }
+        else {
+            if ($url[0] != '?') {
+                $url = "?{$url}";
+            }
+        }
+
+        miniLOL::instance()->set('go.params.url', $url);
+    }
+
+    public function __fixScript ($event)
     {
         $html = str_get_html(miniLOL::instance()->get('output'));
 
@@ -59,6 +81,24 @@ APACHE;
         
 
 HTML;
+
+        miniLOL::instance()->set('output', $html->save());
+    }
+
+    public function __fixLinks ($event)
+    {
+        $html = str_get_html(miniLOL::instance()->get('output'));
+
+        foreach ($html->find('a') as $a) {
+            $url = $a->href;
+
+            $url = preg_replace('#^\?page=(.*?)(&(.*))?$#', 'pages/$1?$3', $url);
+            $url = preg_replace('#^\?module=(.*?)(&(.*))?$#', 'modules/$1?$3', $url);
+            $url = preg_replace('#^\?([^&/]+)(&(.*))?$#', '$1?$3', $url);
+            $url = preg_replace('#\?$#', '', $url);
+
+            $a->href = $url;
+        }
 
         miniLOL::instance()->set('output', $html->save());
     }

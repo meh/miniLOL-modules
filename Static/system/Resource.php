@@ -39,7 +39,7 @@ abstract class Resource
         ));
 
         try {
-            call_user_method_array('_load', $this, $args);
+            call_user_func_array(array($this, '_load'), $args);
 
             array_push($this->_calls, $args);
         }

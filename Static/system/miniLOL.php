@@ -59,17 +59,36 @@ class miniLOL
 
         $this->resources->get('miniLOL.config')->load(STATIC_RESOURCES.'/config.xml');
         $this->resources->get('miniLOL.modules')->load(STATIC_RESOURCES.'/modules.xml', false);
+
+        $this->events->observe(':output', array($this, '__fixLinks'));
+    }
+
+    public function __fixLinks ($event)
+    {
+        $html = str_get_html($this->get('output'));
+
+        foreach ($html->find('a') as $a) {
+            $url = $a->href;
+
+            if ($url[0] == '#') {
+                $url[0] = '?';
+            }
+
+            $a->href = $url;
+        }
+
+        $this->set('output', $html->save());
     }
 
     public function initialize () {
         $this->resources->get('miniLOL.config')->load('resources/config.xml');
-        
+
         $config =& $this->resources->get('miniLOL.config')->get();
 
         $this->set('title', $config['core']['siteTitle']);
-        
+
         $this->theme->load($config['core']['theme']);
-        
+
         $this->resources->get('miniLOL.menus')->load('resources/menus.xml')->normalize(array($this->theme, 'menus'));
         $this->resources->get('miniLOL.pages')->load('resources/pages.xml')->normalize(array($this->theme, 'pages'));
         
@@ -106,7 +125,9 @@ class miniLOL
 
     public function &set ($name, $value)
     {
-        return $this->_data[$name] = $value;
+        $this->_data[$name] = $value;
+
+        return $this->_data[$name];
     }
 
     public function load ($page, $arguments)
@@ -129,12 +150,17 @@ class miniLOL
             $url[0] = '?';
         }
 
-        $this->events->fire(':go.before', array(
-            'url'       => &$url,
-            'arguments' => &$arguments,
-            'query'     => &$query,
-            'again'     => &$again
-        ));
+        $this->set('go.params.url', $url);
+        $this->set('go.params.arguments', $arguments);
+        $this->set('go.params.query', $query);
+        $this->set('go.params.again', $again);
+
+        $this->events->fire(':go.before');
+
+        $url       = $this->get('go.params.url');
+        $arguments = $this->get('go.params.arguments');
+        $query     = $this->get('go.params.query');
+        $again     = $this->get('go.params.again');
 
         if (isURL($url)) {
             header("Location: {$url}");
@@ -145,7 +171,7 @@ class miniLOL
             $query = $_SERVER['QUERY_STRING'];
         }
 
-        if (preg_match('/\?(([^=&]*)&|([^=&]*)$)/', $url, $matches)) {
+        if (preg_match('/\?(([^=&]+)&|([^=&]+)$)/', $url, $matches)) {
             $page = (!empty($matches[2])) ? $matches[2] : $matches[3];
 
             $alias = $this->resources->get('miniLOL.pages')->attribute($page, 'alias');
@@ -218,8 +244,8 @@ class miniLOL
             $menu = 'default';
         }
 
-        $this->set('menu', preg_replace('/(href=[\'"])#/', '$1?', $this->resources->get('miniLOL.menus')->get($menu)));
-        $this->set('content', preg_replace('/(href=[\'"])#/', '$1?', $content));
+        $this->set('menu', $this->resources->get('miniLOL.menus')->get($menu));
+        $this->set('content', $content);
 
         $this->events->fire(':initialized');
         $this->events->fire(':go', $url);

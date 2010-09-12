@@ -65,6 +65,10 @@ class Events
                 else {
                     $callback($event);
                 }
+
+                if ($event->stopped()) {
+                    break;
+                }
             }
         }
     }

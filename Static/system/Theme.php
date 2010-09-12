@@ -26,10 +26,6 @@ class Theme
     private $_styles;
     private $_template;
     private $_html;
-    
-    public function __construct ()
-    {
-    }
 
     public function load ($name)
     {
@@ -94,7 +90,7 @@ class Theme
             $this->_templates[$template->nodeName] =& XMLToArray($template);
         }
 
-        if (@include(STATIC_ADAPTERS."/themes/{$name}.php")) {
+        if (include(STATIC_ADAPTERS."/themes/{$name}.php")) {
             if (function_exists('Theme_callback')) {
                 Theme_callback();
             }

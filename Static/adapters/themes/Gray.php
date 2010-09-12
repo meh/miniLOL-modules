@@ -45,7 +45,9 @@ function __fix_menu ($event)
         }
 
         if (!$set) {
-            $menu->find('a', 0)->parent()->class = 'current';
+            if ($link = $menu->find('a', 0)) {
+                $link->parent()->class = 'current';
+            }
         }
     }
 
@@ -64,8 +66,8 @@ function __fix_title ($event)
 
 function Theme_callback ()
 {
-    miniLOL::instance()->events->observe(':initialized', __fix_title);
-    miniLOL::instance()->events->observe(':go', __fix_menu);
+    miniLOL::instance()->events->observe(':initialized', '__fix_title');
+    miniLOL::instance()->events->observe(':go', '__fix_menu');
 }
 
 ?>

@@ -25,7 +25,7 @@ class Event
 
     public function __construct ($name, $memo)
     {
-        $this->_name = $name;
+        $this->_name =  $name;
         $this->_memo = $memo;
     }
 
@@ -34,9 +34,19 @@ class Event
         return $this->_name;
     }
 
-    public function memo ()
+    public function &memo ()
     {
         return $this->_memo;
+    }
+
+    public function stop ()
+    {
+        $this->_stopped = true;
+    }
+
+    public function stopped ()
+    {
+        return $this->_stopped;
     }
 }
 

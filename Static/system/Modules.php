@@ -60,7 +60,7 @@ class Modules
     public function execute ($name, $args, $output=false)
     {
         if ($this->_modules[$name]) {
-            return call_user_method_array('execute', $this->_modules[$name], $args);
+            return call_user_func_array(array($this->_modules[$name], 'execute'), $args);
         }
         else {
             if ($output) {
