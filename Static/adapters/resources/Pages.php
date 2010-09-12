@@ -46,13 +46,7 @@ class PagesResource extends Resource
     {
         foreach ($this->_data['content'] as $name => $page) {
             $this->_data['attributes'][$name] = ObjectFromAttributes($page->attributes);
-
-            if (is_array($callback)) {
-                $this->_data['content'][$name] = $callback[0]->{$callback[1]}($page);
-            }
-            else {
-                $this->_data['content'][$name] = $callback($page);
-            }
+            $this->_data['content'][$name]    = call_user_func($callback, $page);
         }
     }
 }

@@ -56,12 +56,7 @@ class MenusResource extends Resource
     public function normalize ($callback)
     {
         foreach ($this->_data as $name => $menu) {
-            if (is_array($callback)) {
-                $this->_data[$name] = $callback[0]->{$callback[1]}($menu);
-            }
-            else {
-                $this->_data[$name] = $callback($menu);
-            }
+            $this->_data[$name] = call_user_func($callback, $menu);
         }
     }
 }

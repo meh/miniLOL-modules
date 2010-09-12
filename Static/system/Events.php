@@ -59,12 +59,7 @@ class Events
             $event = new Event($name, $memo);
 
             foreach ($this->_events[$name] as $callback) {
-                if (is_array($callback)) {
-                    $callback[0]->{$callback[1]}($event);
-                }
-                else {
-                    $callback($event);
-                }
+                call_user_func($callback, $event);
 
                 if ($event->stopped()) {
                     break;
