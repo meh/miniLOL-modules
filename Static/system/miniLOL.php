@@ -132,12 +132,17 @@ class miniLOL
 
     public function load ($page, $arguments)
     {
-        if (ini_get('allow_url_fopen')) {
-            return file_get_contents("http://{$_SERVER['HTTP_HOST']}".WEB_ROOT."/data/{$page}?{$arguments}");
+        $result = @file_get_contents("http://{$_SERVER['HTTP_HOST']}".WEB_ROOT."/data/{$page}?{$arguments}");
+
+        if (!$result) {
+            $result = @file_get_contents(ROOT."/data/{$page}");
         }
-        else {
-            return file_get_contents(ROOT."/data/{$page}");
+
+        if (!$result) {
+            $result = null;
         }
+
+        return $result;
     }
 
     public function go ($url, $arguments, $query=null, $again=false)
@@ -212,7 +217,7 @@ class miniLOL
             $content = $this->modules->execute($arguments['module'], $arguments, true);
         }
         else if ($arguments['page']) {
-            $page = $arguments['page']; unset($arguments['page']);
+            $page    = $arguments['page']; unset($arguments['page']);
             $content = $this->load($page, $query);
         }
         else {
