@@ -61,6 +61,29 @@ class miniLOL
         $this->resources->get('miniLOL.modules')->load(STATIC_RESOURCES.'/modules.xml', false);
 
         $this->events->observe(':output', array($this, '__fixLinks'));
+
+        $this->set('url.normalize', array($this, '__urlNormalize'));
+        $this->set('url.outputize', array($this, '__urlOutputize'));
+    }
+
+    public function __urlNormalize ($url)
+    {
+        $url = str_replace(WEB_ROOT.'/', '', $url);
+
+        if ($url[0] == '#') {
+            $url[0] = '?';
+        }
+
+        return $url;
+    }
+
+    public function __urlOutputize ($url)
+    {
+        if (isURL($url)) {
+            return $url;
+        }
+
+        return call_user_func($this->get('url.normalize'), $url);
     }
 
     public function __fixLinks ($event)
@@ -68,13 +91,7 @@ class miniLOL
         $html = str_get_html($this->get('output'));
 
         foreach ($html->find('a') as $a) {
-            $url = $a->href;
-
-            if ($url[0] == '#') {
-                $url[0] = '?';
-            }
-
-            $a->href = $url;
+            $a->href = call_user_func($this->get('url.outputize'), $a->href);
         }
 
         $this->set('output', $html->save());
@@ -151,9 +168,7 @@ class miniLOL
             throw new Exception('No url was passed.');
         }
 
-        if ($url[0] == '#') {
-            $url[0] = '?';
-        }
+        $url = call_user_func($this->get('url.normalize'), $url);
 
         $this->set('go.params.url', $url);
         $this->set('go.params.arguments', $arguments);

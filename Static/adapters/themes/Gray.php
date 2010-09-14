@@ -20,11 +20,14 @@
 
 function __fix_menu ($event)
 {
+    $memo = $event->memo();
     $menu = str_get_html(miniLOL::instance()->get('menu'));
     $set  = false;
 
+    $normalize = miniLOL::instance()->get('url.normalize');
+
     foreach ($menu->find('a') as $link) {
-        if (strstr($event->memo(), $link->href) !== false) {
+        if (strstr($event->memo(), call_user_func($normalize, $link->href)) !== false) {
             $link->parent()->class = 'current';
             $set = true;
             break;
@@ -32,11 +35,11 @@ function __fix_menu ($event)
     }
 
     if (!$set) {
-        if ($_SERVER['HTTP_REFERER']) {
-            $url = parse_url($_SERVER['HTTP_REFERER']);
+        if (preg_match("#^http(s)?://.*?\Q{$_SERVER['HTTP_HOST']}\E(/.+)$#", $_SERVER['HTTP_REFERER'], $matches)) {
+            $old = call_user_func($normalize, $matches[2]);
 
             foreach ($menu->find('a') as $link) {
-                if (strstr("?{$url['query']}", $link->href) !== false) {
+                if (strstr($old, call_user_func($normalize, $link->href)) !== false) {
                     $link->parent()->class = 'current';
                     $set = true;
                     break;

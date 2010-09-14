@@ -47,18 +47,21 @@ APACHE;
 
     public function __construct ()
     {
-        miniLOL::instance()->events->observe(':go.before', array($this, '__fixUrl'));
         miniLOL::instance()->events->observe(':output', array($this, '__fixScript'));
-        miniLOL::instance()->events->observe(':output', array($this, '__fixLinks'));
 
         if (!file_exists(ROOT.'/.htaccess')) {
             file_put_contents(ROOT.'/.htaccess', URLRewriteModule::htaccess());
         }
+
+        $this->__urlNormalize__ = miniLOL::instance()->get('url.normalize');
+
+        miniLOL::instance()->set('url.normalize', array($this, '__urlNormalize'));
+        miniLOL::instance()->set('url.outputize', array($this, '__urlOutputize'));
     }
 
-    public function __fixUrl ($event)
+    public function __urlNormalize ($url)
     {
-        $url = str_replace(WEB_ROOT.'/', '', miniLOL::instance()->get('go.params.url'));
+        $url = call_user_func($this->__urlNormalize__, $url);
 
         if (preg_match('#pages/(.+)$#', $url, $matches)) {
             $url = '?page=' . str_replace('?', '&', $matches[1]);
@@ -69,36 +72,60 @@ APACHE;
             }
         }
 
-        miniLOL::instance()->set('go.params.url', $url);
+        return $url;
     }
+
+    public function __urlOutputize ($url)
+    {
+        $url = call_user_func(miniLOL::instance()->get('url.normalize'), $url);
+
+        $url = preg_replace('#^\?page=(.*?)(&(.*))?$#', 'pages/$1?$3', $url);
+        $url = preg_replace('#^\?module=(.*?)(&(.*))?$#', 'modules/$1?$3', $url);
+        $url = preg_replace('#^\?([^&/]+)(&(.*))?$#', '$1?$3', $url);
+        $url = preg_replace('#\?$#', '', $url);
+
+        return $url;
+    }
+
 
     public function __fixScript ($event)
     {
         $html = str_get_html(miniLOL::instance()->get('output'));
 
-        $html->find('#__miniLOL_Static_fixUrl', 0)->innertext = <<<HTML
-
-        
-
-HTML;
-
-        miniLOL::instance()->set('output', $html->save());
-    }
-
-    public function __fixLinks ($event)
-    {
-        $html = str_get_html(miniLOL::instance()->get('output'));
-
-        foreach ($html->find('a') as $a) {
-            $url = $a->href;
-
-            $url = preg_replace('#^\?page=(.*?)(&(.*))?$#', 'pages/$1?$3', $url);
-            $url = preg_replace('#^\?module=(.*?)(&(.*))?$#', 'modules/$1?$3', $url);
-            $url = preg_replace('#^\?([^&/]+)(&(.*))?$#', '$1?$3', $url);
-            $url = preg_replace('#\?$#', '', $url);
-
-            $a->href = $url;
+        if (!($script = $html->find('#__miniLOL_Static_fixUrl', 0))) {
+            return;
         }
+
+        $_WEB_ROOT    = WEB_ROOT;
+        $_WEB_ROOT_RE = preg_replace('#[\./]#', '\$1', $_WEB_ROOT);
+        
+        $script->innertext = <<<JAVASCRIPT
+// <![CDATA[
+
+        (miniLOL.utils.fixURL = function () {
+            var matches = location.href.match(/(.*?{$_WEB_ROOT_RE}\/)(.+?)(\?(.+))$/);
+
+            if (!matches) {
+                return false;
+            }
+
+            var first = matches[1];
+            var path  = matches[2];
+            var query = (matches[4]) ? "&" + matches[3] : "";
+
+            if (matches = path.match(/^pages\/(.*)$/)) {
+//                location.href = location.href.
+            }
+
+            if (matches) {
+                location.href = location.href.replace(/\?(.*)$/, "#" + matches[1]);
+
+                return true;
+            }
+        })();
+
+// ]]>
+JAVASCRIPT;
 
         miniLOL::instance()->set('output', $html->save());
     }
