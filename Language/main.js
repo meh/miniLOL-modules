@@ -17,36 +17,36 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-miniLOL.module.create("Language", {
-    version: "0.1",
+miniLOL.module.create('Language', {
+    version: '0.1',
 
-    type: "active",
+    type: 'active',
 
-    aliases: ["lang"],
+    aliases: ['lang'],
 
     initialize: function () {
-        miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/config.xml");
+        miniLOL.resource.get('miniLOL.config').load(this.root+'/resources/config.xml');
 
-        this.Language = miniLOL.utils.execute(this.root+"/system/Language.min.js");
-        this.language = new this.Language(this.root, "/resources/languages.xml");
+        this.Language = miniLOL.utils.execute(this.root+'/system/Language.min.js');
+        this.language = new this.Language(this.root, '/resources/languages.xml');
 
-        this.Template = miniLOL.utils.execute(this.root+"/system/Template.min.js");
+        this.Template = miniLOL.utils.execute(this.root+'/system/Template.min.js');
         this.template = new this.Template(this.root);
 
-        this.language.set(location.href.parseQuery().lang || new CookieJar().get("language") || miniLOL.config["Language"].defaultLanguage);
+        this.language.set(location.href.parseQuery().lang || this.storage.get('language') || miniLOL.config['Language'].defaultLanguage);
     },
 
     execute: function (args) {
         args = args || {};
 
-        if (args["page"]) {
-            this.language.page(args["page"], args["lang"]);
+        if (args['page']) {
+            this.language.page(args['page'], args['lang']);
         }
-        else if (args["choose"]) {
-            this.language.set(args["lang"], Boolean(args["apply"]), true);
+        else if (args['choose']) {
+            this.language.set(args['lang'], Boolean(args['apply']), true);
         }
-        else if (args["chooser"]) {
-            miniLOL.content.set(this.template.apply("global", this.language.toArray()));
+        else if (args['chooser']) {
+            miniLOL.content.set(this.template.apply('global', this.language.toArray()));
         }
         else {
             this.language.apply(true);

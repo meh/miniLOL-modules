@@ -25,12 +25,12 @@ var Language = Class.create({
 
         var Language = this;
 
-        this.resource = new miniLOL.Resource("Language.resource", {
+        this.resource = new miniLOL.Resource('Language.resource', {
             load: function (path) {
                 Language.languages = this.data;
 
                 new Ajax.Request(path, {
-                    method: "get",
+                    method: 'get',
                     asynchronous: false,
 
                     onSuccess: function (http) {
@@ -38,16 +38,16 @@ var Language = Class.create({
                             return;
                         }
 
-                        $A(http.responseXML.getElementsByTagName("language")).each(function (language) {
+                        $A(http.responseXML.getElementsByTagName('language')).each(function (language) {
                             Language.languages.push({
-                                code: language.getAttribute("code"),
-                                name: language.getAttribute("name")
+                                code: language.getAttribute('code'),
+                                name: language.getAttribute('name')
                             });
                         });
                     },
 
                     onFailure: function (http) {
-                        miniLOL.error("Error while loading config.xml (#{error})".interpolate({
+                        miniLOL.error('Error while loading config.xml (#{error})'.interpolate({
                             error: http.status
                         }));
                     }
@@ -61,8 +61,8 @@ var Language = Class.create({
 
         this.resource.load(this.root+languages);
 
-        miniLOL.resource.get("miniLOL.menus").flush(["resources/menus.xml"]);
-        miniLOL.resource.get("miniLOL.pages").flush(["resources/pages.xml"]);
+        miniLOL.resource.get('miniLOL.menus').flush(['resources/menus.xml']);
+        miniLOL.resource.get('miniLOL.pages').flush(['resources/pages.xml']);
     },
 
     set: function (lang, apply, save) {
@@ -71,7 +71,7 @@ var Language = Class.create({
         }
 
         if (!lang) {
-            throw new Error("No correct language was passed.");
+            throw new Error('No correct language was passed.');
         }
         
         var language = this.languages.find(function (current) {
@@ -81,7 +81,7 @@ var Language = Class.create({
         });
 
         if (!language) {
-            throw new Error("`#{language}` isn't in the languages list.".interpolate({
+            throw new Error('`#{language}` is not in the languages list.'.interpolate({
                 language: lang
             }));
         }
@@ -94,29 +94,29 @@ var Language = Class.create({
         }
 
         if (save) {
-            new CookieJar({ expires: 60 * 60 * 24 * 365 }).set("language", this.current);
+            miniLOL.module.get('Language').storage.set('language', this.current);
         }
 
-        Event.fire(document, ":module.Language.change", this.current);
+        Event.fire(document, ':module.Language.change', this.current);
 
         this.apply(apply);
     },
 
     apply: function (reload) {
         if (this.old != this.current) {
-            miniLOL.resource.get("miniLOL.config").flush([this.root+"/resources/languages/#{code}/config.xml".interpolate(this.old)]);
-            miniLOL.resource.get("miniLOL.menus").flush([this.root+"/resources/languages/#{code}/menus.xml".interpolate(this.old)]);
-            miniLOL.resource.get("miniLOL.pages").flush([this.root+"/resources/languages/#{code}/pages.xml".interpolate(this.old)]);
+            miniLOL.resource.get('miniLOL.config').flush([this.root+'/resources/languages/#{code}/config.xml'.interpolate(this.old)]);
+            miniLOL.resource.get('miniLOL.menus').flush([this.root+'/resources/languages/#{code}/menus.xml'.interpolate(this.old)]);
+            miniLOL.resource.get('miniLOL.pages').flush([this.root+'/resources/languages/#{code}/pages.xml'.interpolate(this.old)]);
 
-            if (!miniLOL.resource.get("miniLOL.config").load(this.root+"/resources/languages/#{code}/config.xml".interpolate(this.current))) {
+            if (!miniLOL.resource.get('miniLOL.config').load(this.root+'/resources/languages/#{code}/config.xml'.interpolate(this.current))) {
                 return false;
             }
 
-            if (!miniLOL.resource.get("miniLOL.menus").load(this.root+"/resources/languages/#{code}/menus.xml".interpolate(this.current))) {
+            if (!miniLOL.resource.get('miniLOL.menus').load(this.root+'/resources/languages/#{code}/menus.xml'.interpolate(this.current))) {
                 return false;
             }
 
-            if (!miniLOL.resource.get("miniLOL.pages").load(this.root+"/resources/languages/#{code}/pages.xml".interpolate(this.current))) {
+            if (!miniLOL.resource.get('miniLOL.pages').load(this.root+'/resources/languages/#{code}/pages.xml'.interpolate(this.current))) {
                 return false;
             }
         }
@@ -128,7 +128,7 @@ var Language = Class.create({
     },
 
     page: function (page, lang) {
-        miniLOL.go("#page=../#{root}/resources/languages/#{code}/data/#{page}".interpolate({
+        miniLOL.go('#page=../#{root}/resources/languages/#{code}/data/#{page}'.interpolate({
             root: this.root,
             code: lang || this.current.code,
             page: page
