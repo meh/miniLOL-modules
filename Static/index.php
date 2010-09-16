@@ -83,7 +83,7 @@ $output['javascript'] = array();
 
 if ($config['Static']['alwaysOn'] != 'true') {
     $scripts = unifiedScriptsURL(array(
-        'system/prototype.min.js', 'system/unFocus-History.min.js', 'system/cookiejar.min.js', 'system/jstorage.min.js',
+        'system/prototype.min.js', 'system/unFocus-History.min.js', 'system/cookiejar.min.js',
 
         # 'system/scriptaculous.min.js' # Uncomment if you need scriptaculous
 

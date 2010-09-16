@@ -26,7 +26,7 @@ var Shell = Class.create({
                     asynchronous: false,
         
                     onSuccess: function (http) {
-                        if (miniLOL.utils.checkXML(http.responseXML, path)) {
+                        if (miniLOL.utils.XML.check(http.responseXML, path)) {
                             return;
                         }
 

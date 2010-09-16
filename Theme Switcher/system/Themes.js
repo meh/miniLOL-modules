@@ -25,7 +25,7 @@ var Themes = Class.create({
             asynchronous: false,
     
             onSuccess: function (http) {
-                var dom = miniLOL.utils.fixDOM(http.responseXML);
+                var dom = miniLOL.utils.XML.fix(http.responseXML);
     
                 $A(dom.getElementsByTagName("theme")).each(function (theme) {
                     this.themes.push(theme.getAttribute("name"));
