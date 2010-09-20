@@ -9,12 +9,17 @@ def minify (file, out=nil)
         return false
     end
 
-    out ||= file.clone; out[out.length - 3, 3] = '.min.js'
+    if !out
+        out = file.clone;
+        out[out.length - 3, 3] = '.min.js'
+    end
 
     if !File.exists?(out) || File.mtime(file) > File.mtime(out)
         result = `#{COMPILER} --js '#{file}' --js_output_file '#{out}'`
 
         if $? != 0
+            File.delete(out) rescue nil
+
             return false
         end
     end

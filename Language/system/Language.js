@@ -34,7 +34,7 @@ var Language = Class.create({
                     asynchronous: false,
 
                     onSuccess: function (http) {
-                        if (miniLOL.utils.XML.check(http.responseXML, path)) {
+                        if (Document.check(http.responseXML, path)) {
                             return;
                         }
 

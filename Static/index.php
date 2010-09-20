@@ -83,11 +83,9 @@ $output['javascript'] = array();
 
 if ($config['Static']['alwaysOn'] != 'true') {
     $scripts = unifiedScriptsURL(array(
-        'system/prototype.min.js', 'system/unFocus-History.min.js', 'system/cookiejar.min.js',
+        'system/prototype.min.js', # 'system/scriptaculous.min.js' # Uncomment if you need scriptaculous
 
-        # 'system/scriptaculous.min.js' # Uncomment if you need scriptaculous
-
-        'system/miniLOL.min.js', 
+        'system/miniLOL.min.js'
     ));
 
     $output['javascript']['dependencies'] = <<<HTML
@@ -98,7 +96,7 @@ if ($config['Static']['alwaysOn'] != 'true') {
 
     miniLOL.utils.css("body { display: none !important; }", "__miniLOL_Static_hide");
 
-    Event.observe(document, ":initializing", function () {
+    Event.observe(document, ":initialization", function () {
         $("__miniLOL_Static_hide").remove();
     });
 

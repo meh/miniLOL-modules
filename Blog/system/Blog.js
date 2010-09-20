@@ -39,11 +39,11 @@ var Blog = Class.create({
                     },
 
                     onSuccess: function (http) {
-                        if (miniLOL.utils.XML.check(http.responseXML, path)) {
+                        if (Document.check(http.responseXML, path)) {
                             return;
                         }
 
-                        data.data = miniLOL.utils.XML.fix(http.responseXML);
+                        data.data = Document.fix(http.responseXML);
                     },
 
                     onFailure: function (http) {
