@@ -73,7 +73,7 @@ miniLOL.module.create("Syntax Highlighter", {
 
         Event.observe(window, "resize", this.doWrap);
 
-        miniLOL.utils.css("body .syntaxhighlighter .line { white-space: pre-wrap !important; }");
+        CSS.create("body .syntaxhighlighter .line { white-space: pre-wrap !important; }");
     },
 
     loadFile: function (name) {

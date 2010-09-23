@@ -94,7 +94,7 @@ if ($config['Static']['alwaysOn'] != 'true') {
 
     <script type="text/javascript">// <![CDATA[
 
-    miniLOL.utils.css("body { display: none !important; }", "__miniLOL_Static_hide");
+    CSS.create("body { display: none !important; }", "__miniLOL_Static_hide");
 
     Event.observe(document, ":initialization", function () {
         $("__miniLOL_Static_hide").remove();
