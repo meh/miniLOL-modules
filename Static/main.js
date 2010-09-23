@@ -17,16 +17,16 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
-miniLOL.module.create("Static", {
-    version: "0.1",
+miniLOL.module.create('Static', {
+    version: '0.1',
 
     initialize: function () {
-        Event.observe(document, ":go", this.execute);
+        Event.observe(document, ':go', this.execute);
     },
 
     execute: function () {
-        $$("a").each(function (link) {
-            var matches = link.getAttribute("href").match(/(.*)[?#](.*)$/);
+        $$('a').each(function (link) {
+            var matches = link.getAttribute('href').match(/(.*)[?#](.*)$/);
 
             if (matches) {
                 if (matches[1] && !matches[1].include(location.host)) {
@@ -39,9 +39,9 @@ miniLOL.module.create("Static", {
             
             var href = matches[2];
 
-            link.setAttribute("href", "?" + href);
+            link.setAttribute('href', '?' + href);
 
-            link.observe("click", function (event) { 
+            link.observe('click', function (event) { 
                 event.stop();
 
                 location.hash = href;

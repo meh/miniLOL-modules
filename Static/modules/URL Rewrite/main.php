@@ -111,18 +111,28 @@ APACHE;
 
             var first = matches[1];
             var path  = matches[2];
-            var query = (matches[4]) ? "&" + matches[3] : "";
+            var query = (matches[4]) ? '&' + matches[3] : '';
 
             if (matches = path.match(/^pages\/(.*)$/)) {
 //                location.href = location.href.
             }
 
             if (matches) {
-                location.href = location.href.replace(/\?(.*)$/, "#" + matches[1]);
+                location.href = location.href.replace(/\?(.*)$/, '#' + matches[1]);
 
                 return true;
             }
         })();
+
+        Event.observe(document, ':module.create', function (event) {
+            if (event.memo.name != 'Static') {
+                return;
+            }
+
+            event.memo.execute = (function () {
+
+            }).bind(event.memo);
+        });
 
 // ]]>
 JAVASCRIPT;

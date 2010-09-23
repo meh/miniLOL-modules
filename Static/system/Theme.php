@@ -90,7 +90,9 @@ class Theme
             $this->_templates[$template->nodeName] =& XMLToArray($template);
         }
 
-        if (include(STATIC_ADAPTERS."/themes/{$name}.php")) {
+        if (file_exists(STATIC_ADAPTERS."/themes/{$name}.php")) {
+            require(STATIC_ADAPTERS."/themes/{$name}.php");
+
             if (function_exists('Theme_callback')) {
                 Theme_callback();
             }
