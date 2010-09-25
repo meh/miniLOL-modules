@@ -23,8 +23,8 @@ ob_start();
 define('MINILOL_VERSION', '1.2');
 define('__VERSION__', '0.1');
 
-define('ROOT',     realpath(dirname(__FILE__)));
-define('WEB_ROOT', dirname($_SERVER['SCRIPT_NAME']));
+define('ROOT',     preg_replace('#^/$#', '', realpath(dirname(__FILE__))));
+define('WEB_ROOT', preg_replace('#^/$#', '', dirname($_SERVER['SCRIPT_NAME'])));
 define('MODULES',  ROOT.'/modules');
 
 define('STATIC_ROOT',      MODULES.'/Static');
@@ -94,10 +94,10 @@ if ($config['Static']['alwaysOn'] != 'true') {
 
     <script type="text/javascript">// <![CDATA[
 
-    CSS.create("body { display: none !important; }", "__miniLOL_Static_hide");
+    miniLOL.CSS.create("body { display: none !important; }", "__miniLOL.Static.hide");
 
     Event.observe(document, ":initialization", function () {
-        $("__miniLOL_Static_hide").remove();
+        $("__miniLOL.Static.hide").remove();
     });
 
     // ]]></script>
