@@ -7,7 +7,7 @@
  *--------------------------------------------------------------------------*/
 
 /*
- * Little modifications by meh. [http://meh.doesntexist.org | meh.ffff@gmail.com]
+ * Little modifications by meh. [http://meh.doesntexist.org | meh@paranoici.org] 
  * to adapt the code to the Security module.
  */
 

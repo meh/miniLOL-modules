@@ -1,6 +1,6 @@
 <?php
 /****************************************************************************
- * Copyleft meh. [http://meh.doesntexist.org | meh.ffff@gmail.com]          *
+ * Copyleft meh. [http://meh.doesntexist.org | meh@paranoici.org]           *
  *                                                                          *
  * This file is part of miniLOL. A PHP implementation.                      *
  *                                                                          *
