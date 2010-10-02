@@ -75,8 +75,8 @@ $output['favicon'] = ($config['Static']['favicon'])
     : '';
 
 $output['styles'] = '';
-foreach ($miniLOL->theme->styles() as $style) {
-    $output['styles'] .= "<link rel='stylesheet' type='text/css' href='{$miniLOL->theme->path(true)}/{$style}.css'/>\n";
+foreach ($miniLOL->theme->styles(true) as $style) {
+    $output['styles'] .= "<link rel='stylesheet' type='text/css' href='{$style}'/>\n";
 }
 
 $output['javascript'] = array();

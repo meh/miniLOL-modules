@@ -20,6 +20,14 @@ Ajax.Request.addMethods({
             this.options.parameters = this.options.parameters.toQueryParams();
         }
 
+        if (this.options.minified) {
+            var minified = this.url.replace(/\.([^.]*?)$/, '.min.\1');
+
+            if (miniLOL.utils.exists(minified)) {
+                this.url = minified;
+            }
+        }
+
         if (this.options.tokenized) {
             this.options.parameters.__token = miniLOL.module.execute('Security', { token: true });
         }

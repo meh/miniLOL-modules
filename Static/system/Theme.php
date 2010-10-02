@@ -114,9 +114,30 @@ class Theme
         return $this->_info;
     }
 
-    public function styles ()
+    public function styles ($output)
     {
-        return $this->_styles;
+        $result = $this->_styles;
+
+        if ($output) {
+            $result = array();
+
+            foreach ($this->_styles as $style) {
+                $path = "{$this->path(true)}/{$style}";
+
+                if (file_exists("{$this->path()}/${style}.min.css")) {
+                    $path .= '.min.css';
+                }
+                else {
+                    $path .= '.css';
+                }
+
+                array_push($result, $path);
+            }
+
+            return $result;
+        }
+
+        return $result;
     }
 
     public function html ($value=null)
