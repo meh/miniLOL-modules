@@ -61,7 +61,7 @@ if ($content === false) {
     exit;
 }
 
-$output['title'] = $miniLOL->get('title');
+$output['title'] = interpolate($miniLOL->get('title'), $config['core']);
 
 $output['meta'] = '';
 if (is_array($config['Static']['meta'])) {
