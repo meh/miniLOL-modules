@@ -203,16 +203,7 @@ class miniLOL
             }
 
             if ($alias) {
-                if ($alias[0] == '#') {
-                    $alias[0] = '?';
-                }
-
-                if ($alias[0] != '?') {
-                    $alias = "?{$alias}";
-                }
-
-                header("Location: $alias"); 
-                return false;
+                return $this->go($alias, $arguments, $query, $again);
             }
             else {
                 $config =& $this->resources->get('miniLOL.config')->get('Static');

@@ -27,7 +27,7 @@ class BlogResource extends Resource
 
     public function _load ($path)
     {
-        $dom = DOMDocument::loadXML($path);
+        $dom = DOMDocument::load($path);
 
         foreach ($dom->getElementsByTagName('post') as $post) {
             $post = new Post($post);
