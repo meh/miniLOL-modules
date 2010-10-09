@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE wiki [
+    <!ELEMENT wiki (page*)>
+
+    <!ELEMENT page (#PCDATA)>
+    <!ATTLIST page
+        id      ID      #REQUIRED
+        format  CDATA   #IMPLIED
+    >
+]>
+
+<wiki>
+    <page id="Home"><![CDATA[
+
+Welcome to the miniLOL Wiki
+===========================
+
+Hope you enjoy it :)
+
+    ]]></page>
+</wiki>

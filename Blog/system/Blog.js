@@ -29,14 +29,10 @@ var Blog = Class.create({
             load: function (path) {
                 var data = this.data;
 
-                new Ajax.Request(path + "?failCache=" + Math.random(), {
+                new Ajax.Request(path, {
                     method: "get",
                     asynchronous: false,
-
-                    requestHeaders: {
-                        "Cache-Control": "must-revalidate",
-                        "Pragma":        "no-cache"
-                    },
+                    cached: false,
 
                     onSuccess: function (http) {
                         if (miniLOL.Document.check(http.responseXML, path)) {
@@ -72,10 +68,10 @@ var Blog = Class.create({
         this.resource.load(this.root+data);
         miniLOL.resource.get("miniLOL.config").load(this.root+config);
 
-        this.Template = miniLOL.utils.execute(this.root+"/system/Template.min.js");
+        this.Template = miniLOL.utils.execute(this.root+"/system/Template.js", { minified: true });
         this.template = new this.Template(this.root);
 
-        this.Feed = miniLOL.utils.execute(this.root+"/system/Feed.min.js");
+        this.Feed = miniLOL.utils.execute(this.root+"/system/Feed.js", { minified: true });
         this.feed = new this.Feed(this.root, {
             path:    miniLOL.config["Blog"].feed.path,
             type:    miniLOL.config["Blog"].feed.type,

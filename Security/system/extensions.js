@@ -28,6 +28,15 @@ Ajax.Request.addMethods({
             }
         }
 
+        if (this.options.cached === false) {
+            this.url += ((this.url.include('?')) ? '&' : '?') + Math.random();
+
+            this.options.requestHeaders = Object.extend(this.options.requestHeaders || {}, {
+                'Cache-Control': 'must-revalidate',
+                'Pragma':        'no-cache'
+            });
+        }
+
         if (this.options.tokenized) {
             this.options.parameters.__token = miniLOL.module.execute('Security', { token: true });
         }
