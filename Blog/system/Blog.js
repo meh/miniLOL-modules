@@ -27,33 +27,7 @@ var Blog = Class.create({
 
         this.resource = new miniLOL.Resource("Blog", {
             load: function (path) {
-                var data = this.data;
-
-                new Ajax.Request(path, {
-                    method: "get",
-                    asynchronous: false,
-                    cached: false,
-
-                    onSuccess: function (http) {
-                        if (miniLOL.Document.check(http.responseXML, path)) {
-                            return;
-                        }
-
-                        data.data = miniLOL.Document.fix(http.responseXML);
-                    },
-
-                    onFailure: function (http) {
-                        miniLOL.error("Error while loading Blog's data.xml (#{error})".interpolate({
-                            error: http.status
-                        }));
-                    }
-                });
-
-                if (!data.data) {
-                    return false;
-                }
-
-                Blog.data  = this.data.data;
+                Blog.data  = this.data.data = miniLOL.Document.fix(miniLOL.utils.get(path));
                 Blog.cache = this.data.cache;
             },
 

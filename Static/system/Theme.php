@@ -298,7 +298,7 @@ class Theme
         foreach ($page->childNodes as $node) {
             switch ($node->nodeType) {
                 case XML_ELEMENT_NODE:
-                try { $output .= $this->{"_pages_{$node->nodeName}"}($node, $data); } catch (Exception $e) { }
+                try { $output .= @call_user_func(array($this, "_pages_{$node->nodeName}"), $node, $data); } catch (Exception $e) { }
                 break;
 
                 case XML_CDATA_SECTION_NODE:

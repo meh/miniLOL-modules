@@ -18,6 +18,24 @@
  * along with miniLOL.  If not, see <http://www.gnu.org/licenses/>.         *
  ****************************************************************************/
 
+class Page {
+    public $name;
+    public $attributes;
+    public $meta;
+    public $content;
+
+    function __construct ($dom) {
+        $this->name       = $dom->getAttribute('id');
+        $this->attributes = ObjectFromAttributes($dom->attributes);
+        $this->meta       = XMLToArray($dom->getElementsByTagName('meta')->item(0));
+        $this->content    = $dom;
+    }
+
+    function normalize ($callback) {
+        $this->content = call_user_func($callback, $this->content);
+    }
+}
+
 class PagesResource extends Resource
 {
     public function name ()
@@ -28,25 +46,20 @@ class PagesResource extends Resource
     public function _load ($path)
     {
         foreach (DOMDocument::load($path)->getElementsByTagName('page') as $page) {
-            $this->_data['content'][$page->getAttribute('id')] = $page;
+            $page = new Page($page);
+            $this->_data[$page->name] = $page;
         }
     }
 
-    public function get ($id)
+    public function get ($page)
     {
-        return $this->_data['content'][$id];
-    }
-
-    public function attribute ($page, $name)
-    {
-        return $this->_data['attributes'][$page][$name];
+        return $this->_data[$page];
     }
 
     public function normalize ($callback)
     {
-        foreach ($this->_data['content'] as $name => $page) {
-            $this->_data['attributes'][$name] = ObjectFromAttributes($page->attributes);
-            $this->_data['content'][$name]    = call_user_func($callback, $page);
+        foreach ($this->_data as $page) {
+            $page->normalize($callback);
         }
     }
 }

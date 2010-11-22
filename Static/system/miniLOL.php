@@ -194,11 +194,11 @@ class miniLOL
         if (preg_match('/\?(([^=&]+)&|([^=&]+)$)/', $url, $matches)) {
             $page = (!empty($matches[2])) ? $matches[2] : $matches[3];
 
-            $alias = $this->resources->get('miniLOL.pages')->attribute($page, 'alias');
-            $type  = $this->resources->get('miniLOL.pages')->attribute($page, 'type');
-            $menu  = $this->resources->get('miniLOL.pages')->attribute($page, 'menu');
+            $alias = $this->resources->get('miniLOL.pages')->get($page)->attributes['alias'];
+            $type  = $this->resources->get('miniLOL.pages')->get($page)->attributes['type'];
+            $menu  = $this->resources->get('miniLOL.pages')->get($page)->attributes['menu'];
 
-            if (($title = $this->resources->get('miniLOL.pages')->attribute($page, 'title'))) {
+            if (($title = $this->resources->get('miniLOL.pages')->get($page)->attributes['title'])) {
                 $this->set('title', $title);
             }
 
@@ -207,16 +207,9 @@ class miniLOL
             }
             else {
                 $config =& $this->resources->get('miniLOL.config')->get('Static');
+                $content = $this->resources->get('miniLOL.pages')->get($page)->content;
 
-                if ($keywords = $this->resources->get('miniLOL.pages')->attribute($page, 'keywords')) {
-                    $config['meta']['keywords'] = $keywords;
-                }
-
-                if ($description = $this->resources->get('miniLOL.pages')->attribute($page, 'description')) {
-                    $config['meta']['description'] = $description;
-                }
-
-                $content = $this->resources->get('miniLOL.pages')->get($page);
+                $this->set('page', $this->resources->get('miniLOL.pages')->get($page));
             }
         }
         else if ($arguments['module']) {

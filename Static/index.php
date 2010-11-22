@@ -64,19 +64,18 @@ if ($content === false) {
 $output['title'] = interpolate($miniLOL->get('title'), $config['core']);
 
 $output['meta'] = '';
-if (is_array($config['Static']['meta'])) {
-    foreach ($config['Static']['meta'] as $name => $content) {
-        $output['meta'] .= "<meta name='{$name}' content='{$content}'/>\n";
-    }
+
+foreach (array_merge((array) $config['Static']['meta'], (array) ($miniLOL->get('page') ? $miniLOL->get('page')->meta : null)) as $name => $content) {
+    $output['meta'] .= "<meta name='{$name}' content='{$content}' />\n";
 }
 
 $output['favicon'] = ($config['Static']['favicon'])
-    ? $output['favicon'] = "<link rel='icon' type='image/png' href='{$config['Static']['favicon']}'/>"
+    ? $output['favicon'] = "<link rel='icon' type='image/png' href='{$config['Static']['favicon']}' />"
     : '';
 
 $output['styles'] = '';
 foreach ($miniLOL->theme->styles(true) as $style) {
-    $output['styles'] .= "<link rel='stylesheet' type='text/css' href='{$style}'/>\n";
+    $output['styles'] .= "<link rel='stylesheet' type='text/css' href='{$style}' />\n";
 }
 
 $output['javascript'] = array();
@@ -126,7 +125,7 @@ $output['whole'] = <<<HTML
 <head>
     <title>{$output['title']}</title>
 
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 
     {$output['meta']}
 

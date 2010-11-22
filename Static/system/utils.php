@@ -32,7 +32,12 @@ function interpolate ($string, $object)
 function &XMLToArray ($xml)
 {
     $result = array();
-    $class  = get_class($xml);
+
+    if (!is_object($xml)) {
+        return $result;
+    }
+
+    $class = get_class($xml);
 
     if (preg_match('/^SimpleXML/', $class)) {
         if (count($xml->children()) == 0) {
