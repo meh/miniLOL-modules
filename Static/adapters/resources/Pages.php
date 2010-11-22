@@ -29,6 +29,10 @@ class Page {
         $this->attributes = ObjectFromAttributes($dom->attributes);
         $this->meta       = XMLToArray($dom->getElementsByTagName('meta')->item(0));
         $this->content    = $dom;
+
+        foreach ($this->meta as $name => $content) {
+            $this->meta[$name] = trim($content);
+        }
     }
 
     function normalize ($callback) {
