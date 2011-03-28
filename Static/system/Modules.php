@@ -57,19 +57,9 @@ class Modules
         return $this->_modules[$name];
     }
 
-    public function execute ($name, $args, $output=false)
+    public function execute ($name, $args)
     {
-        if ($this->_modules[$name]) {
-            return call_user_func_array(array($this->_modules[$name], 'execute'), $args);
-        }
-        else {
-            if ($output) {
-                return 'Module `' . htmlentities($name) . '` not found.';
-            }
-            else {
-                return false;
-            }
-        }
+        return $this->get($name)->execute($args);
     }
 }
 

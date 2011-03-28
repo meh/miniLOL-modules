@@ -19,6 +19,7 @@
  ****************************************************************************/
 
 ob_start();
+error_reporting(E_ERROR);
 
 define('MINILOL_VERSION', '1.2');
 define('__VERSION__', '0.1');
@@ -81,11 +82,11 @@ foreach ($miniLOL->theme->styles(true) as $style) {
 $output['javascript'] = array();
 
 if ($config['Static']['alwaysOn'] != 'true') {
-    $scripts = unifiedScriptsURL(array(
-        'system/prototype.min.js', # 'system/scriptaculous.min.js' # Uncomment if you need scriptaculous
+    $scripts = htmlentities(unifiedScriptsURL(array(
+        'system/prototype.min.js', # 'system/scriptaculous.min.js', # Uncomment if you need scriptaculous
 
         'system/miniLOL.min.js'
-    ));
+    )));
 
     $output['javascript']['dependencies'] = <<<HTML
 

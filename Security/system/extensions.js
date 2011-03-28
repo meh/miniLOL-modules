@@ -21,7 +21,7 @@ Ajax.Request.addMethods({
         }
 
         if (this.options.minified) {
-            var minified = this.url.replace(/\.([^.]*?)$/, '.min.\1');
+            var minified = this.url.replace(/\.([^.]*?)$/, '.min.$1');
 
             if (miniLOL.utils.exists(minified)) {
                 this.url = minified;

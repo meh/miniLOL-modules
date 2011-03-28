@@ -5,21 +5,6 @@
 ]>
 
 <configuration domain="Blog">
-    <title>#{siteTitle} - #{title}</title>
-
-    <author>
-        <post>Owner</post>
-        <comment>Anonymous</comment>
-    </author>
-
-    <postsPerPage>5</postsPerPage>
-    <editorType>simple</editorType>
-
-    <feed>
-        <path>/feed.xml</path>
-        <type>rss</type>
-        <version>2.0</version>
-        <description>full</description>
-        <max>10</max>
-    </feed>
+  <fetchFrom>modules/Blog/fetch.php</fetchFrom>
+  <data>resources/blog.xml</data>
 </configuration>

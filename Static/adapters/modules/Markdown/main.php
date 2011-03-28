@@ -35,8 +35,10 @@ class MarkdownModule extends Module
 
     public function execute ($what)
     {
-        if (is_string($what['content'])) {
-            return Markdown($what['content']);
+        if (!is_string($what) && $what['content']) {
+            $what = $what['content'];
         }
+
+        return Markdown($what);
     }
 }

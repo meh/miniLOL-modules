@@ -20,7 +20,7 @@
 
 function Function_markdown ($text, $args)
 {
-    return miniLOL::instance()->modules->execute('Markdown', array(array('content' => $text)));
+    return miniLOL::instance()->modules->execute('Markdown', $text);
 }
 
 ?>

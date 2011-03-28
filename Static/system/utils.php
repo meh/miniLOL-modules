@@ -29,6 +29,12 @@ function interpolate ($string, $object)
     return $string;
 }
 
+function array_insert(&$input, $offset, $replacement)
+{
+    array_splice($input, $offset, 0, 0);
+    $input[$offset] = $replacement;
+}
+
 function &XMLToArray ($xml)
 {
     $result = array();

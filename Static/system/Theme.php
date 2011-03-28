@@ -24,6 +24,7 @@ class Theme
     private $_path;
     private $_info;
     private $_styles;
+    private $_other_styles;
     private $_template;
     private $_html;
 
@@ -39,10 +40,11 @@ class Theme
             throw new Exception('Theme not found.');
         }
 
-        $this->_name   = $name;
-        $this->_path   = realpath($path);
-        $this->_info   = array();
-        $this->_styles = array();
+        $this->_name         = $name;
+        $this->_path         = realpath($path);
+        $this->_info         = array();
+        $this->_styles       = array();
+        $this->_other_styles = array();
 
         $dom   = DOMDocument::load($this->path().'/theme.xml');
         $xpath = new DOMXpath($dom);
@@ -82,6 +84,13 @@ class Theme
                     'nest' => '<div class="#{class}" style="#{style}">#{data}</div>',
                     'data' => '<div class="data">#{before}#{data}#{after}</div>'
                 )
+            ),
+
+            'menu' => array(
+                '0' => array(
+                    'menu' => '<div class="menu">#{data}</div>',
+                    'item' => '<span class="item"><a href="#{href}">#{text}</a></span>'
+                )
             )
         );
 
@@ -114,17 +123,30 @@ class Theme
         return $this->_info;
     }
 
+    public function addStyle ($path)
+    {
+        array_push($this->_other_styles, $path);
+    }
+
+    public function hasStyle ($name)
+    {
+        !!$this->_styles[$name];
+    }
+
     public function styles ($output)
     {
-        $result = $this->_styles;
-
         if ($output) {
             $result = array();
 
-            foreach ($this->_styles as $style) {
-                $path = "{$this->path(true)}/{$style}";
+            foreach (array_merge($this->_styles, $this->_other_styles) as $style) {
+                if (in_array($style, $this->_styles)) {
+                    $path = "{$this->path(true)}/{$style}";
+                }
+                else {
+                    $path = $style;
+                }
 
-                if (file_exists("{$this->path()}/${style}.min.css")) {
+                if (file_exists("{$path}.min.css")) {
                     $path .= '.min.css';
                 }
                 else {
@@ -136,8 +158,9 @@ class Theme
 
             return $result;
         }
-
-        return $result;
+        else {
+            return array_merge($this->_styles, $this->_other_styles);
+        }
     }
 
     public function html ($value=null)
@@ -230,7 +253,7 @@ class Theme
             if (!$result['menu']) {
                 $result['menu'] = '#{data}';
             }
-            
+
             if (!$result['item']) {
                 $result['item'] = '<a href="#{href}" #{attributes}>#{text}</a> ';
             }
