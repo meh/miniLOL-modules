@@ -52,13 +52,6 @@ class MenusResource extends Resource
     {
         return $this->_data[$name];
     }
-
-    public function normalize ($callback)
-    {
-        foreach ($this->_data as $name => $menu) {
-            $this->_data[$name] = call_user_func($callback, $menu);
-        }
-    }
 }
 
 ?>

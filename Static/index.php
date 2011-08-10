@@ -19,7 +19,7 @@
  ****************************************************************************/
 
 ob_start();
-error_reporting(E_ERROR);
+error_reporting(E_ERROR | E_PARSE);
 
 define('MINILOL_VERSION', '1.2');
 define('__VERSION__', '0.1');

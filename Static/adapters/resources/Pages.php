@@ -19,24 +19,23 @@
  ****************************************************************************/
 
 class Page {
-    public $name;
     public $attributes;
     public $meta;
-    public $content;
+
+    private $_dom;
 
     function __construct ($dom) {
-        $this->name       = $dom->getAttribute('id');
-        $this->attributes = ObjectFromAttributes($dom->attributes);
-        $this->meta       = XMLToArray($dom->getElementsByTagName('meta')->item(0));
-        $this->content    = $dom;
-
-        foreach ($this->meta as $name => $content) {
-            $this->meta[$name] = trim($content);
-        }
+        $this->_dom       = $dom;
+        $this->attributes = ObjectFromAttributes($this->_dom->attributes);
+        $this->meta       = XMLToArray($this->_dom->getElementsByTagName('meta')->item(0));
     }
 
-    function normalize ($callback) {
-        $this->content = call_user_func($callback, $this->content);
+    public function dom () {
+        return $this->_dom;
+    }
+
+    public function name () {
+        return $this->_dom->getAttribute('id');
     }
 }
 
@@ -51,20 +50,13 @@ class PagesResource extends Resource
     {
         foreach (DOMDocument::load($path)->getElementsByTagName('page') as $page) {
             $page = new Page($page);
-            $this->_data[$page->name] = $page;
+            $this->_data[$page->name()] = $page;
         }
     }
 
     public function get ($page)
     {
         return $this->_data[$page];
-    }
-
-    public function normalize ($callback)
-    {
-        foreach ($this->_data as $page) {
-            $page->normalize($callback);
-        }
     }
 }
 

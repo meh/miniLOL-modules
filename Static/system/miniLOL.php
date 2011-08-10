@@ -106,8 +106,8 @@ class miniLOL
 
         $this->theme->load($config['core']['theme']);
 
-        $this->resources->get('miniLOL.menus')->load('resources/menus.xml')->normalize(array($this->theme, 'menus'));
-        $this->resources->get('miniLOL.pages')->load('resources/pages.xml')->normalize(array($this->theme, 'pages'));
+        $this->resources->get('miniLOL.menus')->load('resources/menus.xml');
+        $this->resources->get('miniLOL.pages')->load('resources/pages.xml');
         
         $this->resources->get('miniLOL.functions')->load('resources/functions.xml');
         
@@ -198,16 +198,18 @@ class miniLOL
             $type  = $this->resources->get('miniLOL.pages')->get($page)->attributes['type'];
             $menu  = $this->resources->get('miniLOL.pages')->get($page)->attributes['menu'];
 
-            if (($title = $this->resources->get('miniLOL.pages')->get($page)->attributes['title'])) {
-                $this->set('title', $title);
-            }
-
             if ($alias) {
                 return $this->go($alias, $arguments, $query, $again);
             }
             else {
+                $this->set('page.current', $this->resources->get('miniLOL.pages')->get($page));
+
+                if (($title = $this->get('page.current')->attributes['title'])) {
+                    $this->set('title', $title);
+                }
+
                 $config =& $this->resources->get('miniLOL.config')->get('Static');
-                $content = $this->resources->get('miniLOL.pages')->get($page)->content;
+                $content = $this->theme->pages($this->resources->get('miniLOL.pages')->get($page)->dom());
 
                 $this->set('page', $this->resources->get('miniLOL.pages')->get($page));
             }
@@ -248,7 +250,7 @@ class miniLOL
             $menu = 'default';
         }
 
-        $this->set('menu', $this->resources->get('miniLOL.menus')->get($menu));
+        $this->set('menu', $this->theme->menus($this->resources->get('miniLOL.menus')->get($menu)));
         $this->set('content', $content);
 
         $this->events->fire(':initialized');
