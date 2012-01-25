@@ -28,6 +28,10 @@ define('ROOT',     preg_replace('#^/$#', '', realpath(dirname(__FILE__))));
 define('WEB_ROOT', preg_replace('#^/$#', '', dirname($_SERVER['SCRIPT_NAME'])));
 define('MODULES',  ROOT.'/modules');
 
+if (!ROOT) {
+	die('ROOT could not be defined');
+}
+
 define('STATIC_ROOT',      MODULES.'/Static');
 define('STATIC_RESOURCES', STATIC_ROOT.'/resources');
 define('STATIC_SYSTEM',    STATIC_ROOT.'/system');
