@@ -96,10 +96,5 @@ The example below should be self explanatory.
     <page id="separated" alias="#page=separated"/>
 
     <page id="stuff" type="simple">
-        <![CDATA[
-            NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER
-            NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER
-            NIGGER NIGGER NIGGER NIGGER NIGGER NIGGER
-        ]]>
     </page>
 </pages>
